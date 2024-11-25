@@ -62,7 +62,8 @@ if __name__ == "__main__":
         "1427047": "christian-waters",
         "353270": "joe-pitts",
         "3292198": "josh-cottrell",
-        "3357259": "alex-radice"
+        "3357259": "alex-radice",
+        "4264967": "rich-kelsey"
     }
 
     # Fetch data
