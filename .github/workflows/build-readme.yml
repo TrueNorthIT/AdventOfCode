@@ -1,0 +1,45 @@
+name: Build README
+
+on:
+  # Trigger on push to any branch
+  push:
+    branches:
+      - '**'
+
+  # Scheduled run every 30 minutes
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  build-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      # Step 3: Install dependencies (if you have any requirements)
+      - name: Install dependencies
+        run: pip install requests tabulate
+
+      # Step 4: Run the script to build README
+      - name: Run build_readme.py
+        env:
+          SESSION_COOKIE: ${{ secrets.SESSION_COOKIE }}
+        run: python build_readme.py
+
+      # Step 5: Commit and push updated README.md to main branch
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README.md [GitHub Action]" || echo "No changes to commit"
+          git push
