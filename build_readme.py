@@ -4,7 +4,8 @@ import json
 from tabulate import tabulate
 
 # Constants
-LEADERBOARD_URL = "https://adventofcode.com/2023/leaderboard/private/view/353270.json"
+YEAR = 2023
+LEADERBOARD_URL = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/353270.json"
 
 # Fetch SESSION_COOKIE from environment variables
 SESSION_COOKIE = os.getenv("SESSION_COOKIE")
@@ -42,9 +43,9 @@ def generate_markdown_table(data, branch_mapping):
             if day_str in completion:
                 stars_for_day = completion[day_str]
                 if "2" in stars_for_day:
-                    star_progress.append(f"[★](https://github.com/your-repo/{branch}/tree/main/day{day:02})")
+                    star_progress.append(f"[★](https://github.com/your-repo/{branch}/tree/main/{YEAR}/day{day:02})")
                 elif "1" in stars_for_day:
-                    star_progress.append(f"[✩](https://github.com/your-repo/{branch}/tree/main/day{day:02})")
+                    star_progress.append(f"[✩](https://github.com/your-repo/{branch}/tree/main/{YEAR}/day{day:02})")
             else:
                 star_progress.append("·")
 
