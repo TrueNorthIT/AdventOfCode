@@ -7,10 +7,10 @@ Welcome to the **Advent of Code 2024** private leaderboard for our team! This re
 
 |   Rank | Name          |   Local Score |   Stars | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   | 18   | 19   | 20   | 21   | 22   | 23   | 24   | 25   |
 |--------|---------------|---------------|---------|-----|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|
-|      1 | chriswaters78 |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      2 | Joe Pitts     |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      3 | Sam Hatts     |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      4 | Alex Radice   |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      1 | Alex Radice   |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      2 | Sam Hatts     |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      3 | chriswaters78 |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      4 | Joe Pitts     |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
 |      5 | Josh          |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
 
 
@@ -24,7 +24,7 @@ Welcome to the **Advent of Code 2024** private leaderboard for our team! This re
    Visit the [Advent of Code website](https://adventofcode.com/) and sign up.
 
 2. **Join the Private Leaderboard**  
-   Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code which Joe can tell you. 
+   Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
 
 3. **Set Up the Repository**  
    - Clone this repository:
