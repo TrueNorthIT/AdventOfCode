@@ -24,7 +24,7 @@ Welcome to the **Advent of Code 2024** private leaderboard for our team! This re
    Visit the [Advent of Code website](https://adventofcode.com/) and sign up.
 
 2. **Join the Private Leaderboard**  
-   Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
+   Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code which Joe can tell you. 
 
 3. **Set Up the Repository**  
    - Clone this repository:
