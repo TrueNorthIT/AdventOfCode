@@ -1,62 +1,32 @@
-# 🎄 Advent of Code - 2024 🎄
+# Welcome to Your Personal Advent of Code Branch 🎄
 
-Welcome to the **Advent of Code 2024** private leaderboard for our team! This repository is where we’ll track progress, share solutions, and have a friendly competition while improving our coding skills.
+This is **your personal branch** for Advent of Code! Please use this branch to add your code, solutions, and any notes for the daily challenges.
 
+## Guidelines for Using This Branch
 
-## Leadeboard
+1. **Structure Your Solutions**:
+   - Each day's solution should be in a folder named `dayXX` (e.g., `day01`, `day02`, etc.). These have already been created for you. 
+   - There is a `README.md` in each `dayXX` folder. Feel free to use this to doccument, make note's etc. 
 
-|   Rank | Name          |   Local Score |   Stars | 1                                                                  | 2                                                                  | 3                                                                  | 4                                                                  | 5                                                                  | 6                                                                  | 7                                                                  | 8                                                                  | 9                                                                  | 10                                                                 | 11                                                                 | 12                                                                 | 13                                                                 | 14                                                                 | 15                                                                 | 16                                                                 | 17                                                                 | 18                                                                 | 19                                                                 | 20                                                                 | 21                                                                 | 22                                                                 | 23                                                                 | 24                                                                 | 25                                                                 |
-|--------|---------------|---------------|---------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|--------------------------------------------------------------------|
-|      1 | chriswaters78 |           223 |      50 | [★](https://github.com/your-repo/christian-waters/tree/main/day01) | [★](https://github.com/your-repo/christian-waters/tree/main/day02) | [★](https://github.com/your-repo/christian-waters/tree/main/day03) | [★](https://github.com/your-repo/christian-waters/tree/main/day04) | [★](https://github.com/your-repo/christian-waters/tree/main/day05) | [★](https://github.com/your-repo/christian-waters/tree/main/day06) | [★](https://github.com/your-repo/christian-waters/tree/main/day07) | [★](https://github.com/your-repo/christian-waters/tree/main/day08) | [★](https://github.com/your-repo/christian-waters/tree/main/day09) | [★](https://github.com/your-repo/christian-waters/tree/main/day10) | [★](https://github.com/your-repo/christian-waters/tree/main/day11) | [★](https://github.com/your-repo/christian-waters/tree/main/day12) | [★](https://github.com/your-repo/christian-waters/tree/main/day13) | [★](https://github.com/your-repo/christian-waters/tree/main/day14) | [★](https://github.com/your-repo/christian-waters/tree/main/day15) | [★](https://github.com/your-repo/christian-waters/tree/main/day16) | [★](https://github.com/your-repo/christian-waters/tree/main/day17) | [★](https://github.com/your-repo/christian-waters/tree/main/day18) | [★](https://github.com/your-repo/christian-waters/tree/main/day19) | [★](https://github.com/your-repo/christian-waters/tree/main/day20) | [★](https://github.com/your-repo/christian-waters/tree/main/day21) | [★](https://github.com/your-repo/christian-waters/tree/main/day22) | [★](https://github.com/your-repo/christian-waters/tree/main/day23) | [★](https://github.com/your-repo/christian-waters/tree/main/day24) | [★](https://github.com/your-repo/christian-waters/tree/main/day25) |
-|      2 | Joe Pitts     |           160 |      37 | [★](https://github.com/your-repo/joe-pitts/tree/main/day01)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day02)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day03)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day04)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day05)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day06)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day07)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day08)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day09)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day10)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day11)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day12)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day13)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day14)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day15)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day16)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day17)        | [★](https://github.com/your-repo/joe-pitts/tree/main/day18)        | [✩](https://github.com/your-repo/joe-pitts/tree/main/day19)        | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  |
-|      3 | Sam Hatts     |            73 |      21 | [★](https://github.com/your-repo/None/tree/main/day01)             | [★](https://github.com/your-repo/None/tree/main/day02)             | ·                                                                  | [★](https://github.com/your-repo/None/tree/main/day04)             | ·                                                                  | [★](https://github.com/your-repo/None/tree/main/day06)             | [★](https://github.com/your-repo/None/tree/main/day07)             | [★](https://github.com/your-repo/None/tree/main/day08)             | [★](https://github.com/your-repo/None/tree/main/day09)             | ·                                                                  | [✩](https://github.com/your-repo/None/tree/main/day11)             | ·                                                                  | [✩](https://github.com/your-repo/None/tree/main/day13)             | [✩](https://github.com/your-repo/None/tree/main/day14)             | [★](https://github.com/your-repo/None/tree/main/day15)             | ·                                                                  | ·                                                                  | ·                                                                  | [✩](https://github.com/your-repo/None/tree/main/day19)             | ·                                                                  | [✩](https://github.com/your-repo/None/tree/main/day21)             | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  |
-|      4 | Alex Radice   |            24 |       8 | [★](https://github.com/your-repo/alex-radice/tree/main/day01)      | ·                                                                  | ·                                                                  | [★](https://github.com/your-repo/alex-radice/tree/main/day04)      | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | [★](https://github.com/your-repo/alex-radice/tree/main/day11)      | [✩](https://github.com/your-repo/alex-radice/tree/main/day12)      | [✩](https://github.com/your-repo/alex-radice/tree/main/day13)      | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  |
-|      5 | Josh          |             2 |       2 | [★](https://github.com/your-repo/josh-cottrell/tree/main/day01)    | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  | ·                                                                  |
+2. **Submitting to Advent of Code**:
+   - Before pushing your changes to this branch, make sure you’ve submitted your solutions to Advent of Code to collect your stars!
+   - The leaderboard on the `main` branch updates based on your Advent of Code progress. If you push before earning your stars, they won’t reflect until the leaderboard is refreshed (every 30 minutes).
 
-
-## What is Advent of Code?
-
-[Advent of Code](https://adventofcode.com/) is an Advent Calendar of coding puzzles, with a new challenge released every day from December 1st to December 25th. These puzzles are designed to hone your problem-solving abilities and provide an excellent opportunity to learn new coding techniques.
-
-## How to Get Started
-
-1. **Sign Up**  
-   Visit the [Advent of Code website](https://adventofcode.com/) and sign up.
-
-2. **Join the Private Leaderboard**  
-   Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
-
-3. **Set Up the Repository**  
-   - Clone this repository:
-     ```bash
-     git clone <repo_url>
-     ```
-   - Check out your personal branch (replace `your-branch-name` with your name i.e `joseph-pitts`):
-     ```bash
-     git checkout -b your-branch-name
-     ```
-   - Each participant will have their own branch. Please keep your solutions and notes in your branch to avoid conflicts with others.
-
-4. **Log Your Progress**  
-   Commit and push your solutions to your branch regularly. You can also share any thoughts, approaches, or challenges you faced for each day's puzzle.
-
-## Repository Structure
-
-- Each participant will have their own branch.
-- Ensure your branch includes:
-  - A folder for each day (e.g., `day01`, `day02`) containing your solution files.
-  - Optionally, a `README.md` in each folder to document your approach or challenges for that day.
+2. **Push to This Branch**:
+   - Push your changes to this branch regularly to save your progress.
+   - Ensure your code is complete and tested before pushing.
 
 
-## Rules and Guidelines
+## Leaderboard Updates
 
-- **Programming Language**: Use any language you prefer.
-- **Collaboration**: Feel free to discuss strategies and techniques with the team. Sharing knowledge is encouraged!
-- **No ChatGPT**: While Copilot autocomplete is allowed, using ChatGPT or similar tools to solve puzzles is prohibited.
-- **Training Time**: You can log your time for solving these challenges under Training, but please keep it reasonable.
+The leaderboard displayed on the `main` branch will:
+- Pull the latest data from Advent of Code periodically (every ~30 minutes).
+- Update to show your progress based on the stars you’ve earned.
 
+💡 **Tip**: To ensure your stars appear on the leaderboard immediately, submit your solutions to Advent of Code before pushing your changes.
 
-## Prize 🏆
+## Happy Coding! 🚀
 
-An **INCREDIBLE** _(yet to be decided)_ **prize** awaits the winner of our leaderboard. May the best coder win!
+Advent of Code is a fun and challenging way to improve your problem-solving skills and coding expertise, as well as a way to earn the _m y s t e r y_ prize!
 
+Good luck, and may the stars guide you to the top of the leaderboard! 🌟
