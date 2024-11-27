@@ -5,7 +5,7 @@ from tabulate import tabulate
 
 # Constants
 YEAR = 2024
-LEADERBOARD_URL = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/353270.json"
+LEADERBOARD_URL = f"https://adventofcode.com/2023/leaderboard/private/view/353270.json"
 
 # Fetch SESSION_COOKIE from environment variables
 SESSION_COOKIE = os.getenv("SESSION_COOKIE")
