@@ -1,4 +1,4 @@
-# 🎄 Advent of Code - 2024 🎄
+# 🎄 Advent of Code - 2024! 🎄
 
 Welcome to the **Advent of Code 2024** private leaderboard for our team! This repository is where we’ll track progress, share solutions, and have a friendly competition while improving our coding skills.
 
