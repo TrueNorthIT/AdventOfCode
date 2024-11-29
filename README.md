@@ -1,4 +1,4 @@
-# 🎄 Advent of Code - 2024! 🎄
+# 🎄 Advent of Code - 2024 🎄
 
 Welcome to the **Advent of Code 2024** private leaderboard for our team! This repository is where we’ll track progress, share solutions, and have a friendly competition while improving our coding skills.
 
@@ -8,12 +8,12 @@ Welcome to the **Advent of Code 2024** private leaderboard for our team! This re
 |   Rank | Name          |   Local Score |   Stars | 1                                                                              | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   | 13   | 14   | 15   | 16   | 17   | 18   | 19   | 20   | 21   | 22   | 23   | 24   | 25   |
 |--------|---------------|---------------|---------|--------------------------------------------------------------------------------|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|
 |      1 | Josh          |            14 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/josh-cottrell/2024/day01) | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      2 | kadable       |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      2 | Joe Pitts     |            12 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/joe-pitts/2024/day01)     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
 |      3 | RichKelsey    |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      4 | Joe Pitts     |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      4 | Sam Hatts     |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
 |      5 | chriswaters78 |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      6 | Sam Hatts     |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
-|      7 | Alex Radice   |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      6 | Alex Radice   |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
+|      7 | kadable       |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    | ·    |
 
 
 ## What is Advent of Code?
