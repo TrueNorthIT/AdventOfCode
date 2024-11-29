@@ -1,0 +1,48 @@
+name: Build README (Non-Main Branches)
+
+on:
+  # Trigger only on non-main branches
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build-readme-non-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository and switch to the main branch
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Switch to main branch
+        run: |
+          git fetch origin main
+          git checkout main
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      # Step 3: Install dependencies (if you have any requirements)
+      - name: Install dependencies
+        run: pip install requests tabulate
+
+      # Step 4: Run the script to build README
+      - name: Run build_readme.py
+        env:
+          SESSION_COOKIE: ${{ secrets.SESSION_COOKIE }}
+        run: python build_readme.py
+
+      # Step 5: Commit and push updated README.md to main branch
+      - name: Commit and push changes to main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README.md [GitHub Action]" || echo "No changes to commit"
+          git push origin main
