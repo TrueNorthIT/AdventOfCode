@@ -3,6 +3,8 @@ name: Build README (Non-Main Branches)
 on:
   # Trigger only on non-main branches
   push:
+    branches:
+      - "**"
     branches-ignore:
       - main
 
