@@ -6,9 +6,9 @@ on:
     branches:
       - '**'
 
-  # Scheduled run every 30 minutes
+  # Scheduled run at midday
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0 12 * * *"
 
 jobs:
   build-readme:
