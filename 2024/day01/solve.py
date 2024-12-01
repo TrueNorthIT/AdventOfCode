@@ -14,16 +14,8 @@ class Day01Solver(JoesAoCSolver):
 
     def part1(self):
         L1, L2 = self.parse_input()
-        total = 0
-        while L1:
-            x = min(L1)
-            y = min(L2)
-            L1.remove(x)
-            L2.remove(y)
-            total += abs(x - y)
+        total = sum(abs(x - y) for x, y in zip(sorted(L1), sorted(L2)))
         return total
-
-
 
     def part1_examples(self):
         return [
@@ -35,15 +27,8 @@ class Day01Solver(JoesAoCSolver):
 3   3""", 11)]
     
     def part2(self):
-
         L1, L2 = self.parse_input()
-        total_similarity = 0
-
-        for i in L1:
-            count = L2.count(i)
-            total_similarity += i * count
-
-        return total_similarity
+        return sum([i * L2.count(i) for i in L1])
     
     def part2_examples(self):
         return [
