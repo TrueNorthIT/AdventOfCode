@@ -8,6 +8,9 @@ from colorama import Fore, Style, init
 # Initialize colorama for cross-platform color support
 init(autoreset=True)
 
+import statistics
+from typing import Dict
+
 
 class JoesAoCSolver:
     TRACE_LEVELS = {
@@ -53,42 +56,109 @@ class JoesAoCSolver:
     def part2(self) -> Any:
         raise NotImplementedError("Part 2 solution must be implemented.")
 
-    def time_function(self, func: Callable[[], Any]) -> Tuple[Any, float]:
+    def time_function(self, func: Callable[[], Any]) -> float:
         start_time = time.time()
-        result = func()
-        elapsed_time = time.time() - start_time
-        return result, elapsed_time
+        func()
+        return time.time() - start_time
 
-    def assert_examples(self, examples: List[Tuple[str, Any]], solver: Callable[[str], Any]):
-        original_input_data = self.input_data  # Save the original input
+    def benchmark(self, times: int = 100):
+        self.log(f"Benchmarking Part 1 and Part 2 with {times} iterations...", "INFO")
+        results: Dict[str, List[float]] = {"Part 1": [], "Part 2": []}
+
+        # Run benchmarks for Part 1
+        if hasattr(self, "part1"):
+            for _ in range(times):
+                elapsed_time = self.time_function(self.part1)
+                results["Part 1"].append(elapsed_time)
+
+        # Run benchmarks for Part 2
+        if hasattr(self, "part2"):
+            for _ in range(times):
+                elapsed_time = self.time_function(self.part2)
+                results["Part 2"].append(elapsed_time)
+
+        # Analyze results
+        self.log("Benchmarking complete. Analyzing results...", "INFO")
+        print("=" * 50)
+        print(f"{Fore.CYAN}{Style.BRIGHT}Benchmark Results for {self.day}")
+        print("=" * 50)
+
+        def adjust_units(value: float) -> Tuple[float, str]:
+            if value >= 1:
+                return value, "s"
+            elif value >= 1e-3:
+                return value * 1e3, "ms"
+            elif value >= 1e-6:
+                return value * 1e6, "µs"
+            else:
+                return value * 1e9, "ns"
+
+        table = PrettyTable()
+        table.field_names = ["Part", "Avg Time", "Median", "95th %ile", "99th %ile", "Unit"]
+
+        for part, timings in results.items():
+            avg_time = statistics.mean(timings)
+            median_time = statistics.median(timings)
+            p95 = statistics.quantiles(timings, n=100)[94]  
+            p99 = statistics.quantiles(timings, n=100)[98] 
+
+            # Adjust units
+            avg_time, unit = adjust_units(avg_time)
+            median_time, _ = adjust_units(median_time)
+            p95, _ = adjust_units(p95)
+            p99, _ = adjust_units(p99)
+
+            table.add_row([part, f"{avg_time:.6f}", f"{median_time:.6f}", f"{p95:.6f}", f"{p99:.6f}", unit])
+
+        print(table)
+
+
+    def run_phase(
+        self,
+        phase_name: str,
+        solver: Callable[[], Any],
+        examples: List[Tuple[str, Any]],
+        run_assertions: bool,
+        run_real: bool,
+    ):
+        if run_assertions:
+            self.log(f"Testing {phase_name} Examples...", "INFO")
+            if examples:
+                self.run_examples(examples, solver)
+            self.log(f"{phase_name} Examples Passed!", "SUCCESS")
+
+        if run_real:
+            result, elapsed_time = self.time_function(solver)
+            self.log(f"{phase_name} Result: {result} (took {elapsed_time:.4f} seconds)", "SUCCESS")
+            print()
+
+    def run_examples(self, examples: List[Tuple[str, Any]], solver: Callable[[str], Any]):
+        original_input_data = self.input_data
         table = PrettyTable()
         table.field_names = ["Example Input", "Expected Output", "Actual Output", "Status"]
         for i, (example_input, expected_output) in enumerate(examples, start=1):
-            self.input_data = example_input  # Temporarily use the example input
-            actual_output = solver(example_input)
+            self.input_data = example_input
+            actual_output = solver()
             status = "PASS" if actual_output == expected_output else "FAIL"
             color = "SUCCESS" if status == "PASS" else "ERROR"
             table.add_row([example_input, expected_output, actual_output, status])
             self.log(f"Example {i}: {status}", color)
             if status == "FAIL":
-                self.input_data = original_input_data  # Restore the original input before raising
+                self.input_data = original_input_data
                 raise AssertionError(
                     f"Example {i} failed: input={example_input}, expected={expected_output}, got={actual_output}"
                 )
-        self.input_data = original_input_data  # Restore the original input
+        self.input_data = original_input_data
         print(table)
 
-    def run(self):
+    def run(self, run_mode: str = "both"):
+        run_assertions = run_mode in {"both", "assertions"}
+        run_real = run_mode in {"both", "real"}
+
         self.log(f"Advent of Code - {self.day}", "INFO")
         print("=" * 40)
-
         try:
-            self.log("Testing Part 1 Examples...", "INFO")
-            self.assert_examples(self.part1_examples(), lambda inp: self.part1_on_input(inp))
-            self.log("Part 1 Examples Passed!", "SUCCESS")
-            part1_result, part1_time = self.time_function(self.part1)
-            print("\n")
-            self.log(f"Part 1 Result: {part1_result} (took {part1_time:.4f} seconds)", "SUCCESS")
+            self.run_phase("Part 1", self.part1, self.part1_examples(), run_assertions, run_real)
         except NotImplementedError:
             self.log("Part 1: Not implemented.", "WARNING")
         except AssertionError as e:
@@ -99,12 +169,7 @@ class JoesAoCSolver:
         print("-" * 40)
 
         try:
-            self.log("Testing Part 2 Examples...", "INFO")
-            self.assert_examples(self.part2_examples(), lambda inp: self.part2_on_input(inp))
-            self.log("Part 2 Examples Passed!", "SUCCESS")
-            part2_result, part2_time = self.time_function(self.part2)
-            print("\n")
-            self.log(f"Part 2 Result: {part2_result} (took {part2_time:.4f} seconds)", "SUCCESS")
+            self.run_phase("Part 2", self.part2, self.part2_examples(), run_assertions, run_real)
         except NotImplementedError:
             self.log("Part 2: Not implemented.", "WARNING")
         except AssertionError as e:
@@ -113,12 +178,6 @@ class JoesAoCSolver:
             self.log(f"Part 2: Error - {e}", "ERROR")
 
         print("=" * 40)
-
-    def part1_on_input(self, input_data: str) -> Any:
-        return self.part1()
-
-    def part2_on_input(self, input_data: str) -> Any:
-        return self.part2()
 
     def part1_examples(self) -> List[Tuple[str, Any]]:
         return []

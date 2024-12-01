@@ -28,7 +28,7 @@ class Day01Solver(JoesAoCSolver):
     
     def part2(self):
         L1, L2 = self.parse_input()
-        return sum([i * L2.count(i) for i in L1])
+        return sum(i * L2.count(i) for i in L1)
     
     def part2_examples(self):
         return [
@@ -43,5 +43,7 @@ class Day01Solver(JoesAoCSolver):
 
 if __name__ == "__main__":
     solver = Day01Solver()
-    solver.run()
+    # solver.run("assertions")
+    # solver.run("real")
+    solver.benchmark(1000)
     

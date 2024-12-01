@@ -53,3 +53,10 @@ No real imporvement made in the refactor, just condensed into a list comprehensi
         L1, L2 = self.parse_input()
         return sum([i * L2.count(i) for i in L1])
 ```
+
+## Benchmark 1000 Iterations
+
+| Part   | Avg Time   | Median     | 95th %ile | 99th %ile | Unit |
+|--------|------------|------------|-----------|-----------|------|
+| Part 1 | 548.262119 | 972.270966 | 1.052821  | 1.428754  | µs   |
+| Part 2 | 5.859317   | 5.999088   | 7.007957  | 9.008093  | ms   |
