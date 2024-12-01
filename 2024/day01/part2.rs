@@ -31,6 +31,7 @@ pub mod part2{
         let mut similarity_score = 0;
         let mut occurrences = 0;
 
+        //for each element in the 1st vector calculate the similarity score
         for number1 in numbers1.iter(){
             for number2 in numbers2.iter(){
                 if number1 == number2{
