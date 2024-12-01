@@ -60,18 +60,22 @@ class JoesAoCSolver:
         return result, elapsed_time
 
     def assert_examples(self, examples: List[Tuple[str, Any]], solver: Callable[[str], Any]):
+        original_input_data = self.input_data  # Save the original input
         table = PrettyTable()
         table.field_names = ["Example Input", "Expected Output", "Actual Output", "Status"]
         for i, (example_input, expected_output) in enumerate(examples, start=1):
+            self.input_data = example_input  # Temporarily use the example input
             actual_output = solver(example_input)
             status = "PASS" if actual_output == expected_output else "FAIL"
             color = "SUCCESS" if status == "PASS" else "ERROR"
             table.add_row([example_input, expected_output, actual_output, status])
             self.log(f"Example {i}: {status}", color)
             if status == "FAIL":
+                self.input_data = original_input_data  # Restore the original input before raising
                 raise AssertionError(
                     f"Example {i} failed: input={example_input}, expected={expected_output}, got={actual_output}"
                 )
+        self.input_data = original_input_data  # Restore the original input
         print(table)
 
     def run(self):
@@ -111,11 +115,9 @@ class JoesAoCSolver:
         print("=" * 40)
 
     def part1_on_input(self, input_data: str) -> Any:
-        self.input_data = input_data
         return self.part1()
 
     def part2_on_input(self, input_data: str) -> Any:
-        self.input_data = input_data
         return self.part2()
 
     def part1_examples(self) -> List[Tuple[str, Any]]:
