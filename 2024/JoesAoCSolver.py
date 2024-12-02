@@ -56,10 +56,15 @@ class JoesAoCSolver:
     def part2(self) -> Any:
         raise NotImplementedError("Part 2 solution must be implemented.")
 
-    def time_function(self, func: Callable[[], Any]) -> float:
+    def time_function(self, func: Callable[[], Any]) -> Tuple[Any, float]:
+        """
+        Times the execution of the given function and returns its result and the elapsed time.
+        """
         start_time = time.time()
-        func()
-        return time.time() - start_time
+        result = func()  # Capture the result of the function
+        elapsed_time = time.time() - start_time
+        return result, elapsed_time
+
 
     def benchmark(self, times: int = 100):
         self.log(f"Benchmarking Part 1 and Part 2 with {times} iterations...", "INFO")
@@ -68,13 +73,13 @@ class JoesAoCSolver:
         # Run benchmarks for Part 1
         if hasattr(self, "part1"):
             for _ in range(times):
-                elapsed_time = self.time_function(self.part1)
+                _, elapsed_time = self.time_function(self.part1)
                 results["Part 1"].append(elapsed_time)
 
         # Run benchmarks for Part 2
         if hasattr(self, "part2"):
             for _ in range(times):
-                elapsed_time = self.time_function(self.part2)
+                _, elapsed_time = self.time_function(self.part2)
                 results["Part 2"].append(elapsed_time)
 
         # Analyze results
