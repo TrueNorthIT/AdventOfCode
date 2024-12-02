@@ -44,6 +44,6 @@ class Day01Solver(JoesAoCSolver):
 if __name__ == "__main__":
     solver = Day01Solver()
     # solver.run("assertions")
-    # solver.run("real")
-    solver.benchmark(1000)
+    solver.run("real")
+    # solver.benchmark(1000)
     
