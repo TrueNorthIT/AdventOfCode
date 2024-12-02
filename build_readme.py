@@ -61,7 +61,7 @@ if __name__ == "__main__":
     branch_mapping = {
         "1427047": "christian-waters",
         "353270": "joe-pitts",
-        "3292198": "josh-cottrell",
+        "4472230": "josh-cottrell",
         "3357259": "alex-radice",
         "4264967": "rich-kelsey",
         "4265041": "kade-hennessy",
