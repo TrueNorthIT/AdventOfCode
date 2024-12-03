@@ -1,3 +1,6 @@
 
 *.pyc
 input.txt
+2024/target/
+
+.idea/vcs.xml
