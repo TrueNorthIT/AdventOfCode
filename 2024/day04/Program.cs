@@ -4,16 +4,14 @@
     var R = grid.Max(tp => tp.Key.r);
     var C = grid.Max(tp => tp.Key.c);
 
-    var validLines = new (int r, int c)[][] {
-        new [] { (0,0),(1,0), (2,0), (3,0) }, //down
-        new [] { (0,0),(0,1), (0,2), (0,3) }, //right
-        new [] { (0,0),(1,1), (2,2), (3,3) }, //right-down
-        new [] { (0,0),(-1,0), (-2,0), (-3,0) }, //up
-        new [] { (0,0),(0,-1), (0,-2), (0,-3) }, //left
-        new [] { (0,0),(-1,-1), (-2,-2), (-3,-3) }, //left-up
-        new [] { (0,0),(-1, 1), (-2, 2), (-3, 3) }, //right-up
-        new [] { (0,0),(1, -1), (2, -2), (3, -3) }, //left-down
-    };
+    (int r, int c)[][] validLines =
+        (   from or in new[] { -1, 0, 1 }
+            from oc in new[] { -1, 0, 1 }
+            where !(or == 0 && oc == 0)
+            select (from i in Enumerable.Range(0, 4) 
+                    select (or * i, oc * i))
+                    .ToArray()
+        ).ToArray();
 
     var Xs = new (int r, int c)[][] {
         new [] { (-1,-1),(1,1) },
