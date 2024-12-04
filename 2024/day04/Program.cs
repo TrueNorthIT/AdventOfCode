@@ -1,32 +1,26 @@
-﻿var grid = File.ReadAllLines("input.txt").SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
-        .ToDictionary(tp => (tp.r, tp.c), tp => tp.ch);
+﻿using System.Numerics;
 
-var Xs = new (int or, int oc)[][] {
-    new [] { (-1,-1),(1,1) },
-    new [] { (-1,1),(1,-1) },
-};
+var grid = File.ReadAllLines("input.txt").SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
+        .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
+
+Complex[][] Xs = [
+    [ new (-1,-1), new(0, 0), new(1,1) ],
+    [new (-1,1), new(0, 0), new (1,-1) ],
+];
 
 var lines = from or in new[] { -1, 0, 1 }
             from oc in new[] { -1, 0, 1 }
             where !(or == 0 && oc == 0)
-            select (    from i in Enumerable.Range(0, 4) select (or * i, oc * i))
-            .ToArray<(int r, int c)>();
+            select (from i in Enumerable.Range(0, 4) select new Complex(or * i, oc * i)).ToArray();
 
-var part1 = grid.Where(kvp => kvp.Value == 'X')
-    .Select(kvp => lines.Count(
-        line => Enumerable.Range(0, 4)
-                .Select(i => ("XMAS"[i], (kvp.Key.r + line[i].r, kvp.Key.c + line[i].c)))
-                .All(tp => tp.Item1 == grid.GetValueOrDefault(tp.Item2, '.'))))
-    .Sum();
+var part1 = grid.Select(kvp => lines.Count(line => Enumerable.Range(0, 4).All(i => "XMAS"[i] == grid.GetValueOrDefault(kvp.Key + line[i])))).Sum();
 
-var part2 = grid.Where(kvp => kvp.Value == 'A' 
-                                && (    from arr in Xs
-                                        from tp in arr
-                                        select new String(
-                                            arr.Select(tp => (tp.or + kvp.Key.r, tp.oc + kvp.Key.c))
-                                            .Select(tp => grid.GetValueOrDefault(tp, '.')).ToArray())
-                                    ).All(str => str == "MS" || str == "SM"))
-            .Count();
+var part2 = grid.Where(kvp => 
+                    (   from arr in Xs
+                        from tp in arr
+                        select new string(arr.Select(tp => grid.GetValueOrDefault(tp + kvp.Key, '.')).ToArray())
+                    ).All(str => str == "MAS" || str == "SAM"))
+                .Count();
 
 Console.WriteLine($"Part 1: {part1}");
 Console.WriteLine($"Part 2: {part2}");
