@@ -21,25 +21,15 @@
                     //is there a rule that causes update[i] to have to be before update[i-1]
                     if (rules.Any(tp => tp.Item1 == update[i] && tp.Item2 == update[i - 1]))
                     {
-                        //this isn't a possible ordering
-                        //these two should be the other way, so swap
-                        //we need to swap these two values
                         failed = false;
-                        var tmp = update[i - 1];
-                        update[i - 1] = update[i];
-                        update[i] = tmp;
+                        (update[i - 1], update[i]) = (update[i], update[i-1]);
                         goto runagain;
                     }
                 }
-                //this is a positive order
                 if (failed)
-                {
                     part1 += update[update.Length / 2];
-                }
                 else
-                {
                     part2 += update[update.Length / 2];
-                }
             }
             Console.WriteLine($"Part 1: {part1}");
             Console.WriteLine($"Part 2: {part2}");
