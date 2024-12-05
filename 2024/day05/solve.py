@@ -17,48 +17,25 @@ class Day05Solver(JoesAoCSolver):
 
         return rules, print_queues
 
-
     def is_queue_sorted(self, rules, queue):
-        valid = True
-        for i, page in enumerate(queue):
-            for rule in rules[page]:
-                if rule in queue[:i]:
-                    valid = False
-                    break
-            if not valid:
-                break
+        return not any( must_be_before_page in queue[:page_index] for page_index, page in enumerate(queue) for must_be_before_page in rules[page])
         
-        return valid
-    
-    def order_queue(self, rules, queue):
-        for i, page in enumerate(queue):
-            for rule in rules[page]:
-                if rule in queue[:i]:
-                    # Find the correct position
-                    correct_position = queue.index(rule)
-                    # Swap the elements
-                    queue[i], queue[correct_position] = queue[correct_position], queue[i]
-                    break
-        
-        # Recurse until the queue is sorted :) 
+    # Orders the queue by recursively swapping elements that are out of order based on the rules
+    def order_queue(self, rules, queue, depth=0):
+        for page_index, page in enumerate(queue):
+            for must_be_before_page in rules[page]:
+                if must_be_before_page in queue[:page_index]:
+                    correct_position = queue.index(must_be_before_page)
+                    queue[page_index], queue[correct_position] = queue[correct_position], queue[page_index]
+                    break # We only need to swap one element at a time for each rule
+            
         if not self.is_queue_sorted(rules, queue):
-            return self.order_queue(rules, queue)
-                
-        
+            return self.order_queue(rules, queue, depth=depth+1)
         return queue
-
-
-
-
+    
     def part1(self):
         rules, queues = self.parse_input()
-        
-        centres = []
-        for queue in queues:
-            if self.is_queue_sorted(rules, queue):
-                centres.append(queue[len(queue) // 2])
-
-        return sum(centres)
+        return sum(queue[len(queue) // 2] for queue in queues if self.is_queue_sorted(rules, queue))
 
     def part1_examples(self):
         return [
@@ -93,21 +70,8 @@ class Day05Solver(JoesAoCSolver):
 """, 143)]
     
     def part2(self):
-        rules, queues = self.parse_input()
-
-        # We only care about the unsorted queues
-
-        unsorted_queues = [queue for queue in queues if not self.is_queue_sorted(rules, queue)]
-        centres = []
-
-        for queue in unsorted_queues:
-            queue = self.order_queue(rules, queue)
-            print(queue)
-            centres.append(queue[len(queue) // 2])
-        
-        return sum(centres)
-
-        
+        rules, queues = self.parse_input()        
+        return sum(self.order_queue(rules, queue)[len(queue) // 2] for queue in queues if not self.is_queue_sorted(rules, queue))
 
     def part2_examples(self):
             return [
@@ -145,6 +109,6 @@ class Day05Solver(JoesAoCSolver):
 if __name__ == "__main__":
     solver = Day05Solver()
     # solver.run("assertions")
-    solver.run("real")
-    # solver.benchmark(1000)
+    # solver.run("real")
+    solver.benchmark(1000)
     
