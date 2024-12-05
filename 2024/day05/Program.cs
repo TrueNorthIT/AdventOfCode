@@ -5,9 +5,10 @@ var updates = file[1].Split(Environment.NewLine).Select(update => update.Split("
 
 (int part1, int part2) tp = updates.Zip(updates.Select(arr => arr.OrderBy(i => i, new PageComparer(rules)).ToArray()))
             .Aggregate((0, 0),
-                (acc, tp) => tp.First.SequenceEqual(tp.Second)
-                ? (acc.Item1 + tp.First[tp.First.Length / 2], acc.Item2)
-                : (acc.Item1, acc.Item2 + tp.Second[tp.Second.Length / 2]));
+                ((int p1, int p2) acc, (int[] First, int[] Second) tp) => 
+                tp.First.SequenceEqual(tp.Second)
+                    ? (acc.p1 + tp.First[tp.First.Length / 2], acc.p2)
+                    : (acc.p1, acc.p2 + tp.Second[tp.Second.Length / 2]));
 
 Console.WriteLine($"Answers: {tp}");
 
