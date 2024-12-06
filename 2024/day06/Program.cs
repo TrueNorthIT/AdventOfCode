@@ -1,50 +1,35 @@
-﻿    using System.Numerics;
+﻿using System.Numerics;
 
-    Complex[] dirs = { new(-1, 0), new(0, 1), new(1, 0), new(0, -1) };
+Complex[] dirs = { new(-1, 0), new(0, 1), new(1, 0), new(0, -1) };
 
-    var grid = File.ReadAllLines("input.txt")
-                .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
-                .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
+var grid = File.ReadAllLines("input.txt")
+            .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
+            .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
 
-    var part1 = solve(grid).Select(tp => tp.position).Distinct().Count();
-    Console.WriteLine($"Part 1: {part1}");
+var start = grid.Where(kvp => kvp.Value == '^').Single().Key;
 
-    int part2 = 0;
-    Parallel.ForEach(grid.Where(kvp => kvp.Value == '.').Select(kvp => kvp.Key), obstacle =>
+var guardsRoute = solve(new Complex(-1,-1));
+Console.WriteLine($"Part 1: {guardsRoute.Count()}");
+
+var part2 = guardsRoute.Where(position => position != start)
+                .AsParallel()
+                .Count(obstacle => solve(obstacle) == null);
+
+Console.WriteLine($"Part 2: {part2}");
+
+List<Complex> solve(Complex obstacle)
+{
+    var visited = new HashSet<(Complex position, int direction)>();
+    (Complex position, int direction) current = (start, 0);
+    while (visited.Add(current))
     {
-        var newGrid = grid.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        newGrid[obstacle] = '#';
-        if (solve(newGrid) == null) Interlocked.Increment(ref part2);
-    });
-    Console.WriteLine($"Part 2: {part2}");
+        var next = current.position + dirs[current.direction];
+        if (!grid.ContainsKey(next))
+            return visited.Select(tp => tp.position).Distinct().ToList();
 
-    HashSet<(Complex position,int direction)> solve(Dictionary<Complex, char> grid)
-    {
-        var R = grid.Keys.Max(tp => tp.Real);
-        var C = grid.Keys.Max(tp => tp.Imaginary);
-
-        var start = grid.Where(kvp => kvp.Value == '^').Single().Key;
-
-        var visited = new HashSet<(Complex, int)>();
-        (Complex position, int direction) current = (start, 0);
-        while (visited.Add(current))
-        {
-            while (true)
-            {
-                Complex next = current.position + dirs[current.direction];
-                if (!grid.ContainsKey(next))
-                    return visited;
-
-                if (grid[next] == '#')
-                {
-                    current = (current.position, (current.direction + 1) % 4);
-                }
-                else
-                {
-                    current = (next, current.direction);
-                    break;
-                }
-            }
-        }
-        return null;
+        current = next == obstacle  || grid[next] == '#'
+                    ? (current.position, (current.direction + 1) % 4)
+                    : (next, current.direction);
     }
+    return null;
+}
