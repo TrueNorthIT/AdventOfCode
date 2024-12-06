@@ -4,11 +4,6 @@ var grid = File.ReadAllLines("input.txt")
             .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
             .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
 
-Complex[][] xOffsets = [
-    [ new (-1,-1), new (0, 0), new (1, 1) ],
-    [ new (-1, 1), new (0, 0), new (1,-1) ],
-];
-
 var offsets = from or in new [] { -1, 0, 1 }
             from oc in new [] { -1, 0, 1 }
             where !(or == 0 && oc == 0)
@@ -18,6 +13,11 @@ var part1 = grid.SelectMany(kvp =>
                 offsets.Where(line => Enumerable.Range(0, 4).All(i => 
                     "XMAS"[i] == grid.GetValueOrDefault(kvp.Key + line[i]))))
             .Count();
+
+Complex[][] xOffsets = [
+    [new(-1, -1), new(0, 0), new(1, 1)],
+    [new(-1, 1), new(0, 0), new(1, -1)],
+];
 
 var part2 = grid.Where(kvp => 
                     (   from arr in xOffsets
