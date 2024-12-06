@@ -1,50 +1,48 @@
-﻿    using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 
-    Complex[] dirs = { new(-1, 0), new(0, 1), new(1, 0), new(0, -1) };
+    var grid = File.ReadAllLines("input.txt").Select(line => line.ToArray()).ToArray();
+    (int sr, int sc, char _) = grid.SelectMany((str, r) => str.Select((ch, c) => (r, c, ch))).Single(tp => tp.ch == '^');
+    grid[sr][sc] = '.';
 
-    var grid = File.ReadAllLines("input.txt")
-                .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
-                .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
+    (int or, int oc) [] dirs = { (-1, 0), (0, 1), (1, 0), (0, -1) };
 
-    var part1 = solve(grid).Select(tp => tp.position).Distinct().Count();
-    Console.WriteLine($"Part 1: {part1}");
+    Stopwatch watch = new Stopwatch();
+    watch.Start();
+    var guardsRoute = solve(grid, (-1,-1)).DistinctBy(tp => tp.position);
+    Console.WriteLine($"Part 1: {guardsRoute.Count()} in {watch.ElapsedMilliseconds}ms");
 
+    watch.Restart();
     int part2 = 0;
-    Parallel.ForEach(grid.Where(kvp => kvp.Value == '.').Select(kvp => kvp.Key), obstacle =>
+    Parallel.ForEach(guardsRoute, new ParallelOptions { MaxDegreeOfParallelism = 16 }, obstacle =>
     {
-        var newGrid = grid.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        newGrid[obstacle] = '#';
-        if (solve(newGrid) == null) Interlocked.Increment(ref part2);
+        if (obstacle.position == (sr, sc)) return;
+        var solution = solve(grid, obstacle.position);
+        if (solution == null)
+        {
+            Console.WriteLine($"Obstacle at {obstacle.position} resulted in loop");
+            Interlocked.Increment(ref part2);
+        }
+        else
+        {
+            Console.WriteLine($"Obstacle at {obstacle.position} left room and covered {solution.Count} spaces");
+        }
     });
-    Console.WriteLine($"Part 2: {part2}");
+    Console.WriteLine($"Part 2: {part2} in {watch.ElapsedMilliseconds}ms");
 
-    HashSet<(Complex position,int direction)> solve(Dictionary<Complex, char> grid)
+    HashSet<((int r, int c) position,int direction)> solve(char[][] grid, (int r, int c) obstacle)
     {
-        var R = grid.Keys.Max(tp => tp.Real);
-        var C = grid.Keys.Max(tp => tp.Imaginary);
-
-        var start = grid.Where(kvp => kvp.Value == '^').Single().Key;
-
-        var visited = new HashSet<(Complex, int)>();
-        (Complex position, int direction) current = (start, 0);
+        var visited = new HashSet<((int r, int c) position, int direction)>();
+        ((int r, int c) position, int direction) current = ((sr,sc), 0);
         while (visited.Add(current))
         {
-            while (true)
-            {
-                Complex next = current.position + dirs[current.direction];
-                if (!grid.ContainsKey(next))
-                    return visited;
+            (int r, int c) next = (current.position.r + dirs[current.direction].or, current.position.c + dirs[current.direction].oc);
+            if (next.r < 0 || next.r >= grid.Length || next.c < 0 || next.c >= grid[0].Length)
+                return visited;
 
-                if (grid[next] == '#')
-                {
-                    current = (current.position, (current.direction + 1) % 4);
-                }
-                else
-                {
-                    current = (next, current.direction);
-                    break;
-                }
-            }
+            current = grid[next.r][next.c] == '#' || next == obstacle 
+                ? (current.position, (current.direction + 1) % 4)
+                : (next, current.direction);
         }
         return null;
     }
