@@ -13,7 +13,8 @@ Console.WriteLine($"Part 1: {part1}");
 Console.WriteLine($"Part 2: {part2}");
 
 static int totalWays(long target, long currentTotal, List<long> numbers, bool part2) => 
-!numbers.Any() ? target == currentTotal ? 1 : 0
-    :   totalWays(target, currentTotal * numbers.First(), numbers.Skip(1).ToList(), part2)
-        + totalWays(target, currentTotal + numbers.First(), numbers.Skip(1).ToList(), part2)
-        + (part2 ? totalWays(target, long.Parse($"{currentTotal}{numbers.First()}"), numbers.Skip(1).ToList(), part2) : 0);
+    !numbers.Any() 
+    ? target == currentTotal ? 1 : 0
+    : totalWays(target, currentTotal * numbers.First(), numbers.Skip(1).ToList(), part2)
+      + totalWays(target, currentTotal + numbers.First(), numbers.Skip(1).ToList(), part2)
+      + (part2 ? totalWays(target, long.Parse($"{currentTotal}{numbers.First()}"), numbers.Skip(1).ToList(), part2) : 0);
