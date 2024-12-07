@@ -1,20 +1,21 @@
-﻿var equations = File.ReadAllLines("input.txt").Select(str => { var sp = str.Split(':'); 
-        return (long.Parse(sp[0]), sp[1].Trim().Split(' ').Select(long.Parse).ToList()); 
-}).ToArray();
+﻿(long target, long[] ops)[] equations = File.ReadAllLines("input.txt")
+    .Select(str => str.Split(':'))
+    .Select(sp => ( long.Parse(sp[0]),
+                    sp[1].Trim().Split(' ').Select(long.Parse).ToArray())
+    ).ToArray();
 
-(var part1, var part2) = (0L, 0L);
-foreach ((long target, List<long> operands) in equations)
-{
-    if (totalWays(target, operands.First(), operands.Skip(1).ToList(), false) > 0) part1 += target;
-    if (totalWays(target, operands.First(), operands.Skip(1).ToList(), true) > 0) part2 += target;
-}
+var solve = (bool part2) => equations.AsParallel()
+        .Where(equation => possible(equation, equation.ops[0], 1, part2))
+        .Sum(eq => eq.target);
 
-Console.WriteLine($"Part 1: {part1}");
-Console.WriteLine($"Part 2: {part2}");
+Console.WriteLine($"Part 1: {solve(false)}");
+Console.WriteLine($"Part 2: {solve(true)}");
 
-static int totalWays(long target, long currentTotal, List<long> numbers, bool part2) => 
-    !numbers.Any() 
-    ? target == currentTotal ? 1 : 0
-    : totalWays(target, currentTotal * numbers.First(), numbers.Skip(1).ToList(), part2)
-      + totalWays(target, currentTotal + numbers.First(), numbers.Skip(1).ToList(), part2)
-      + (part2 ? totalWays(target, long.Parse($"{currentTotal}{numbers.First()}"), numbers.Skip(1).ToList(), part2) : 0);
+static bool possible((long target, long[] ops) equation, long currentTotal, int index, bool part2) => 
+    index >= equation.ops.Length 
+    ? equation.target == currentTotal
+    :   possible(equation, currentTotal + equation.ops[index], index + 1, part2)
+        || possible(equation, currentTotal * equation.ops[index], index + 1, part2)
+        || (part2 ? possible(equation, concat(currentTotal, equation.ops[index]), index + 1, true) : false);
+
+static long concat(long a, long b) =>  a * (long)Math.Pow(10, Math.Ceiling(Math.Log(b + 1, 10))) + b;
