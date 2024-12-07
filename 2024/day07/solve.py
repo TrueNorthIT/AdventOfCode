@@ -26,7 +26,7 @@ class Day07Solver(JoesAoCSolver):
                 return current == target
             if current > target:
                 return False
-
+            
             # Add, multiply, and concatenate
             if helper(current + values[index], index + 1):
                 return True
@@ -84,8 +84,8 @@ class Day07Solver(JoesAoCSolver):
 if __name__ == "__main__":
     solver = Day07Solver()
     # solver.run("assertions")S
-    # solver.run("real")
-    solver.benchmark(1000)
+    solver.run("real")
+    # solver.benchmark(1000)
     # cProfile.run("solver.part2()", "profile_results")
 
     # # # View the profile results
