@@ -1,42 +1,56 @@
+from math import log10 
 import sys; from pathlib import Path
 from typing import Tuple; sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
 
+
 class Day07Solver(JoesAoCSolver):
-
+    cached_data = None
     def parse_input(self):
+        if self.cached_data:
+            return self.cached_data
         rval = []
-
         for line in self.input_data.splitlines():
-            rval.append((int(line.split(":")[0]), tuple(map(int, line.split(": ")[1].split(" ")))))    
-
+            target, values = line.split(": ")
+            values = tuple(map(int, values.split(" ")))
+            # Precompute the number of digits for each value 
+            digit_lengths = [int(log10(v) + 1) if v > 0 else 1 for v in values]
+            rval.append((int(target), values, digit_lengths))
+        self.cached_data = rval
         return rval
     
-    def can_values_reach_target(self, target: int, values: Tuple[int], current: int, part2=False):
-        if len(values) == 0:
-            if target == current:
+    def can_values_reach_target(self, target: int, values: Tuple[int], current: int, digit_lengths,  part2=False):
+        length = len(values)
+
+        def helper(current, index):
+            if index == length:
+                return current == target
+            if current > target:
+                return False
+
+            # Add, multiply, and concatenate
+            if helper(current + values[index], index + 1):
                 return True
+            if helper(current * values[index], index + 1):
+                return True
+            if part2 and helper(current * (10**digit_lengths[index]) + values[index], index + 1):
+                return True
+
             return False
-        if current > target:
-            return False
-        
 
-        add_posibility = self.can_values_reach_target(target, values[1:], current + values[0], part2)
-        mult_posibility = self.can_values_reach_target(target, values[1:], current * values[0], part2)
-        if part2:
-            concat_posibility = self.can_values_reach_target(target, values[1:], int(str(current) + str(values[0])), part2)
-            return add_posibility or mult_posibility or concat_posibility
-        return add_posibility or mult_posibility
+        return helper(current, 0)
 
 
 
-    def part1(self):
+    def solve(self, part_2: bool = False):
         data = self.parse_input()
 
         total = 0
-        for target, values in data:
-            if self.can_values_reach_target(target, values, 0):
-                total += target
+        for target, values, lens in data:
+            total += target if self.can_values_reach_target(target, values, 0, lens, part_2) else 0
         return total
+    
+    def part1(self):
+        return self.solve()
 
     def part1_examples(self):
         return [
@@ -51,13 +65,7 @@ class Day07Solver(JoesAoCSolver):
 292: 11 6 16 20""", 3749)]
     
     def part2(self):
-        data = self.parse_input()
-
-        total = 0
-        for target, values in data:
-            if self.can_values_reach_target(target, values, 0, True):
-                total += target
-        return total
+        return self.solve(part_2=True)
 
     def part2_examples(self):
         return [
@@ -75,7 +83,13 @@ class Day07Solver(JoesAoCSolver):
 
 if __name__ == "__main__":
     solver = Day07Solver()
-    # solver.run("assertions")
-    solver.run("real")
-    # solver.benchmark(1000)
-    
+    # solver.run("assertions")S
+    # solver.run("real")
+    solver.benchmark(1000)
+    # cProfile.run("solver.part2()", "profile_results")
+
+    # # # View the profile results
+    # with open("profile_results.txt", "w") as f:
+    #     p = pstats.Stats("profile_results", stream=f)
+    #     p.sort_stats("cumulative").print_stats()
+        
