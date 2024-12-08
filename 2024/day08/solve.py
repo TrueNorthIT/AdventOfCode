@@ -20,57 +20,42 @@ class Day08Solver(JoesAoCSolver):
         for pos, char in grid.items():
             if char != ".":
                 antennas[char].append(pos)
+        grid_bounds = [max(pos.real for pos in grid.keys()), max(pos.imag for pos in grid.keys())]
 
-        return grid, antennas
+        return antennas, grid_bounds
 
     def part1(self):
-        grid, antennas = self.parse_input()
+        antennas, grid_bounds = self.parse_input()
 
         antenodes = set()
-        for ant, positions in antennas.items():
+        for _, positions in antennas.items():
             all_pairs = itertools.combinations(positions, 2)
             for pair in all_pairs:
                 delta = pair[0] - pair[1]
-                a_1 = pair[0] + delta
-                a_2 = pair[1] - delta
-                antenodes.add(a_1)
-                antenodes.add(a_2)
+                antenodes.add(pair[0] + delta)
+                antenodes.add(pair[1] - delta)
 
-        grid_bounds = [max(pos.real for pos in grid.keys()), max(pos.imag for pos in grid.keys())]
-        antenodes = {pos for pos in antenodes if in_bounds(pos, grid_bounds)}
-
-        return len(antenodes)
+        return len({pos for pos in antenodes if in_bounds(pos, grid_bounds)})
 
     def part2(self):
-        grid, antennas = self.parse_input()
-        grid_bounds = [max(pos.real for pos in grid.keys()), max(pos.imag for pos in grid.keys())]
-
+        antennas, grid_bounds = self.parse_input()
+        
         antenodes = set()
-        for ant, positions in antennas.items():
+        for _, positions in antennas.items():
             all_pairs = itertools.combinations(positions, 2)
-            antenodes.update(positions)
+            if (len(positions) >= 2): antenodes.update(positions)
             for pair in all_pairs:
                 delta = pair[0] - pair[1]
 
-                a_1_in_bounds = True
                 a_1 = pair[0]
-                while a_1_in_bounds:
-                    new_a_1 = a_1 + delta
-                    if in_bounds(new_a_1, grid_bounds):
-                        antenodes.add(new_a_1)
-                        a_1 = new_a_1
-                    else:
-                        a_1_in_bounds = False
+                while in_bounds(a_1 + delta, grid_bounds):
+                    a_1 += delta
+                    antenodes.add(a_1)
 
-                a_2_in_bounds = True
                 a_2 = pair[1]
-                while a_2_in_bounds:
-                    new_a_2 = a_2 - delta
-                    if in_bounds(new_a_2, grid_bounds):
-                        antenodes.add(new_a_2)
-                        a_2 = new_a_2
-                    else:
-                        a_2_in_bounds = False
+                while in_bounds(a_2 - delta, grid_bounds):
+                    a_2 -= delta
+                    antenodes.add(a_2)
 
         return len(antenodes)
 
@@ -120,3 +105,5 @@ class Day08Solver(JoesAoCSolver):
 if __name__ == "__main__":
     solver = Day08Solver()
     solver.run("real")
+    # solver.run("assertions")
+    # solver.benchmark(1000)

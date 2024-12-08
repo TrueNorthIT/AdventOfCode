@@ -27,7 +27,7 @@
         return helper(current, 0)
 ```
 
-## Benchmark 100 Iterations
+## Benchmark 100 Iterations (PyPy)
 
 | Part   | Avg Time   | Median     | 95th %ile | 99th %ile | Unit |
 |--------|------------|------------|-----------|-----------|------|
