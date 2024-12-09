@@ -4,28 +4,28 @@ if (tmp.Length % 2 == 1) tmp = $"{tmp}0";
 Block firstBlock = null;
 Block lastBlock = null;
 {
-    Block forwardIterator = null;
+    Block currentBlock = null;
     int fileId = 0;
     foreach (var grp in tmp.Select((ch, i) => (ch, i)).GroupBy(tp => tp.i / 2))
     {
         var size = int.Parse($"{grp.First().ch}");
         var free = int.Parse($"{grp.Skip(1).First().ch}");
 
-        var block = new Block() { id = fileId, size = size, free = free, prev = forwardIterator };
+        var block = new Block() { id = fileId, size = size, free = free, prev = currentBlock };
         if (firstBlock == null)
         {
             firstBlock = block;
-            forwardIterator = firstBlock;
+            currentBlock = firstBlock;
         }
         else
         {
-            forwardIterator.next = block;
-            forwardIterator = block;
+            currentBlock.next = block;
+            currentBlock = block;
         }
 
         fileId++;
     }
-    lastBlock = forwardIterator;
+    lastBlock = currentBlock;
 }
 
 
