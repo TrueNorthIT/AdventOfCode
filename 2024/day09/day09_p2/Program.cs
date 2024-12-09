@@ -1,99 +1,66 @@
 ﻿var tmp = File.ReadAllText("input.txt");
 if (tmp.Length % 2 == 1) tmp = $"{tmp}0";
 
-Block firstBlock = null;
-Block lastBlock = null;
+var blocks = new LinkedList<Block>();
+int id = 0;
+foreach (var grp in tmp.Select((ch, i) => (ch, i)).GroupBy(tp => tp.i / 2))
 {
-    Block currentBlock = null;
-    int fileId = 0;
-    foreach (var grp in tmp.Select((ch, i) => (ch, i)).GroupBy(tp => tp.i / 2))
-    {
-        var size = int.Parse($"{grp.First().ch}");
-        var free = int.Parse($"{grp.Skip(1).First().ch}");
+    var size = int.Parse($"{grp.First().ch}");
+    var free = int.Parse($"{grp.Skip(1).First().ch}");
 
-        var block = new Block() { id = fileId, size = size, free = free, prev = currentBlock };
-        if (firstBlock == null)
-        {
-            firstBlock = block;
-            currentBlock = firstBlock;
-        }
-        else
-        {
-            currentBlock.next = block;
-            currentBlock = block;
-        }
-
-        fileId++;
-    }
-    lastBlock = currentBlock;
+    var block = new Block() { id = id, size = size, free = free};
+    blocks.AddLast(block);    
+    id++;
 }
 
+//no way to enumerate the nodes so this is a bit clunky
+//but we need to copy them as blockToMove.Previous becomes invalid in the loop
+var reversed = new List<LinkedListNode<Block>>();
+for (var blockToMove = blocks.Last; blockToMove != null; blockToMove = blockToMove.Previous)
+{
+    reversed.Add(blockToMove);
+}
 
-for (var blockToMove = lastBlock; blockToMove != null; blockToMove = blockToMove.prev)
+foreach (var movingBlock in reversed)
 {
     //step through from first block trying to find enough free space to fit this block
-    var blockToMergeInto = firstBlock;
-    while (blockToMergeInto != blockToMove && blockToMergeInto.free < blockToMove.size)
+    var targetBlock = blocks.First;
+    while (targetBlock != movingBlock && targetBlock.Value.free < movingBlock.Value.size)
+        targetBlock = targetBlock.Next;
+
+    if (targetBlock != movingBlock)
     {
-        blockToMergeInto = blockToMergeInto.next;
-    }
-    if (blockToMergeInto != blockToMove)
-    {
-        //we can move a block
-        //remove it completely and add its space to the previous block
+        //we can move a block so add its space to the previous block
         //(there must be one we never move the first block)
-        blockToMove.prev.free = blockToMove.prev.free + blockToMove.size + blockToMove.free;
-        blockToMove.prev.next = blockToMove.next;
-
-        //if the removed block pointed to something, repoint it
-        if (blockToMove.next != null)
-        {
-            blockToMove.next.prev = blockToMove.prev;
-        }
-
-        //out new block has any extra free space from the block we have moved it into
-        var movedBlock = new Block() { 
-            id = blockToMove.id, 
-            size = blockToMove.size, 
-            free = blockToMergeInto.free - blockToMove.size, 
-            next = blockToMergeInto.next, 
-            prev = blockToMergeInto };
+        movingBlock.Previous.ValueRef.free = movingBlock.Previous.Value.free + movingBlock.Value.size + movingBlock.Value.free;
+        
+        //our new block has any extra free space from the block we have moved it into
+        movingBlock.ValueRef.free = targetBlock.Value.free - movingBlock.Value.size;
 
         //target block we are merging into now has 0 free space, it has been given to the new block
-        blockToMergeInto.free = 0;
+        targetBlock.ValueRef.free = 0;
 
-        //target block must have pointed to something, as we never move to the last block
-        // so repoint it to this block
-        blockToMergeInto.next.prev = movedBlock;
-
-        //target block now points to the new block
-        blockToMergeInto.next = movedBlock;
+        //remove the deleted node, and add the new one after the block we merged into
+        blocks.Remove(movingBlock);
+        targetBlock.List.AddAfter(targetBlock, movingBlock);
     }
 }
 
 int index = 0;
 long part2 = 0;
-for (var iterator = firstBlock; iterator !=null; iterator = iterator.next)
+for (var iterator = blocks.First; iterator != null; iterator = iterator.Next)
 {
-    for (int i = 0; i < iterator.size; i++)
-    {
-        part2 += index * iterator.id;
-        index++;
-    }
-    index += iterator.free;
+    part2 += iterator.Value.id * (index * iterator.Value.size + ((long) iterator.Value.size * (iterator.Value.size - 1) / 2));
+    index += iterator.Value.size + iterator.Value.free;
 }
 
 Console.WriteLine($"Part 2: {part2}");
-class Block ()
+
+struct Block()
 {
     public int id;
     public int size;
     public int free;
-    public Block prev;
-    public Block next;
 
-    public override string ToString()
-    {
-        return $"id:{id}, size:{size}, free:{free}";
-    }
+    public override string ToString() => $"id:{id},size:{size},free:{free}";
 }
