@@ -5,7 +5,7 @@ class Day09Solver(JoesAoCSolver):
 
     def parse_input(self) -> tuple[dict[int, int], dict[int, list[int]]]:
         files = self.input_data[0::2]
-        file_dict = {}
+        file_dict = defaultdict(int)
         for index, file_length in enumerate(files):
             file_dict[index] = int(file_length)
 
@@ -13,9 +13,8 @@ class Day09Solver(JoesAoCSolver):
         space_dict = {}
         for index, space in enumerate(empty_space):
             space_dict[index] = [int(space), []]
-
         
-        print(file_dict, space_dict)
+        
         return file_dict, space_dict
 
     def part1(self):
@@ -64,49 +63,47 @@ class Day09Solver(JoesAoCSolver):
     def build_drive(self, file_dict, space_dict):
         final_drive = []
         for key, value in file_dict.items():
-            final_drive.extend([key] * value)
-            try:
-                final_drive.extend(space_dict[key][1])
-                final_drive.extend(["."] * space_dict[key][0])
-            except KeyError:
-                pass
-        return final_drive
+            final_drive.extend([chr(key)] * value)
+            if key in space_dict:
+                final_drive.extend([chr(ord("."))] * space_dict[key][0])
+        return "".join(final_drive)
+    
+    def print_drive(self, drive):
+        print("".join(map(lambda x: str(ord(x)) if not x == '.' else '.', drive)))
 
-    def part2(self):
+    def part2(self):            
+        def swap_substrings(s: str, val1: str, val2: str) -> str:
+            idx1, idx2 = s.find(val1), s.find(val2)
+            if idx1 == -1 or idx2 == -1: return s
+            if idx1 < idx2: return s
+            return s[:idx2] + val1 + s[idx2 + len(val2):idx1] + val2 + s[idx1 + len(val1):]
+
         file_dict, space_dict = self.parse_input()
-
         initial_drive = self.build_drive(file_dict, space_dict)
-        print("".join(map(str, initial_drive)))
+        drive_string = self.build_drive(file_dict, space_dict)
+        self.print_drive(drive_string)
 
-        for file, file_repeat in sorted(file_dict.items(), reverse=True):
-            for block, (space, _) in sorted(space_dict.items()):
-                if block > file:
-                    break  # Don't move data past its current position
-                file_size = len(str(file) * file_repeat)
-                if space >= file_size:
-                    space_dict[block][1].extend([file] * file_size)
-                    space_dict[block][0] -= file_size
-                    file_dict[file] = 0
-                    if file in space_dict:
-                        if file_size == 1 and file-1 in space_dict:
-                            space_dict[file-1][0] += file_size
-                        else:
-                            space_dict[file][0] += file_size
-                    else:
-                        space_dict[file] = [file_size, []]
-                    break
+        for file_index, file_size in sorted(file_dict.items(), reverse=True):
+            file = str(chr(file_index)) * file_size
+            empty_space = "." * file_size * len(str(file_index))
+            drive_string = swap_substrings(drive_string, file,  empty_space)
 
-        final_drive = self.build_drive(file_dict, space_dict)
-        print("".join(map(str, final_drive)))
-        return sum(i * value for i, value in enumerate(final_drive) if value != ".")
+        self.print_drive(drive_string)
+
+        # If they are a different length, something went wrong!
+        assert len(drive_string) == len(initial_drive)
+        
+        # Final score is the sum of index * value for each file in the final drive
+        total = 0
+        for i, value in enumerate(drive_string):
+            if value != ".":
+                print(f"{i} * {ord(value)} = {i * int(ord(value))}")
+                total += i * int(ord(value))
+        return total
 
 
     def part2_examples(self):
-        return [
-            ("2333133121414131402", 2858),
-            # ("12345", 79), # 0..111....22222
-            # ("233313312", 414)
-        ]
+        return [("243313312141413140202", 2858)]
 
 
 
