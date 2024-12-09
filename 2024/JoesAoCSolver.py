@@ -182,6 +182,7 @@ class JoesAoCSolver:
             self.log(f"Part 2: Example Test Failed - {e}", "ERROR")
         except Exception as e:
             self.log(f"Part 2: Error - {e}", "ERROR")
+            raise e
 
         print("=" * 40)
 
