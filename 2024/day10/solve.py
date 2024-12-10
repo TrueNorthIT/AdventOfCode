@@ -7,7 +7,7 @@ DOWN = complex(0, 1)
 LEFT = complex(-1, 0)
 RIGHT = complex(1, 0)
 
-class Day01Solver(JoesAoCSolver):
+class Day10Solver(JoesAoCSolver):
 
     def parse_input(self) -> tuple[dict[complex, int], dict[int, list[complex]]]:
         grid = {
@@ -68,7 +68,6 @@ class Day01Solver(JoesAoCSolver):
 
     def part1(self):
         grid, lookup = self.parse_input()
-
         return sum(self.count_trails(trailhead, grid, set()) for trailhead in lookup[0])
 
     def part1_examples(self):
@@ -89,7 +88,6 @@ class Day01Solver(JoesAoCSolver):
     
     def part2(self):
         grid, lookup = self.parse_input()
-
         return sum(self.calculate_trails_ratings(trailhead, grid) for trailhead in lookup[0])
 
     def part2_examples(self):
@@ -108,8 +106,8 @@ class Day01Solver(JoesAoCSolver):
 
 
 if __name__ == "__main__":
-    solver = Day01Solver()
+    solver = Day10Solver()
     # solver.run("assertions")
-    solver.run("real")
-    # solver.benchmark(1000)
+    # solver.run("real")
+    solver.benchmark(1000)
     
