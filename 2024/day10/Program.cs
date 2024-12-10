@@ -4,7 +4,7 @@
     {
         static void Main()
         {
-            var results = new HashSet<Trail>();
+            var results = new List<Trail>();
             var points = File.ReadAllLines("input.txt").Select((l, yIndex) => l.Select((c, xIndex) => new Point { Height = int.Parse(c.ToString()), X = xIndex, Y = yIndex }).ToArray()).ToArray();
             for (var yIndex = 0; yIndex < points.Length; yIndex++)
             {
@@ -14,7 +14,7 @@
                     var point = pointsLine[xIndex];
                     if (point.Height == 0)
                     {
-                        foreach (var ninePoint in FindDestinations(points, point, new HashSet<Point>())) results.Add(new Trail { Destination = ninePoint, Origin = point });
+                        foreach (var ninePoint in FindDestinations(points, point, new List<Point>())) results.Add(new Trail { Destination = ninePoint, Origin = point });
                     }
                 }
             }
