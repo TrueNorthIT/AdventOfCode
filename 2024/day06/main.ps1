@@ -9,7 +9,7 @@ function Find-Guard($Lines)
         $foundXIndex = $Lines[$index].IndexOf("^");
         if ($foundXIndex -gt -1) 
         {
-            return [pscustomobject] @{x=$foundXIndex;y=$index;x_delta=0;y_delta=-1}
+            return [pscustomobject] @{x=$foundXIndex;y=$index;x_delta=0;y_delta=-1;is_loop=$false}
         }
     }
 }
@@ -40,12 +40,20 @@ function Move-Guard($Lines, $Position, $Occupations)
             $lastPosition.y_delta = $Position.x_delta
             return $lastPosition
         }
-        $positionsOccupied[($nextPosition.y*1000) + $nextPosition.x] = $true
         $lastPosition = [pscustomobject] @{
             x=$nextPosition.x;
             y=$nextPosition.y;
             x_delta=$Position.x_delta;
             y_delta=$Position.y_delta}
+        $key = ($nextPosition.y*1000) + $nextPosition.x
+        if ($positionsOccupied.ContainsKey($key))
+        {
+
+        }
+        else 
+        {
+            $positionsOccupied[$key] = @($lastPosition)
+        }
         $nextPosition = [pscustomobject] @{
             x=$lastPosition.x + $Position.x_delta;
             y=$lastPosition.y + $Position.y_delta;
@@ -55,10 +63,28 @@ function Move-Guard($Lines, $Position, $Occupations)
 }
 
 
-$guardPos = Find-Guard -Lines $lines
+$initialPos = Find-Guard -Lines $lines
 
 Write-Host "Guard is at ($($guardPos.x),$($guardPos.y)), facing ($($guardPos.x_delta),$($guardPos.y_delta))"
-$positionsOccupied[($guardPos.y*1000) + $guardPos.x] = $true
+
+$obstaclePoss = 0
+for ($xIndex = 0; $xIndex -lt $lines[0].length; $xIndex++) {
+    for ($yIndex = 0; $yIndex -lt $lines.length; $yIndex++) {
+        if ($lines[$yIndex][$xIndex] -ne "#")
+        {
+            $guardPos = @{
+                x=$initialPos.x;
+                y=$initialPos.y;
+                x_delta=$initialPos.x_delta;
+                y_delta=$initialPos.y_delta
+            }
+            $lines[$yIndex][$xIndex] = "#"
+            if ()
+            $lines[$yIndex][$xIndex] = "."
+        }
+    }
+}
+$positionsOccupied[($guardPos.y*1000) + $guardPos.x] = $($guardPos)
 
 while ($guardPos)
 {
