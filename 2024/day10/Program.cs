@@ -8,23 +8,22 @@ var grid = File.ReadAllLines("input.txt")
 
 var gridMap = grid.GroupBy(kvp => kvp.Value).ToDictionary(grp => grp.Key, grp => grp.Select(kvp => kvp.Key).ToArray());
 
-var neighourPaths = gridMap['0'].ToDictionary(key => key, key => new HashSet<Complex>(new[] { key }));
+var trailHeadsCanReach = gridMap['0'].ToDictionary(key => key, key => new HashSet<Complex>([key]));
 var dp1 = (char h, Complex square) => dirs.Select(dir => square + dir)
-                        .Where(n =>
-                            grid.ContainsKey(n) && (h - grid[n]) == 1)
-                        .SelectMany(neighbour => neighourPaths[neighbour])
+                        .Where(n => grid.ContainsKey(n) && (h - grid[n]) == 1)
+                        .SelectMany(neighbour => trailHeadsCanReach[neighbour])
                         .ToHashSet();
 
-solvedp(neighourPaths, '1', dp1);
-var part1 = gridMap['9'].Sum(square => neighourPaths[square].Count());
+solvedp(trailHeadsCanReach, '1', dp1);
+var part1 = gridMap['9'].Sum(square => trailHeadsCanReach[square].Count());
 
-var paths = gridMap['0'].ToDictionary(key => key, _ => 1);
+var pathCounts = gridMap['0'].ToDictionary(key => key, _ => 1);
 var dp2 = (char h, Complex square) => dirs.Select(dir => square + dir)
                         .Where(n => grid.ContainsKey(n) && (h - grid[n]) == 1)
-                        .Sum(neighbour => paths[neighbour]);
+                        .Sum(neighbour => pathCounts[neighbour]);
 
-solvedp<int>(paths, '1', dp2);
-var part2 = gridMap['9'].Sum(square => paths[square]);
+solvedp(pathCounts, '1', dp2);
+var part2 = gridMap['9'].Sum(square => pathCounts[square]);
 
 Console.WriteLine($"Part 2: {part2}");
 
