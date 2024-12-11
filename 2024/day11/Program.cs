@@ -5,9 +5,13 @@ namespace day11
     {
         static void Main()
         {
-            var stones = File.ReadAllLines("input.txt").First().Split(' ').Select(long.Parse);
-            for (int i = 0; i < 25; i++) stones = Blink(stones);
-            Console.WriteLine(stones.Count());
+            var stones = File.ReadAllLines("input.txt").First().Split(' ').Select(long.Parse).ToArray();
+            for (int i = 0; i < 75; i++)
+            {
+                stones = Blink(stones).ToArray();
+                Console.WriteLine("{2:HH:mm:ss} Blinked {0:00} times, stones {1}", i, stones.LongLength, DateTime.Now);
+            }
+            Console.WriteLine(stones.LongLength);
         }
 
         static IEnumerable<long> Blink(IEnumerable<long> stones)
