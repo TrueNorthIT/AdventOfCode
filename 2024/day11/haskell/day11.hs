@@ -8,10 +8,9 @@
         count 0 _ = 1
         count step 0 = memoized_count (step - 1) 1
         count step tile
-            |   mod (decimalLength tile) 2 == 0,
-                let (div,rem) = halves tile
-                = sum $ map (memoized_count (step-1)) [div, rem]
+            |   mod (digits tile) 2 == 0
+                = sum $ map (memoized_count (step-1)) $ split tile
             | otherwise = memoized_count (step-1) $ tile * 2024
 
-    decimalLength a  = toInteger $ ceiling $ logBase 10 $ fromIntegral a + 1
-    halves a = divMod a $ (^) 10 $ fst $ divMod (decimalLength a) 2
+    digits a  = toInteger $ ceiling $ logBase 10 $ fromIntegral a + 1
+    split a =  [div,rem] where (div,rem) = divMod a $ (^) 10 $ fst $ divMod (digits a) 2
