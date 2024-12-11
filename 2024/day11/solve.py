@@ -1,10 +1,6 @@
-# Day 11
+import sys; from pathlib import Path; sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
 
-## Solutions:
-
-
-
-```python
+class Day11Solver(JoesAoCSolver):
 
     def blink(self, num: int) -> list[int]:
         if num == 0:
@@ -19,6 +15,15 @@
         else:
             return [num * 2024]
         
+        
+    
+    def how_many_stones_after_n_blinks_recursive(self, num: int, n: int) -> int:
+        if n == 0:
+            return 1 
+        stones = self.blink(num)
+        
+        return sum(self.how_many_stones_after_n_blinks_recursive(stone, n - 1) for stone in stones)
+        
     def how_many_stones_after_n_blinks_iterative(self, num: int, n: int) -> int:
         current_stones = {num: 1}  # Initial stone count
         
@@ -31,23 +36,24 @@
             current_stones = next_stones
         
         return sum(current_stones.values())
-```
 
-I did a recursive approach frist which was fine for part 1 but went slowwwwwww for part 2 so the itterative one was born
-
-#### Slow Recursive
-```python
-def how_many_stones_after_n_blinks_recursive(self, num: int, n: int) -> int:
-        if n == 0:
-            return 1 
-        stones = self.blink(num)
         
-        return sum(self.how_many_stones_after_n_blinks_recursive(stone, n - 1) for stone in stones)
-```
 
-## Benchmark 1000 Iterations (PyPy)
+    def part1(self):
+        nums = map(int, self.input_data.split())
+        BLINK = 25
+        return sum(self.how_many_stones_after_n_blinks_iterative(num, BLINK) for num in nums)
 
-| Part   | Avg Time   | Median    | 95th %ile | 99th %ile  | Unit |
-|--------|------------|-----------|-----------|------------|------|
-| Part 1 | 1.254805   | 1.000404  | 2.008164  | 3.075488   | ms   |
-| Part 2 | 55.694045  | 52.537441 | 82.709527 | 102.180593 | ms   |
+    def part2(self):
+        nums = map(int, self.input_data.split())
+        BLINK = 75
+        return sum(self.how_many_stones_after_n_blinks_iterative(num, BLINK) for num in nums)
+
+
+if __name__ == "__main__":
+    solver = Day11Solver()
+    # solver.run("assertions")
+    solver.run("real")
+    # solver.benchmark(1000)
+    
+    
