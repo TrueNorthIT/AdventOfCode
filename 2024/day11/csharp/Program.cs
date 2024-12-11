@@ -1,19 +1,21 @@
-﻿var cache = new System.Collections.Concurrent.ConcurrentDictionary<(double, int), long>();
+﻿var cache = new System.Collections.Concurrent.ConcurrentDictionary<(double, int), double>();
 
-var solve = (int steps) => File.ReadAllText("input.txt").Split(' ')
-    .Sum(tile => count(long.Parse(tile), steps));
+var solve = (int steps) => File.ReadAllText("test.txt").Split(' ')
+    .Select(double.Parse)
+    .Sum(count(steps));
 
 Console.WriteLine($"Part 1: {solve(25)}, Part2: {solve(75)}");
 
-long count(long tile, int step) => cache.GetOrAdd((tile, step),
+Func <double, double> count(int step) => tile => cache.GetOrAdd((tile, step),
     _ => step switch {
         0 => 1L,
         _ => (tile switch {
             0 => [1L],
-                _ => (digits(tile), Math.Pow(10, digits(tile) / 2)) switch {
-                    (var d, var p) when d % 2 == 0
-                        => [(long)Math.Floor(tile / p), (long) (tile % p)],
-                    (_, _) => new [] { tile * 2024 }
-            }}).Sum(i => count(i, step))});
+            _ => digits(tile) switch {
+                var dig when dig % 2 == 0
+                    => [Math.Floor(tile / power10(dig/2)), (tile % power10(dig/2))],
+                _ => new [] { tile * 2024 }
+        }}).Sum(count(step - 1))});
 
-long digits(long a) => (long) Math.Ceiling(Math.Log(a + 1, 10));
+double power10(double a) => Math.Pow(10, a);
+double digits(double a) => Math.Ceiling(Math.Log(a + 1, 10));

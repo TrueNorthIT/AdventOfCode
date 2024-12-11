@@ -290,3 +290,9 @@ __pycache__/
 
 # Exclude AoC inputs
 *input*.txt
+
+*.exe
+
+*.hi
+
+*.o
