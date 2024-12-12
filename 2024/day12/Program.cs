@@ -1,4 +1,6 @@
-﻿    var dirs = new Complex[] { new(1, 0), new(0, -1), new(-1, 0), new(0, 1) };
+﻿    using System.Numerics;
+
+    var dirs = new Complex[] { new(1, 0), new(0, -1), new(-1, 0), new(0, 1) };
     var grid = File.ReadAllLines("input.txt")
         .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
         .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
@@ -11,12 +13,15 @@
         var queue = new Queue<Complex>([key]);
         while (queue.TryDequeue(out Complex curr))
         {
-            if (!visited.Add(curr)) continue;
+            if (!visited.Add(curr))
+                continue;
 
             foreach (var n in from dir in dirs select curr + dir)
             {
-                if (grid.ContainsKey(n) && grid[n] == grid[curr]) queue.Enqueue(n);
-                if (!grid.ContainsKey(n) || grid[n] != grid[curr]) walls.Add(sort(curr, n));
+                if (grid.ContainsKey(n) && grid[n] == grid[curr])
+                    queue.Enqueue(n);
+                if (!grid.ContainsKey(n) || grid[n] != grid[curr])
+                    walls.Add(sort(curr, n));
             }
         }
         regions.Add((walls.Count, 2 * count(walls, grid[key]), visited));
