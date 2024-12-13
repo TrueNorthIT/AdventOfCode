@@ -6,8 +6,7 @@ var grid = File.ReadAllLines("input.txt")
     .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
 
 var regions = new List<(int perimeter, int sides, HashSet<Complex> points)>();
-foreach (var key in grid.Keys
-    .Where(key => !regions.Any(region => region.points.Contains(key))))
+foreach (var key in grid.Keys.Where(key => !regions.Any(region => region.points.Contains(key))))
 {
     (var visited, var walls) = (new HashSet<Complex>(), new List<(Complex p1,Complex p2)>());
     var queue = new Queue<Complex>([key]);
@@ -29,9 +28,11 @@ foreach (var key in grid.Keys
         .Select(grp => grp.OrderBy(wall => wall.p1.Real))
         .Sum(set => set.Aggregate(
             (set.First(), inner(set.First(), grid[key]).Imaginary, 1),
-            (acc, curr) => (curr, inner(curr, grid[key]).Imaginary,
-                (Math.Abs(curr.p1.Real - acc.Item1.p1.Real) > 1)
-                || acc.Item2 != inner(curr, grid[key]).Imaginary ? acc.Item3 + 1 : acc.Item3),
+            (acc, curr) => 
+                (acc, inner(curr, grid[key]).Imaginary) is ((var prev, var pi, var total), var i)
+                    ? (curr, i, (Math.Abs(curr.p1.Real - acc.Item1.p1.Real) > 1) || pi != i 
+                        ? total + 1 : total) 
+                : default,
             acc => acc.Item3));
 
     regions.Add((walls.Count, 2 * count, visited));
