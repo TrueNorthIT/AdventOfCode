@@ -27,13 +27,16 @@ foreach (var key in grid.Keys.Where(key => !regions.Any(region => region.points.
         .GroupBy(wall => wall.p1.Imaginary)
         .Select(grp => grp.OrderBy(wall => wall.p1.Real))
         .Sum(set => set.Aggregate(
-            (set.First(), inner(set.First(), grid[key]).Imaginary, 1),
-            (acc, curr) => 
-                (acc, inner(curr, grid[key]).Imaginary) is ((var prev, var pi, var total), var i)
-                    ? (curr, i, (Math.Abs(curr.p1.Real - acc.Item1.p1.Real) > 1) || pi != i 
-                        ? total + 1 : total) 
-                : default,
-            acc => acc.Item3));
+            (prev: set.First(), inner: inner(set.First(), grid[key]).Imaginary, total: 1),
+            (acc, curr) => inner(curr, grid[key]).Imaginary switch {
+                var currInner => 
+                    (prev: curr, 
+                    inner: currInner, 
+                    total: (Math.Abs((curr.p1 - acc.prev.p1).Real) > 1) || acc.inner != currInner 
+                            ? acc.total + 1 
+                            : acc.total)
+            },
+            acc => acc.total));
 
     regions.Add((walls.Count, 2 * count, visited));
 }
