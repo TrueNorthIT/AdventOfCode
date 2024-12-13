@@ -1,3 +1,4 @@
+from collections import defaultdict, deque
 import sys; from pathlib import Path; sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
 
 
@@ -123,45 +124,38 @@ class Day12Solver(JoesAoCSolver):
             
         return sum(len(group['plots']) * len(group['fences']) for group in groups)
 
+    def count_edges(self, plots):
 
-    def find_edges(self, grid, target_letter):
-        rows, cols = len(grid), len(grid[0])
-        visited_edges = set()  # To track unique edges
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
-        sides = 0
-
-        # Check neighbors to define edges
-        def is_boundary(r, c, nr, nc):
-            return nr < 0 or nr >= rows or nc < 0 or nc >= cols or grid[nr][nc] != target_letter
-
-        # Iterate through all cells
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == target_letter:
-                    # Check all directions
-                    for dr, dc in directions:
-                        nr, nc = r + dr, c + dc
-                        if is_boundary(r, c, nr, nc):
-                            edge = tuple(sorted([(r, c), (nr, nc)]))  # Unique edge representation
-                            if edge not in visited_edges:
-                                visited_edges.add(edge)
-                                sides += 1
-
-        return sides
+        potential_edges = set()
+        for x, y in plots:
+            for d in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                if (x + d[0], y + d[1]) not in plots:
+                    potential_edges.add(((x, y), d))
 
 
-        
+        to_remove = 0
+        # We want to remove any edges that are part of a corner. Have to do this in two passes because it may not have been added yet.
+        for (x, y), d in potential_edges:
+            if ((x + d[1], y - d[0]), d) in potential_edges:
+                to_remove += 1
+                
+        return len(potential_edges) - to_remove
+
 
     def part2(self):
         grid = self.parse_input()    
         
         groups = self.generate_groups(grid)
         for group in groups:
-            print(f"{group['crop_type']} has {self.find_edges(grid, group['crop_type'])} edges.")
+            crop_type = group['crop_type']
+            area = len(group['plots'])
+            edges = self.count_edges(group['plots'])
+            print(f"A region of {crop_type} plants with price {area} * {edges} = {area * edges}.")
+
+        return sum(self.count_edges(group['plots']) * len(group['plots']) for group in groups)
 
 if __name__ == "__main__":
     solver = Day12Solver()
     # solver.run("assertions")
     solver.run("real")
     # solver.benchmark(1000)
-    
