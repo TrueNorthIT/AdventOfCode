@@ -1,7 +1,6 @@
 main = do
     content <- readFile "input.txt"
-    map $ words content
-    print 0
+    print [sum $ map (count s . read) $ words content | s <- [25 :: Int, 75]]
 
 count 0 _ = 1
 count step 0 = descend step 1
