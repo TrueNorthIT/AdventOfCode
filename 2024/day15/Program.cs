@@ -1,143 +1,80 @@
-﻿using System.Numerics;
-var dirs = new Complex[] { new(-1, 0), new(1, 0), new(0, -1), new(0, 1) };
+﻿    using System.Numerics;
+    var dirs = new Dictionary<char, Complex>() 
+        { { '^', new (-1, 0) }, { 'v', new (1, 0) }, { '<', new (0, -1) }, { '>', new (0, 1) } };
 
-var files = File.ReadAllText("input.txt").Split("\r\n\r\n");
-var parseGrid = () => files[0].Split("\r\n")
+    var files = File.ReadAllText("input.txt").Split("\r\n\r\n");
+    (var initialGrid, var moves) = 
+        (files[0].Split("\r\n")
             .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
-            .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch);
+            .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch),
+            files[1].ReplaceLineEndings(""));
 
-var grid = parseGrid();
-Complex start = grid.Single(kvp => kvp.Value == '@').Key; 
-grid[start] = '.';
-var moves = files[1].ReplaceLineEndings("");
+    var start = initialGrid.Single(kvp => kvp.Value == '@').Key;
+    initialGrid[start] = '.';
 
-solve(start);
-var p1 = grid.Where(kvp => kvp.Value == 'O').Sum(kvp => 100 * kvp.Key.Real + kvp.Key.Imaginary);
-Console.WriteLine($"Part 1: {p1}");
+    Console.WriteLine((part1(), part2()));
 
-grid = parseGrid();
-grid[start] = '.';
+    double part1() => solve(initialGrid, start)
+        .Where(kvp => kvp.Value == 'O').Sum(kvp => 100 * kvp.Key.Real + kvp.Key.Imaginary);
+    
+    double part2() => solve(new Dictionary<Complex, char>(
+        initialGrid.SelectMany(kvp => new KeyValuePair<Complex, char>[]
+            {   new (new (kvp.Key.Real, kvp.Key.Imaginary * 2), kvp.Value switch { 'O' => '[', _ => kvp.Value }),
+                new (new (kvp.Key.Real, kvp.Key.Imaginary * 2 + 1), kvp.Value switch { 'O' => '[', _ => kvp.Value })})), 
+        new (start.Real, start.Imaginary * 2))
+    .Where(kvp => kvp.Value == '[')
+    .Sum(kvp => 100 * kvp.Key.Real + kvp.Key.Imaginary);
 
-var newGrid = new Dictionary<Complex, char>();
-foreach (var kvp in grid)
-{
-    switch (kvp.Value)
+    Dictionary<Complex, char> solve(Dictionary<Complex, char> initialGrid, Complex start)
     {
-        case '#':
-        case '.':
-            newGrid.Add(new Complex(kvp.Key.Real, kvp.Key.Imaginary * 2), kvp.Value);
-            newGrid.Add(new Complex(kvp.Key.Real, kvp.Key.Imaginary * 2 + 1), kvp.Value);
-            break;
-        case 'O':
-            newGrid.Add(new Complex(kvp.Key.Real, kvp.Key.Imaginary * 2), '[');
-            newGrid.Add(new Complex(kvp.Key.Real, kvp.Key.Imaginary * 2 + 1), ']');
-            break;
-    }
-}
-start = new Complex(start.Real, start.Imaginary * 2);
-grid = newGrid;
-solve(start);
-
-void solve(Complex start)
-{
-    var curr = start;
-    foreach (var m in moves)
-    {
-        (var success, curr, var updates) = move2(curr, m);
-        if (success)
+        var grid = new Dictionary<Complex, char>(initialGrid);
+        var curr = start;
+        foreach (var m in moves)
         {
-            foreach (var update in updates)
-                grid[update.from] = '.';
-            foreach (var update in updates)
-                grid[update.to] = update.ch;
+            (var succ, curr, var updates) = step(grid, curr, m);
+            if (succ)
+            {
+                foreach (var update in updates)
+                    grid[update.from] = '.';
+                foreach (var update in updates)
+                    grid[update.to] = update.ch;
+            }
         }
+        return grid;
     }
-}
 
-var R = grid.MaxBy(kvp => kvp.Key.Real).Key.Real;
-var C = grid.MaxBy(kvp => kvp.Key.Imaginary).Key.Imaginary;
-var p2 = grid.Where(kvp => kvp.Value == '[').Sum(kvp =>
-{
-    return 100 * kvp.Key.Real + kvp.Key.Imaginary;
-});
+    (bool success, Complex next, List<(Complex from, Complex to, char ch)> moves)
+        step(Dictionary<Complex, char> grid, Complex start, char move) 
+        => (start + dirs[move]) switch { var next => grid[next] switch { var chNext => chNext switch {
+            '.' => (true, next, [(start, next, grid[start])]),
+            '#' => (false, start, []),
+            var box when chNext == 'O' || move == '>' || move == '<'
+                => step(grid, next, move) switch { var moves
+                => moves.success
+                    ? (true, next, [(start, next, grid[start]), .. moves.moves])
+                    : (false, start, [])
+                },
+            '[' or ']' 
+                => step(grid, next - (chNext == ']' ? new Complex(0, 1) : 0), move) switch { var move1
+                => step(grid, next + (chNext == '[' ? new Complex(0, 1) : 0), move) switch { var move2 
+                => move1.success && move2.success
+                    ? (true, next, [(start, next, grid[start]), .. move1.moves, .. move2.moves])
+                    : (false, start, [])
+            }}}}};
 
-Console.WriteLine($"Part 2: {p2}");
-
-(bool success, Complex next, List<(Complex from, Complex to, char ch)> moves) move2(Complex start, char move)
-{
-    var dir = move switch
-    {
-        '^' => dirs[0],
-        'v' => dirs[1],
-        '<' => dirs[2],
-        '>' => dirs[3],
-    };
-
-    var horizontal = move switch
-    {
-        '>' or '<' => true,
-        _ => false
-    };
-
-    //i is the start of our chain, and starting chain length is 1
-    switch (grid[start + dir])
-    {
-        //the end of our chain has been pushed into free space
-        //start would move forward one, end forward one
-        case '.':
-            //the start of our chain moves forward
-            //the free space gets replaced by whatever was before it
-            return (true, start + dir, [(start, start + dir, grid[start])]);
-        case '#':
-            //we have hit an obstruction, no moves to add
-            return (false, start, []);
-        case 'O':
-        case var box when horizontal:
-            //we are pushing on a length of wall horizontally
-            //no moves to add as only start and end of a chain of walls ever move   .OOO. -> ..OOO   ..[][]..[].. -> ...[][].[].
-            var moves = move2(start + dir, move);
-            if (moves.success)
-            {
-                return (true, start + dir, [(start, start + dir, grid[start]), .. moves.moves]);
-            }
-            return (false, start, []);
-        case '[':
-            {
-                //we are pushing vertically on the lhs of a box
-                var moves1 = move2(start + dir, move);
-                var moves2 = move2(start + dir + new Complex(0, 1), move);
-                if (moves1.success && moves2.success)
-                    return (true, start + dir, [(start, start + dir, grid[start]), .. moves1.moves, .. moves2.moves]);
-
-                return (false, start, []);
-            }
-        case ']':
-            {
-                //we are pushing vertically on the rhs of a box
-                var moves1 = move2(start + dir - new Complex(0, 1), move);
-                var moves2 = move2(start + dir, move);
-                if (moves1.success && moves2.success)
-                    return (true, start + dir, [(start, start + dir, grid[start]), .. moves1.moves, .. moves2.moves]);
-
-                return (false, start, []);
-            }
-        default: throw new();
-    }
-}
-
-//void showGrid(Complex robot)
+//void showGrid(Dictionary<Complex,char> grid, Complex robot)
 //{
 //    var R = (int)grid.Max(kvp => kvp.Key.Real);
 //    var C = (int)grid.Max(kvp => kvp.Key.Imaginary);
-//    var output = new char[R+1][];
+//    var output = new char[R + 1][];
 //    for (int r = 0; r <= R; r++)
-//        output[r] = new char[C+1];
+//        output[r] = new char[C + 1];
 
 //    foreach (var square in grid)
 //    {
 //        output[(int)square.Key.Real][(int)square.Key.Imaginary] = square.Value;
 //    }
-//    output[(int) robot.Real][(int) robot.Imaginary] = '@';
+//    output[(int)robot.Real][(int)robot.Imaginary] = '@';
 
 //    var result = new System.Text.StringBuilder();
 //    foreach (var arr in output)
