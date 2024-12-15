@@ -1,66 +1,55 @@
-﻿    using System.Numerics;
-    var dirs = new Dictionary<char, Complex>() 
-        { { '^', new (-1, 0) }, { 'v', new (1, 0) }, { '<', new (0, -1) }, { '>', new (0, 1) } };
+﻿    using Point = (int r, int c);
+    using Grid = System.Collections.Generic.Dictionary<(int r, int c), char>;
 
-    var files = File.ReadAllText("input.txt").Split("\r\n\r\n");
-    (var initialGrid, var moves) = 
-        (files[0].Split("\r\n")
-            .SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
-            .ToDictionary(tp => new Complex(tp.r, tp.c), tp => tp.ch),
-            files[1].ReplaceLineEndings(""));
+    var dirs = new Dictionary<char, (int r, int c)>() 
+        { { '^', (-1, 0) }, { 'v', (1, 0) }, { '<', (0, -1) }, { '>', (0, 1) } };
 
-    var start = initialGrid.Single(kvp => kvp.Value == '@').Key;
-    initialGrid[start] = '.';
+    (var grid, var moves) = File.ReadAllText("input.txt").Split("\r\n\r\n")  switch { var files => 
+        (files[0].Split("\r\n").SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
+            .ToDictionary(tp => (tp.r, tp.c), tp => tp.ch),
+        files[1].ReplaceLineEndings(""))};
 
     Console.WriteLine((part1(), part2()));
 
-    double part1() => solve(initialGrid, start)
-        .Where(kvp => kvp.Value == 'O').Sum(kvp => 100 * kvp.Key.Real + kvp.Key.Imaginary);
+    double part1() => solve(grid, grid.Single(kvp => kvp.Value == '@').Key)
+        .Where(kvp => kvp.Value == 'O').Sum(kvp => 100 * kvp.Key.r + kvp.Key.c);
     
-    double part2() => solve(new Dictionary<Complex, char>(
-        initialGrid.SelectMany(kvp => new KeyValuePair<Complex, char>[]
-            {   new (new (kvp.Key.Real, kvp.Key.Imaginary * 2), kvp.Value switch { 'O' => '[', _ => kvp.Value }),
-                new (new (kvp.Key.Real, kvp.Key.Imaginary * 2 + 1), kvp.Value switch { 'O' => '[', _ => kvp.Value })})), 
-        new (start.Real, start.Imaginary * 2))
+    double part2() => solve(
+        grid: grid.SelectMany(kvp => 
+        new[] { ((kvp.Key.r, kvp.Key.c * 2), kvp.Value == 'O' ? '[' : kvp.Value),
+                ((kvp.Key.r, kvp.Key.c * 2 + 1), kvp.Value == 'O' ? ']' : kvp.Value)})
+            .ToDictionary(kvp => kvp.Item1, kvp => kvp.Item2),
+        start: grid.Single(kvp => kvp.Value == '@').Key switch { var st => (st.r, st.c * 2) })
     .Where(kvp => kvp.Value == '[')
-    .Sum(kvp => 100 * kvp.Key.Real + kvp.Key.Imaginary);
+    .Sum(kvp => 100 * kvp.Key.r + kvp.Key.c);
 
-    Dictionary<Complex, char> solve(Dictionary<Complex, char> initialGrid, Complex start)
-    {
-        var grid = new Dictionary<Complex, char>(initialGrid);
-        var curr = start;
-        foreach (var m in moves)
+Grid UpdateItems(Grid grid, IEnumerable<(Point, char)> items) { items.ToList().ForEach(item => grid[item.Item1] = item.Item2); return grid; }
+
+Grid solve(Grid grid, Point start) => moves.Aggregate((grid: new Grid(grid), curr: start), (acc, m) =>
+        step(acc.grid, acc.curr, m) switch
         {
-            (var succ, curr, var updates) = step(grid, curr, m);
-            if (succ)
-            {
-                foreach (var update in updates)
-                    grid[update.from] = '.';
-                foreach (var update in updates)
-                    grid[update.to] = update.ch;
-            }
-        }
-        return grid;
-    }
+            (true, var next, var updates) => (UpdateItems(acc.grid, updates.Select(tp => (tp.from, tp.ch)).Concat(updates.Select(tp => (tp.to, tp.ch)))), next),
+            (false, var next, _) => (acc.grid, next)
+        }, acc => acc.grid);
 
-    (bool success, Complex next, List<(Complex from, Complex to, char ch)> moves)
-        step(Dictionary<Complex, char> grid, Complex start, char move) 
-        => (start + dirs[move]) switch { var next => grid[next] switch { var chNext => chNext switch {
-            '.' => (true, next, [(start, next, grid[start])]),
+    (bool success, Point position, List<(Point from, Point to, char ch)> moves)
+    step(Grid grid, Point start, char move) 
+        => (start.r + dirs[move].r, start.c + dirs[move].c) switch { var next 
+        => grid[next] switch { var ch => ch switch {
+            '.' or '@' => (true, next, [(start, next, grid[start])]),
             '#' => (false, start, []),
-            var box when chNext == 'O' || move == '>' || move == '<'
-                => step(grid, next, move) switch { var moves
-                => moves.success
-                    ? (true, next, [(start, next, grid[start]), .. moves.moves])
+            var box when ch == 'O' || move == '>' || move == '<'
+                => step(grid, next, move) switch { var st
+                => st.success
+                    ? (true, next, [(start, next, grid[start]), .. st.moves])
                     : (false, start, [])
                 },
             '[' or ']' 
-                => step(grid, next - (chNext == ']' ? new Complex(0, 1) : 0), move) switch { var move1
-                => step(grid, next + (chNext == '[' ? new Complex(0, 1) : 0), move) switch { var move2 
-                => move1.success && move2.success
-                    ? (true, next, [(start, next, grid[start]), .. move1.moves, .. move2.moves])
-                    : (false, start, [])
-            }}}}};
+                => step(grid, (next.Item1, next.Item2 - (ch == ']' ? 1 : 0)), move) switch { var st1
+                => step(grid, (next.Item1, next.Item2 + (ch == '[' ? 1 : 0)), move) switch { var st2
+                => st1.success && st2.success
+                    ? (true, next, [(start, next, grid[start]), .. st1.moves, .. st2.moves])
+                    : (false, start, [])}}}}};
 
 //void showGrid(Dictionary<Complex,char> grid, Complex robot)
 //{
