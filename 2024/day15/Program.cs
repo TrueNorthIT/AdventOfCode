@@ -23,13 +23,17 @@
     .Where(kvp => kvp.Value == '[')
     .Sum(kvp => 100 * kvp.Key.r + kvp.Key.c);
 
-Grid UpdateItems(Grid grid, IEnumerable<(Point, char)> items) { items.ToList().ForEach(item => grid[item.Item1] = item.Item2); return grid; }
-
-Grid solve(Grid grid, Point start) => moves.Aggregate((grid: new Grid(grid), curr: start), (acc, m) =>
-        step(acc.grid, acc.curr, m) switch
-        {
-            (true, var next, var updates) => (UpdateItems(acc.grid, updates.Select(tp => (tp.from, tp.ch)).Concat(updates.Select(tp => (tp.to, tp.ch)))), next),
-            (false, var next, _) => (acc.grid, next)
+    Grid solve(Grid grid, Point start)
+        => moves.Aggregate((grid: new Grid(grid), curr: start), (acc, m) => {
+        (var success, var next, var updates) = step(acc.grid, acc.curr, m);
+            if (success)
+            {
+                foreach (var update in updates)
+                    acc.grid[update.from] = '.';
+                foreach (var update in updates)
+                    acc.grid[update.to] = update.ch;
+            }
+            return (acc.grid, next);
         }, acc => acc.grid);
 
     (bool success, Point position, List<(Point from, Point to, char ch)> moves)
