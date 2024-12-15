@@ -1,12 +1,12 @@
 using Point = (int r, int c);
+using Move = ((int r, int c) from, (int r, int c) to, char ch);
 using Grid = System.Collections.Generic.Dictionary<(int r, int c), char>;
 
 var dirs = new Dictionary<char, (int r, int c)>() 
     { { '^', (-1, 0) }, { 'v', (1, 0) }, { '<', (0, -1) }, { '>', (0, 1) } };
 
 (var grid, var moves) = File.ReadAllText("input.txt").Split("\r\n\r\n")  switch { var files => 
-    (files[0].Split("\r\n").SelectMany((line, r) => line.Select((ch, c) => (r, c, ch)))
-        .ToDictionary(tp => (tp.r, tp.c), tp => tp.ch),
+    (files[0].Split("\r\n").SelectMany((line, r) => line.Select((ch, c) => ((r, c), ch))).ToDictionary(),
     files[1].ReplaceLineEndings(""))};
 
 Console.WriteLine((part1(), part2()));
@@ -24,17 +24,16 @@ double part2() => solve(
 .Sum(kvp => 100 * kvp.Key.r + kvp.Key.c);
 
 Grid solve(Grid grid, Point start) 
-=> moves.Aggregate((grid: new Grid(grid), curr: start), (acc, m) 
-=> step(acc.grid, acc.curr, m) switch { 
-    (true, var next, var updates) => 
-        (Update(acc.grid, updates.Select(tp => (tp.from, '.'))
-        .Concat(updates.Select(tp => (tp.to, tp.ch)))), next),
-    (false, var next, _) => (acc.grid, next)
-}, acc => acc.grid);
+    => moves.Aggregate((grid: new Grid(grid), curr: start), (acc, m) 
+    => step(acc.grid, acc.curr, m) switch { 
+        (true, var next, var updates) => 
+            (Update(acc.grid, updates.Select(tp => (tp.from, '.'))
+            .Concat(updates.Select(tp => (tp.to, tp.ch)))), next),
+        (false, var next, _) => (acc.grid, next)
+    }, acc => acc.grid);
 
-(bool success, Point position, List<(Point from, Point to, char ch)> moves)
-step(Grid grid, Point start, char move) 
-    => (start.r + dirs[move].r, start.c + dirs[move].c) switch { var next 
+(bool success, Point position, List<Move> moves) step(Grid grid, Point start, char move) 
+    => (start.r + dirs[move].r, start.c + dirs[move].c) switch { (int r, int c) next
     => grid[next] switch { var ch => ch switch {
         '.' or '@' => (true, next, [(start, next, grid[start])]),
         '#' => (false, start, []),
@@ -42,39 +41,13 @@ step(Grid grid, Point start, char move)
             => step(grid, next, move) switch { var st
             => st.success
                 ? (true, next, [(start, next, grid[start]), .. st.moves])
-                : (false, start, [])
-            },
-        '[' or ']' 
-            => step(grid, (next.Item1, next.Item2 - (ch == ']' ? 1 : 0)), move) switch { var st1
-            => step(grid, (next.Item1, next.Item2 + (ch == '[' ? 1 : 0)), move) switch { var st2
+                : (false, start, [])},
+        '[' or ']'
+            => step(grid, (r, c - (ch == ']' ? 1 : 0)), move) switch { var st1
+            => step(grid, (r, c + (ch == '[' ? 1 : 0)), move) switch { var st2
             => st1.success && st2.success
-                ? (true, next, [(start, next, grid[start]), .. st1.moves, .. st2.moves])
-                : (false, start, [])}}}}};
+                ? (true, next, [(start, (r, c), grid[start]), .. st1.moves, .. st2.moves])
+                : (false, start, []) } } } } };
 
 Grid Update(Grid grid, IEnumerable<(Point, char)> items) {
     foreach (var item in items) grid[item.Item1] = item.Item2; return grid; }
-
-//void showGrid(Dictionary<Complex,char> grid, Complex robot)
-//{
-//    var R = (int)grid.Max(kvp => kvp.Key.Real);
-//    var C = (int)grid.Max(kvp => kvp.Key.Imaginary);
-//    var output = new char[R + 1][];
-//    for (int r = 0; r <= R; r++)
-//        output[r] = new char[C + 1];
-
-//    foreach (var square in grid)
-//    {
-//        output[(int)square.Key.Real][(int)square.Key.Imaginary] = square.Value;
-//    }
-//    output[(int)robot.Real][(int)robot.Imaginary] = '@';
-
-//    var result = new System.Text.StringBuilder();
-//    foreach (var arr in output)
-//    {
-//        foreach (var ch in arr)
-//            result.Append(ch);
-//        result.AppendLine();
-//    }
-//    result.AppendLine();
-//    Console.WriteLine(result.ToString());
-//}
