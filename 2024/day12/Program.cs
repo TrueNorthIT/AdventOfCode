@@ -49,3 +49,4 @@ Complex inner((Complex c1, Complex c2) wall, char plant)
 
 Console.WriteLine($"Part 1: {regions.Sum(tp => tp.perimeter * tp.points.Count)}");
 Console.WriteLine($"Part 2: {regions.Sum(tp => tp.sides * tp.points.Count)}");
+
