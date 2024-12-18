@@ -7,12 +7,12 @@ for (int digit = program.Length - 1; digit >= 0; digit -= 1)
 {
     for (int i = 0; i < int.MaxValue; i++)
     {
-        var testing = current +  (1L << (digit * 3)) * i;
-        var output = run(program, testing, 0, 0);
+        var candidate = current +  (1L << (digit * 3)) * i;
+        var output = run(program, candidate, 0, 0);
         if (output.Skip(digit).SequenceEqual(program.Skip(digit)))
         {
-            current = testing;
-            Console.WriteLine($"Success finding digit {digit} = {program[digit]}, i={Convert.ToString(i, 8)} (octal)");
+            current = candidate;
+            Console.WriteLine($"Success finding digit {digit} to match {program[digit]}, i={Convert.ToString(i, 8)} (octal)");
             Console.WriteLine($"Output: [{String.Join(", ", output)}]");
             Console.WriteLine($"Current is now {Convert.ToString(current, 8)} (octal)");
             break;
