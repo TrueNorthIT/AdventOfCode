@@ -7,7 +7,7 @@ class Day15Solver(JoesAoCSolver):
 
     def parse_input(self):
         warehouse, instructions = self.input_data.split("\n\n")
-        
+
         warehouse = warehouse.replace("#", "##").replace("O", "[]").replace(".", "..").replace("@", "@.")
         
         warehouse_grid = {
@@ -20,7 +20,10 @@ class Day15Solver(JoesAoCSolver):
         
         return warehouse_grid, instructions.replace("\n", "")
         
-        
+    def normalise_box(self, box_coord: complex):
+        if self.warehouse_grid[box_coord] != "[":
+            box_coord -= 1
+        return box_coord
     
     def pprint_warehouse(self, warehouse_grid: dict[complex, str]):
         min_x = int(min(p.real for p in warehouse_grid))
@@ -36,50 +39,38 @@ class Day15Solver(JoesAoCSolver):
 
         
     
-    def canBoxMoveUpDown(self, boxCoord: complex, upOrDown: complex):
-        if self.warehouse_grid[boxCoord] != "[":
-            boxCoord -= 1
+    def can_box_move_up_down(self, boxCoord: complex, upOrDown: complex):
+        boxCoord = self.normalise_box(boxCoord)
 
         futureBoxCoord = boxCoord + upOrDown
         futureEndCoord = futureBoxCoord + 1
 
         if self.warehouse_grid[futureBoxCoord] == "#" or self.warehouse_grid[futureEndCoord] == "#":
             return False
-
-        
-        if self.warehouse_grid[futureBoxCoord] == "[":     
-            if not self.canBoxMoveUpDown(futureBoxCoord, upOrDown):
-                return False
-            
-        if self.warehouse_grid[futureBoxCoord] == "]":     
-            if not self.canBoxMoveUpDown(futureBoxCoord, upOrDown):
-                return False
-    
-        if self.warehouse_grid[futureEndCoord] == "[":  
-            if not self.canBoxMoveUpDown(futureEndCoord, upOrDown):
-                return False
+        if self.warehouse_grid[futureBoxCoord] == "[" and not self.can_box_move_up_down(futureBoxCoord, upOrDown):   
+            return False            
+        if self.warehouse_grid[futureBoxCoord] == "]" and not self.can_box_move_up_down(futureBoxCoord, upOrDown):
+            return False    
+        if self.warehouse_grid[futureEndCoord] == "[" and not self.can_box_move_up_down(futureEndCoord, upOrDown):
+            return False
 
         return True
 
-    def moveBoxUpDown(self, boxCoord: complex, upOrDown: complex):
+    def move_box_up_down(self, boxCoord: complex, upOrDown: complex):
+        if not self.can_box_move_up_down(boxCoord, upOrDown):
+            return False
         
-        if self.warehouse_grid[boxCoord] != "[":
-            boxCoord -= 1      
-                    
-        if not self.canBoxMoveUpDown(boxCoord, upOrDown):
-            return False       
-
+        boxCoord = self.normalise_box(boxCoord)   
+        
         futureBoxCoord = boxCoord + upOrDown
         futureEndCoord = futureBoxCoord + 1
             
         if self.warehouse_grid[futureBoxCoord] == "[":     
-            self.moveBoxUpDown(futureBoxCoord, upOrDown)
-            
+            self.move_box_up_down(futureBoxCoord, upOrDown)            
         if self.warehouse_grid[futureBoxCoord] == "]":     
-            self.moveBoxUpDown(futureBoxCoord, upOrDown)
-    
+            self.move_box_up_down(futureBoxCoord, upOrDown)    
         if self.warehouse_grid[futureEndCoord] == "[":  
-            self.moveBoxUpDown(futureEndCoord, upOrDown)
+            self.move_box_up_down(futureEndCoord, upOrDown)
             
         self.warehouse_grid[boxCoord] = "."
         self.warehouse_grid[boxCoord + 1] = "."
@@ -90,7 +81,7 @@ class Day15Solver(JoesAoCSolver):
         return True
         
 
-    def canBoxMoveLeftRight(self, boxCoord: complex, leftOrRight: complex):
+    def can_box_move_left_right(self, boxCoord: complex, leftOrRight: complex):
                 
         if (leftOrRight == -1 and self.warehouse_grid[boxCoord] == "]"):
             boxCoord -= 1
@@ -108,24 +99,23 @@ class Day15Solver(JoesAoCSolver):
             return True
         
         if futureFeature == "[" or futureFeature == "]":
-            return self.canBoxMoveLeftRight(futureBoxCoord, leftOrRight)
+            return self.can_box_move_left_right(futureBoxCoord, leftOrRight)
 
             
     
-    def moveBoxLeftRight(self, boxCoord: complex, leftOrRight: complex):
-        if self.warehouse_grid[boxCoord] != "[":
-            boxCoord -= 1
+    def move_box_left_right(self, boxCoord: complex, leftOrRight: complex):
+        boxCoord = self.normalise_box(boxCoord)
 
-        if not self.canBoxMoveLeftRight(boxCoord, leftOrRight):
+        if not self.can_box_move_left_right(boxCoord, leftOrRight):
             return False
 
         futureBoxCoord = boxCoord + leftOrRight
         futureEndCoord = futureBoxCoord + 1
 
         if leftOrRight == -1 and self.warehouse_grid[futureBoxCoord] == "]":
-            self.moveBoxLeftRight(futureBoxCoord - 1, leftOrRight)
+            self.move_box_left_right(futureBoxCoord - 1, leftOrRight)
         elif leftOrRight == 1 and self.warehouse_grid[futureEndCoord] == "[":
-            self.moveBoxLeftRight(futureEndCoord, leftOrRight)
+            self.move_box_left_right(futureEndCoord, leftOrRight)
 
         self.warehouse_grid[boxCoord] = "."
         self.warehouse_grid[boxCoord + 1] = "."
@@ -135,20 +125,15 @@ class Day15Solver(JoesAoCSolver):
         return True
     
     
-    def walkLeftRight(self, robotPos: complex, leftOrRight: complex):
+    def walk_left_right(self, robotPos: complex, leftOrRight: complex):
         futurePos = robotPos + leftOrRight
         futureFeature = self.warehouse_grid[futurePos]
         
         if futureFeature == "#":
             return robotPos
         
-        if futureFeature == ".":
-            self.warehouse_grid[robotPos] = "."
-            self.warehouse_grid[futurePos] = "@"
-            return futurePos
-        
         if futureFeature == "[" or futureFeature == "]":
-            if self.moveBoxLeftRight(futurePos, leftOrRight):
+            if self.move_box_left_right(futurePos, leftOrRight):
                 self.warehouse_grid[robotPos] = "."
                 self.warehouse_grid[futurePos] = "@"
                 return futurePos
@@ -159,20 +144,15 @@ class Day15Solver(JoesAoCSolver):
         self.warehouse_grid[futurePos] = "@"
         return futurePos
 
-    def walkUpDown(self, robotPos: complex, upOrDown: complex):
+    def walk_up_down(self, robotPos: complex, upOrDown: complex):
         futurePos = robotPos + upOrDown
         futureFeature = self.warehouse_grid[futurePos]
         
         if futureFeature == "#":
             return robotPos
         
-        if futureFeature == ".":
-            self.warehouse_grid[robotPos] = "."
-            self.warehouse_grid[futurePos] = "@"
-            return futurePos
-        
         if futureFeature == "[" or futureFeature == "]":
-            if self.moveBoxUpDown(futurePos, upOrDown):
+            if self.move_box_up_down(futurePos, upOrDown):
                 self.warehouse_grid[robotPos] = "."
                 self.warehouse_grid[futurePos] = "@"
                 return futurePos
@@ -193,13 +173,13 @@ class Day15Solver(JoesAoCSolver):
                 
         for i, instruction in enumerate(instructions):
             if instruction == "^":
-                robot_pos = self.walkUpDown(robot_pos, -1j)
+                robot_pos = self.walk_up_down(robot_pos, -1j)
             elif instruction == "v":
-                robot_pos = self.walkUpDown(robot_pos, 1j)
+                robot_pos = self.walk_up_down(robot_pos, 1j)
             elif instruction == "<":
-                robot_pos = self.walkLeftRight(robot_pos, -1)
+                robot_pos = self.walk_left_right(robot_pos, -1)
             elif instruction == ">":
-                robot_pos = self.walkLeftRight(robot_pos, 1)
+                robot_pos = self.walk_left_right(robot_pos, 1)
 
         self.pprint_warehouse(self.warehouse_grid)
         
