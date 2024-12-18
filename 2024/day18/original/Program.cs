@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text;
 
 const int take = 1024;
 const int X = 70;
@@ -66,3 +67,29 @@ bool inBounds(Complex point) => (point.Real, point.Imaginary) switch {
     (>= 0 and <= X, >=0 and <= Y) => true,
     _ => false,
 };
+
+void print(HashSet<Complex> route, Dictionary<Complex, int> bytes)
+{
+    var sb = new StringBuilder();
+    for (int y = 0; y <= Y; y++)
+    {
+        for (int x = 0; x <= X; x++)
+        {
+            var p = new Complex(x, y);
+            if (route.Contains(p))
+            {
+                sb.Append('O');
+            }
+            else if (bytes.ContainsKey(p))
+            {
+                sb.Append('#');
+            }
+            else
+            {
+                sb.Append('.');
+            }
+        }
+        sb.AppendLine();
+    }
+    Console.WriteLine(sb);
+}
