@@ -4,55 +4,62 @@ const int take = 1024;
 const int X = 70;
 const int Y = 70;
 
-var fullGrid = File.ReadAllText("input.txt").Split("\r\n")
-        .Select((line, r) => {
+var bytes = File.ReadAllText("input.txt").Split("\r\n")
+        .Select(line => {
             var sp = line.Split(",").Select(int.Parse).ToArray();
-            return (new Complex(sp[0], sp[1]), r);
+            return new Complex(sp[0], sp[1]);
         }).ToList();
+
+System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 
 var end = new Complex(X, Y);
 
 var dirs = new Complex[] { new(0, 1), new(1, 0), new(0, -1), new(-1, 0) }; //E, S, W, N
 
-var grid = fullGrid.Take(take).ToDictionary();
-var part1 = solve();
-Console.WriteLine($"Part 1: {part1}");
+var part1 = solve(bytes.Take(take).ToHashSet());
+Console.WriteLine($"Part 1: {part1.Count - 1} in {watch.ElapsedMilliseconds}ms");
 
-for (int t = take; t < int.MaxValue; t++)
+//repeatedly remove the next byte that lands on a cell on the optimum path
+var i = 0;
+var currentSet = bytes.Take(i).ToHashSet();
+do
 {
-    grid = fullGrid.Take(t).ToDictionary();
-    var p1 = solve();
-    if (p1 == -1)
+    var optimum = solve(currentSet);
+    //optimum is the optimum path after the first i bytes have fallen
+    if (!optimum.Any())
     {
-        Console.WriteLine($"Part 2: {fullGrid.Skip(t-1).First()}");
+        //answer is the i'th byte
+        Console.WriteLine($"Part 2: {bytes.Skip(i - 1).First()} in {watch.ElapsedMilliseconds}ms");
         break;
     }
+    i = bytes.Index().FirstOrDefault(tp => optimum.Contains(tp.Item)).Index + 1;
 
+    Console.WriteLine($"Skipping to consider byte {i}");
 }
+while (i != default);
 
-int solve()
+List <Complex> solve(HashSet<Complex> bytes)
 {
-    var queue = new Queue<(Complex, int)>();
-    queue.Enqueue((new Complex(0, 0), 0));
+    var queue = new Queue<(Complex, List<Complex>)>();
+    queue.Enqueue((new Complex(0, 0), new List<Complex>([new Complex(0,0)])));
     var visited = new HashSet<Complex>();
-    while (queue.TryDequeue(out (Complex position, int steps) curr))
+    while (queue.TryDequeue(out (Complex position, List<Complex> path) curr))
     {
         if (visited.Contains(curr.position))
             continue;
 
         if (curr.position == end)
-            return curr.steps;
+            return curr.path;
 
         visited.Add(curr.position);
 
         foreach (var next in dirs.Select(dir => curr.position + dir))
         {            
-            if (!grid.ContainsKey(next) && inBounds(next))
-                queue.Enqueue((next, curr.steps + 1));
+            if (!bytes.Contains(next) && inBounds(next))
+                queue.Enqueue((next, curr.path.Concat([next]).ToList()));
         }
     }
-
-    return -1;
+    return new List<Complex>();
 }
 
 bool inBounds(Complex point) => (point.Real, point.Imaginary) switch {
