@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
@@ -87,6 +86,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "day17", "2024\day17\smart\d
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "day17-brute", "2024\day17\brute\day17-brute.csproj", "{F3C398B6-0CEA-4259-994D-9B75502A31CB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "day18", "day18", "{333CD2AF-1942-4052-B6C4-A5003AF372A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "day18", "2024\day18\day18.csproj", "{5BB3EF34-942D-4B25-BED3-9E5A707573C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -169,6 +172,10 @@ Global
 		{F3C398B6-0CEA-4259-994D-9B75502A31CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3C398B6-0CEA-4259-994D-9B75502A31CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3C398B6-0CEA-4259-994D-9B75502A31CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BB3EF34-942D-4B25-BED3-9E5A707573C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BB3EF34-942D-4B25-BED3-9E5A707573C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BB3EF34-942D-4B25-BED3-9E5A707573C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BB3EF34-942D-4B25-BED3-9E5A707573C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,6 +218,8 @@ Global
 		{F3324508-9A28-4C7E-9606-9FF8546CF727} = {4EE792FD-61B9-4231-8F11-50695C600B2A}
 		{FA466402-EFCC-4152-87A4-83A454ED97D7} = {3B80D8C0-2F2E-4B41-8214-7B347F15052D}
 		{F3C398B6-0CEA-4259-994D-9B75502A31CB} = {F3324508-9A28-4C7E-9606-9FF8546CF727}
+		{333CD2AF-1942-4052-B6C4-A5003AF372A8} = {2D7249D5-D9BE-4D2E-AA70-63D2B99CBE7B}
+		{5BB3EF34-942D-4B25-BED3-9E5A707573C8} = {333CD2AF-1942-4052-B6C4-A5003AF372A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD669E3F-5BDD-426F-B405-A6B7077199F3}
