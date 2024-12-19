@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -17,41 +18,55 @@ var _bytes = File.ReadAllText("large.txt").Split("\r\n")
             return ((sp[0], sp[1]), r);
         });
 
-//reddit input had dupes so clean it up
-var bytes = new Dictionary<(int x, int y), int>();
+//reddit input had dupes so clean it up, kind of dumb!
+var __bytes = new Dictionary<(int x, int y), int>();
 foreach (var  b in _bytes)
-    if (!bytes.ContainsKey(b.Item1))
+    if (!__bytes.ContainsKey(b.Item1))
     {
-        bytes.Add(b.Item1, b.Item2);
+        __bytes.Add(b.Item1, b.Item2);
     }
+
+var bytes = new int[X + 1, Y + 1];
+for (int x = 0; x <= X; x++)
+    for (int y = 0; y <= Y; y++)
+        bytes[x, y] = int.MaxValue;
+
+foreach (var b in __bytes)
+{
+    bytes[b.Key.x, b.Key.y] = b.Value;
+}
+
 
 (int x, int y) end = (X, Y);
 var dirs = new (int x, int y)[] { (0, 1), (1, 0), (0, -1), (-1, 0) };
 
 //start timing now we have parsed the data
 System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-var cache = dijkstra(bytes);
 
-//back track through the cache to reconstruct the actual path
-var route = new HashSet<(int x, int y)>();
-var curr = end;
-while (curr != (0,0))
+((int x, int y), int t) p2 = default;
+List<(int x, int y)> route = null;
+for (int a = 0; a < 10; a++)
 {
-    var prev = cache[curr.x, curr.y];
-    route.Add(prev);
-    curr = prev;
+    var cache = dijkstra(bytes);
+    //back track through the cache to reconstruct the actual path
+    route = new List<(int x, int y)>();
+    var curr = end;
+    while (curr != (0, 0))
+    {
+        var prev = cache[curr.x, curr.y];
+        route.Add(prev);
+        curr = prev;
+    }   
+    //find the point at which this path would no longer be possible
+    p2 = route.Select(r => (r, bytes[r.x, r.y])).MinBy(tp => tp.Item2);
 }
-
-//find the point at which this path would no longer be possible
-var p2 = route.Where(bytes.ContainsKey).MinBy(point => bytes[point]);
 watch.Stop();
 
 //find the time at which this path would no longer be possible so we can print the obstacles
-var minTime = bytes.Where(b => route.Contains(b.Key)).MinBy(b => b.Value).Value;
-print(route, bytes, minTime);
-Console.WriteLine($"Solution {p2} in {watch.ElapsedMilliseconds}ms");
+print(route.ToHashSet(), bytes, p2.t);
+Console.WriteLine($"Solution {p2.Item1} in {watch.ElapsedMilliseconds / 10}ms");
 
-(int x, int y)[,] dijkstra(Dictionary<(int x, int y),int> bytes)
+(int x, int y)[,] dijkstra(int[,] bytes)
 {
     var visited = new bool[X + 1, Y + 1];
     var prev = new (int x, int y)[X + 1, Y + 1];
@@ -78,7 +93,7 @@ Console.WriteLine($"Solution {p2} in {watch.ElapsedMilliseconds}ms");
             if (next.x < 0 || next.x > X || next.y < 0 || next.y > Y)
                 continue;
             
-            queue.Enqueue((move.to, next), Math.Max(priority, -bytes.GetValueOrDefault(next, int.MaxValue))); //|MinValue| > |MaxValue|
+            queue.Enqueue((move.to, next), Math.Max(priority, -bytes[next.x, next.y])); //|MinValue| > |MaxValue|
         }
     }
     throw new();
@@ -89,7 +104,7 @@ bool inBounds(Complex point) => (point.Real, point.Imaginary) switch {
     _ => false,
 };
 
-void print(HashSet<(int x, int y)> route, Dictionary<(int x, int y), int> bytes, int t)
+void print(HashSet<(int x, int y)> route, int[,] bytes, int t)
 {
     var sb = new StringBuilder();
     for (int y = 0; y <= Y; y++)
@@ -101,7 +116,7 @@ void print(HashSet<(int x, int y)> route, Dictionary<(int x, int y), int> bytes,
             {
                 sb.Append('O');
             }
-            else if (bytes.ContainsKey(p) && bytes[p] <= t)
+            else if (bytes[x,y] <= t)
             {
                 sb.Append('#');
             }
