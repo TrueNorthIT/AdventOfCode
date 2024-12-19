@@ -1,15 +1,13 @@
 ﻿using System.Numerics;
 using System.Text;
 
-System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-
 #if FALSE
 const int X = 6; const int Y = X;
 var _bytes = File.ReadAllText("test.txt").Split("\r\n")
-#elif FALSE
+#elif TRUE
 const int X = 70; const int Y = X;
 var _bytes = File.ReadAllText("input.txt").Split("\r\n")
-#elif TRUE
+#elif FALSE
 const int X = 212; const int Y = X;
 var _bytes = File.ReadAllText("large.txt").Split("\r\n")
 #endif
@@ -18,20 +16,23 @@ var _bytes = File.ReadAllText("large.txt").Split("\r\n")
             return (new Complex(sp[0], sp[1]), r);
         });
 
+//reddit input had dupes so clean it up
 var bytes = new Dictionary<Complex, int>();
 foreach (var  b in _bytes)
-{
     if (!bytes.ContainsKey(b.Item1))
     {
         bytes.Add(b.Item1, b.Item2);
     }
-}
 
 var end = new Complex(X, Y);
 var dirs = new Complex[] { new(0, 1), new(1, 0), new(0, -1), new(-1, 0) };
 
+//start timing now we have parsed the data
+System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 var cache = solve(bytes);
-var route = new List<Complex>();
+
+//back track through the cache to reconstruct the actual path
+var route = new HashSet<Complex>();
 var curr = end;
 while (curr != new Complex(0,0))
 {
@@ -39,9 +40,15 @@ while (curr != new Complex(0,0))
     curr = cache[curr];
 }
 
+//find the point at which this path would no longer be possible
 var p2 = route.Where(bytes.ContainsKey).MinBy(point => bytes[point]);
 watch.Stop();
+
+//find the time at which this path would no longer be possible so we can print the obstacles
+var minTime = bytes.Where(b => route.Contains(b.Key)).MinBy(b => b.Value).Value;
+print(route, bytes, minTime);
 Console.WriteLine($"Solution {p2} in {watch.ElapsedMilliseconds}ms");
+
 Dictionary<Complex, Complex> solve(Dictionary<Complex,int> bytes)
 {
     //queue is prioritised by the max t of a byte along its path (remember its a -'ve queue though)    
@@ -56,16 +63,9 @@ Dictionary<Complex, Complex> solve(Dictionary<Complex,int> bytes)
         if (move.to == end)
             return visited;
 
-        //print(curr.path.ToHashSet(), bytes, -priority);
-        foreach (var d in dirs)
-        {
-            var next = move.to + d;
-            if (next.Real < 0 || next.Real > X || next.Imaginary < 0 || next.Imaginary > Y)
-                continue;
-
+        foreach (var next in dirs.Select(d => d + move.to).Where(inBounds))
             queue.Enqueue((move.to, next),
                 Math.Max(priority, -bytes.GetValueOrDefault(next, int.MaxValue))); //|MinValue| > |MaxValue|
-        }
     }
     throw new();
 }
