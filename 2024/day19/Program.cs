@@ -9,13 +9,14 @@ Console.WriteLine($"Part 2: {designs.Sum(possible)}");
 
 long possibleCached (string design)
 {
-    var res = possible(design);
-    cache.TryAdd(design,res);
-    return res;
+    if (!cache.ContainsKey(design))
+    {
+        cache.Add(design, possible(design));
+    }
+    return cache[design];
 }
 long possible(string design) => design switch
 {
     var empty when String.IsNullOrEmpty(design) => 1,
-    var seen when cache.ContainsKey(design) => cache[design],
     var other => patterns.Where(p => design.StartsWith(p)).Sum(p => possibleCached(design[p.Length..])),
 };
