@@ -1,19 +1,16 @@
-﻿    var files = File.ReadAllText("input.txt").Split("\r\n\r\n");
+﻿    using System.Collections.Concurrent;
+
+    var files = File.ReadAllText("input.txt").Split("\r\n\r\n");
     var patterns = files[0].Split(", ").ToArray();
     var designs = files[1].Split("\r\n");
 
-    var cache = new Dictionary<string, long>();
+    var cache = new ConcurrentDictionary<string, long>();
 
-    Console.WriteLine($"Part 1: {designs.Where(d => possibleMemoized(d) > 0).Count()}");
-    Console.WriteLine($"Part 2: {designs.Sum(possibleMemoized)}");
+    Console.WriteLine(designs.Select(waysMemoized) switch { var sol => (sol.Count(r => r > 0), sol.Sum())});
 
-    long possibleMemoized(string design)
-    {
-        if (!cache.ContainsKey(design))
-            cache.Add(design, possible(design));
-        return cache[design];
-    }
-    long possible(string design) => design switch {
+    long waysMemoized(string design) => cache.GetOrAdd(design, ways);
+
+    long ways(string design) => design switch {
         var empty when String.IsNullOrEmpty(empty) => 1,
-        var other => patterns.Where(other.StartsWith).Sum(p => possibleMemoized(other[p.Length..])),
+        var other => patterns.Where(other.StartsWith).Sum(p => waysMemoized(other[p.Length..])),
     };
