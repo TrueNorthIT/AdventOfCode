@@ -1,6 +1,7 @@
 from collections import defaultdict, deque
 import heapq
-import sys; from pathlib import Path; sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
+import sys; from pathlib import Path
+import time; sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
 
 class Day20Solver(JoesAoCSolver):
 
@@ -94,7 +95,7 @@ class Day20Solver(JoesAoCSolver):
     def generate_manhattan_points(self, pos: complex, r):
         # We expect 4 * r points to be generated
         points = []
-        for R in range(r):
+        for R in range(r+1):
             for offset in range(R):
                 invOffset = R - offset 
                 points.append(complex(pos.real + offset, pos.imag + invOffset))
@@ -107,7 +108,7 @@ class Day20Solver(JoesAoCSolver):
         return abs(pos1.real - pos2.real) + abs(pos1.imag - pos2.imag)
     
 
-    def part1(self, dist = 2):
+    def part1(self, dist = 20):
         self.parse_input()
         self.pprint(None)
         
@@ -124,8 +125,12 @@ class Day20Solver(JoesAoCSolver):
         
         checked = 0 
         to_check = len(START_TO_END_PATH) 
+        
+        start_time = time.time()
+        
         for pos in START_TO_END_PATH:
-            checked += 1
+            checked += 1                    
+            # Now let's find all the places we could cheat to from here, we need all '.' that are manhatten distance 2 away
             points = self.generate_manhattan_points(pos, dist)
             for point in points:
                 distance_from_pos_to_point = self.calc_manhattan_distance(pos, point)
@@ -133,11 +138,18 @@ class Day20Solver(JoesAoCSolver):
                     num_of_steps_from_start_to_pos = len(START_TO_END_PATH[0: START_TO_END_PATH.index(pos) + 1])
                     num_of_steps_from_end_to_point = len(START_TO_END_PATH[START_TO_END_PATH.index(point) + 1: ])
                     total_cost = num_of_steps_from_start_to_pos + num_of_steps_from_end_to_point + distance_from_pos_to_point - 1
-                    if total_cost <= START_TO_END_COST :
+                    if total_cost <= START_TO_END_COST - 100:
                         # print(f" Checking {pos} -> {point} Total cost: {total_cost} Difference: {START_TO_END_COST - total_cost}")
                         savings[START_TO_END_COST - total_cost] += 1
                         number_of_cheats += 1   
-            print(f"Checked {checked}/{to_check} points {checked/to_check * 100:.2f}%")
+                        
+            elapsed_time = time.time() - start_time
+            percentage = (checked / to_check) * 100
+            time_per_check = elapsed_time / checked
+            time_left = time_per_check * (to_check - checked)
+            # if percentage % 1 == 0:
+            print(f"Checked {checked} of {to_check} positions. {percentage}% Time left: {time_left:.2f} seconds")
+    
         
         for saving in sorted(savings.keys(), reverse=False):
             print(f"There are {savings[saving]} cheats that save {saving} picoseconds")
