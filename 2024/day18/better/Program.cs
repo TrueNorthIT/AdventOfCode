@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
@@ -66,38 +66,38 @@ watch.Stop();
 print(route.ToHashSet(), bytes, p2.t);
 Console.WriteLine($"Solution {p2.Item1} in {watch.ElapsedMilliseconds / 10}ms");
 
-(int x, int y)[,] dijkstra(int[,] bytes)
-{
-    var visited = new bool[X + 1, Y + 1];
-    var prev = new (int x, int y)[X + 1, Y + 1];
-    for (int x = 0; x <= X; x++)
-        for (int y = 0; y <= Y; y++)
-            prev[x, y] = (-1,-1);
-
-    //queue is prioritised by the max t of a byte along its path (remember its a -'ve queue though)    
-    var queue = new PriorityQueue<((int x, int y) from, (int x, int y) to),int>();
-    queue.Enqueue(((-1,-1),(0, 0)), int.MinValue);
-    while (queue.TryDequeue(out ((int x,int y) from, (int x, int y) to) move, out int priority))
+    (int x, int y)[,] dijkstra(int[,] bytes)
     {
-        if (visited[move.to.x, move.to.y])
-            continue;
-        visited[move.to.x, move.to.y] = true;
+        var visited = new bool[X + 1, Y + 1];
+        var prev = new (int x, int y)[X + 1, Y + 1];
+        for (int x = 0; x <= X; x++)
+            for (int y = 0; y <= Y; y++)
+                prev[x, y] = (-1,-1);
 
-        prev[move.to.x, move.to.y] = move.from;
-        if (move.to == end)
-            return prev;
-
-        foreach (var d in dirs)
+        //queue is prioritised by the max t of a byte along its path (remember its a -'ve queue though)    
+        var queue = new PriorityQueue<((int x, int y) from, (int x, int y) to),int>();
+        queue.Enqueue(((-1,-1),(0, 0)), int.MinValue);
+        while (queue.TryDequeue(out ((int x,int y) from, (int x, int y) to) move, out int priority))
         {
-            (int x, int y) next = (move.to.x + d.x, move.to.y + d.y);
-            if (next.x < 0 || next.x > X || next.y < 0 || next.y > Y)
+            if (visited[move.to.x, move.to.y])
                 continue;
+            visited[move.to.x, move.to.y] = true;
+
+            prev[move.to.x, move.to.y] = move.from;
+            if (move.to == end)
+                return prev;
+
+            foreach (var d in dirs)
+            {
+                (int x, int y) next = (move.to.x + d.x, move.to.y + d.y);
+                if (next.x < 0 || next.x > X || next.y < 0 || next.y > Y)
+                    continue;
             
-            queue.Enqueue((move.to, next), Math.Max(priority, -bytes[next.x, next.y])); //|MinValue| > |MaxValue|
+                queue.Enqueue((move.to, next), Math.Max(priority, -bytes[next.x, next.y])); //|MinValue| > |MaxValue|
+            }
         }
+        throw new();
     }
-    throw new();
-}
 
 bool inBounds(Complex point) => (point.Real, point.Imaginary) switch {
     ( >= 0 and <= X, >= 0 and <= Y) => true,
