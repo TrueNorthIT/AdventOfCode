@@ -1,10 +1,10 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 
 var grid = File.ReadAllText("input.txt").Split("\r\n")
         .SelectMany((line, r) => line.Select((ch, c) => (new Complex(r, c), ch)))
         .ToDictionary(tp => tp.Item1, tp => tp.ch);
 
-System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 
 var R = (int) grid.Max(kvp => kvp.Key.Real);
 var C = (int) grid.Max(kvp => kvp.Key.Imaginary);
@@ -16,100 +16,63 @@ grid[end] = '.';
 
 var dirs = new Complex[] { new(0, 1), new(1, 0), new(0, -1), new(-1, 0) }; //E, S, W, N
 
-List<(int t, bool cheated)> p1Solutions = solve();
+var timeFromEnd = solveNoCheats(start, end);
 
-var regularFinish = p1Solutions.Single(tp => !tp.cheated).t;
-int p1 = 0;
-var savings = p1Solutions.GroupBy(tp => tp.t).Select(grp => (regularFinish - grp.Key, grp.Count())).OrderBy(tp => tp.Item1).ToList();
-foreach (var cheat in savings)
-{
-    if (cheat.Item1 > 0)
-    {
-        Console.WriteLine($"There are {cheat.Item2} cheats thats save {cheat.Item1} picoseconds.");
-    }
-    if (cheat.Item1 >= 100)
-    {
-        p1 += cheat.Item2;
-    }
-}
-//390 too low!
+var p1Solutions = solve(2, timeFromEnd).GroupBy(tp => tp.timeSaved).OrderBy(grp => grp.Key);
+var p1 = p1Solutions.Where(grp => grp.Key >= 100).Sum(grp => grp.Count());
 Console.WriteLine($"Part 1: {p1}");
 
-List<(int t, bool cheated)> solve()
+var p2Solutions = solve(20, timeFromEnd).GroupBy(tp => tp.timeSaved).OrderBy(grp => grp.Key);
+var p2 = p2Solutions.Where(grp => grp.Key >= 100).Sum(grp => grp.Count());
+Console.WriteLine($"Part 2: {p2}");
+
+Dictionary<Complex, int> solveNoCheats(Complex start, Complex end)
 {
-    var queue = new Queue<(Complex, int, (Complex? cS, Complex? cE)?)>();
-    queue.Enqueue((start, 0, null));
-    var visited = new HashSet<(Complex, (Complex? cS, Complex? cE)?)>();
-
-    var solutions = new List<(int t, bool cheated)>();
-    while (queue.TryDequeue(out (Complex pos, int t, (Complex? cS, Complex? cE)? cheat) curr))
+    var route = new Dictionary<Complex, int>();
+    var prev = end;
+    int t = 0;
+    route.Add(end, t);
+    do
     {
-        if (visited.Contains((curr.pos, curr.cheat)))
-            continue;
-
-        if (curr.pos == end)
-        {
-            solutions.Add((curr.t, curr.cheat.HasValue));
-            continue;
-        }
-
-        visited.Add((curr.pos, curr.cheat));
-
-        foreach (var next in dirs.Select(dir => curr.pos + dir))
-        {
-            if (!grid.ContainsKey(next))
-                continue;
-            if (grid[next] != '#')
-            {
-                if (curr.cheat.HasValue && curr.cheat.Value.cS.HasValue)
-                {
-                    //we need to record the end of the cheat
-                    queue.Enqueue((next, curr.t + 1, (curr.cheat.Value.cS, next)));
-                }
-                else
-                {
-                    queue.Enqueue((next, curr.t + 1, curr.cheat));
-                }
-            }
-            else if (curr.cheat == null)
-            {
-                //we can move into a wall
-                var cheat = (next, (Complex?) null);
-                queue.Enqueue((next, curr.t + 1, cheat));
-            }
-        }
+        (end, prev) = (dirs.Select(dir => end + dir).Single(next =>
+            next != prev && grid.GetValueOrDefault(next, '#') == '.'), end);
+        t++;
+        route.Add(end, t);
     }
-    return solutions;
+    while (end != start);
+    return route;
 }
 
-//bool inBounds(Complex point, int R, int C) => point switch
-//{
-//    var inBound when inBound.Real >= 0 && inBound.Real <= R && inBound.Imaginary >= 0 && inBound.Imaginary <= C => true,
-//    _ => false,
-//};
+List<(int timeSaved, (int start, int end) cheat)> solve(int range, Dictionary<Complex, int> timesFromEnd)
+{
+    var results = new List<(int timeSaved, (int start, int end) cheat)>();
+    foreach ((var from, var sourceTimeFromEnd) in timesFromEnd)
+    {
+        var _inRange = inRange(timesFromEnd, from, range);
+        foreach ((var to, var cheatTime) in _inRange)
+        {
+            var timeSaved = sourceTimeFromEnd - timesFromEnd[to] - cheatTime;
+            results.Add((timeSaved, (timesFromEnd[from], timesFromEnd[to])));
+        }
+    }
+    return results;
+}
+List<(Complex pos, int cheatTime)> inRange(Dictionary<Complex, int> timeFromEnd, Complex from, int range)
+{
+    List<(Complex, int)> results = new();
+    for (int r = -range; r <= range; r++)
+        for (int c = -range; c <= range; c++)
+        {
+            var distance = Math.Abs(r) + Math.Abs(c);
+            if (distance > range)
+                continue;
 
-//void print(HashSet<Complex> route, Dictionary<Complex, int> bytes)
-//{
-//    var sb = new StringBuilder();
-//    for (int y = 0; y <= Y; y++)
-//    {
-//        for (int x = 0; x <= X; x++)
-//        {
-//            var p = new Complex(x, y);
-//            if (route.Contains(p))
-//            {
-//                sb.Append('O');
-//            }
-//            else if (bytes.ContainsKey(p))
-//            {
-//                sb.Append('#');
-//            }
-//            else
-//            {
-//                sb.Append('.');
-//            }
-//        }
-//        sb.AppendLine();
-//    }
-//    Console.WriteLine(sb);
-//}
+            var key = new Complex(from.Real + r, from.Imaginary + c);
+            if (timeFromEnd.ContainsKey(key))
+            {
+                results.Add((key, distance));
+            }
+        }
+    return results;
+}
+
