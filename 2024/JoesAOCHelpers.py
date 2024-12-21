@@ -64,3 +64,61 @@ def extract_ints_from_string(s: str) -> List[int]:
     Extracts all integers (positive or negative) from a given string.
     """
     return list(map(int, re.findall(r"-?\d+", s)))
+
+class Coord(complex):
+    def __new__(cls, x: int, y: int):
+        return super().__new__(cls, x, y)
+    
+    @property
+    def x(self):
+        return int(self.real)
+    
+    @property
+    def y(self):
+        return int(self.imag)
+    
+    def __repr__(self):
+        return f"({self.x}, {self.y})"
+    
+    # Overriding addition
+    def __add__(self, other):
+        if isinstance(other, Coord):
+            return Coord(self.x + other.x, self.y + other.y)
+        elif isinstance(other, complex):
+            return Coord(self.x + int(other.real), self.y + int(other.imag))
+        return NotImplemented
+    
+    # Overriding subtraction
+    def __sub__(self, other):
+        if isinstance(other, Coord):
+            return Coord(self.x - other.x, self.y - other.y)
+        elif isinstance(other, complex):
+            return Coord(self.x - int(other.real), self.y - int(other.imag))
+        return NotImplemented
+    
+    # Overriding multiplication
+    def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            return Coord(self.x * other, self.y * other)
+        elif isinstance(other, Coord):
+            return Coord(
+                self.x * other.x - self.y * other.y,
+                self.x * other.y + self.y * other.x
+            )
+        return NotImplemented
+    
+    # Overriding true division
+    def __truediv__(self, other):
+        if isinstance(other, (int, float)):
+            return Coord(self.x / other, self.y / other)
+        elif isinstance(other, Coord):
+            denom = other.x**2 + other.y**2
+            return Coord(
+                (self.x * other.x + self.y * other.y) / denom,
+                (self.y * other.x - self.x * other.y) / denom
+            )
+        return NotImplemented
+    
+    # Optionally, override negation
+    def __neg__(self):
+        return Coord(-self.x, -self.y)
