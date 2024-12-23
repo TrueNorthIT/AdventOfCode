@@ -34,20 +34,29 @@ Console.WriteLine(p1.Count);
 //we take a computer, enumerate all the computers it is connected to
 //and try adding each one to the set, with the condition it must connect to everything in our list already
 //potential issue is if adding a member to the connected set, which is not connected to the others, produces a smaller set
-//but this doesn't matter because we are building this set for each possible seed computer
-//and so one of these MUST result in the biggest set
-List<(string computer, HashSet<string> connected)> results = new();
-foreach ((string comp, HashSet<string> connectedTo) in computers)
+//but doesn't seem a problem in reality. Even if we repeat many times with a randomised order, we get the same answer
+List<string> best = new List<string>();
+for (int r = 0; r < 100; r++)
 {
-    var  connectedSet = new HashSet<string>();
-    connectedSet.Add(comp);
-    foreach (var connection in connectedTo)
+    List<(string computer, HashSet<string> connected)> results = new();
+    foreach ((string comp, HashSet<string> connectedTo) in computers)
     {
-        if (connectedSet.All(existing => computers[connection].Contains(existing)))
-            connectedSet.Add(connection);
+        var connectedSet = new HashSet<string>();
+        connectedSet.Add(comp);
+        var connectToArr = connectedTo.ToArray();
+        new Random().Shuffle(connectToArr);
+        foreach (var connection in connectToArr)
+        {
+            if (connectedSet.All(existing => computers[connection].Contains(existing)))
+                connectedSet.Add(connection);
+        }
+        results.Add((comp, connectedSet));
     }
-    results.Add((comp, connectedSet));
+    var ans = results.MaxBy(tp => tp.connected.Count).connected.OrderBy(str => str).ToArray();
+    best.Add(String.Join(",", ans));
 }
-var p2 = results.MaxBy(tp => tp.connected.Count).connected.OrderBy(str => str).ToArray();
-var p2Ans = String.Join(",", p2);
-Console.WriteLine(p2Ans);
+
+var p2 = best.MaxBy(str => str.Length);
+Console.WriteLine(p2);
+
+
