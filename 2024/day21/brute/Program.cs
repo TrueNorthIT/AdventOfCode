@@ -1,21 +1,44 @@
-﻿namespace day21
+﻿using System.Reflection.Emit;
+using System.Text;
+
+namespace day21
 {
     internal class Program
     {
         static void Main(string[] args)
         {
             var codes = File.ReadAllLines("input.txt");
-            int p1 = 0;
+            var p1Solutions = solve(codes, 2);
+            var p1Answer = p1Solutions.Sum(tp => tp.solution.Length * int.Parse(new string(tp.code.Where(ch => char.IsDigit(ch)).ToArray())));
+            foreach (var sol in p1Solutions)
+            {
+                Console.WriteLine(sol);
+            }
+            Console.WriteLine($"Part 1: {p1Answer}");
+            var p2Solutions = solve(codes, 5);
+            var p2Answer = p2Solutions.Sum(tp => tp.solution.Length * int.Parse(new string(tp.code.Where(ch => char.IsDigit(ch)).ToArray())));
+            Console.WriteLine($"Part 2: {p2Answer}");
+        }
+
+        static List<(string code, string solution)> solve(string[] codes, int noPads)
+        {
+            var solutions = new List<(string code, string solution)>();
             foreach (var code in codes)
             {
-                var moves1 = expand(new List<string>() { code }, true);
-                var moves2 = expand(moves1, false);
-                var moves3 = expand(moves2, false);
-                var l = moves3.MinBy(str => str.Length).Length;
-                var numeric = int.Parse(new string(code.Where(ch => char.IsDigit(ch)).ToArray()));
-                p1 += numeric * l;
+                var moves = expand(new List<string>() { code }, true);
+                int l = 0;
+                for (int pads = 0; pads < noPads; pads++)
+                {
+                    Console.WriteLine($"Expanding {pads}");
+                    moves = expand(moves, false);
+                    Console.WriteLine($"String length: {moves[0].Length}, moves count {moves.Count}");
+                    l = moves.MinBy(str => str.Length).Length;
+                    moves = moves.Where(str => str.Length == l).ToList();
+                }
+                moves = moves.Where(str => str.Length == l).ToList();
+                solutions.Add((code, moves.First()));
             }
-            Console.WriteLine($"Part 1: {p1}");
+            return solutions;
         }
 
         static List<string> expand(List<string> moves, bool keyPad)
@@ -28,19 +51,34 @@
             {
                 //build the new list of possibilities to enter this move on the dir pad above
                 //e.g. the first would be <A
-                var newMoves = new List<string>();
+                var newMoves = new List<StringBuilder>();
                 var prevChar = 'A';
                 foreach (var ch in move)
                 {
                     var dirPadMoves = keyPad ? getKeyPadMoves(prevChar, ch) : getDirPadMoves(prevChar, ch);
                     if (!newMoves.Any())
-                        newMoves.AddRange(dirPadMoves);
-                    else
+                        newMoves.AddRange(dirPadMoves.Select(str => new StringBuilder(str)));
+                    else if (dirPadMoves.Count > 1)
+                    {
                         //we append these moves to the previous set
-                        newMoves = newMoves.SelectMany(preMove => dirPadMoves.Select(newMove => $"{preMove}{newMove}")).ToList();
+                        newMoves = newMoves.SelectMany(preMove => dirPadMoves.Select(newMove =>
+                        {
+                            var sb = new StringBuilder(preMove.ToString());
+                            sb.Append(newMove);
+                            return sb;
+                        })).ToList();
+                        Console.WriteLine($"Expanded {dirPadMoves.Count} options");
+                    }
+                    else
+                    {
+                        foreach (var sb in newMoves)
+                        {
+                            sb.Append(dirPadMoves[0]);
+                        }
+                    }
                     prevChar = ch;
                 }
-                expanded.AddRange(newMoves);
+                expanded.AddRange(newMoves.Select(sb => sb.ToString()));
             }
 
             return expanded;
@@ -60,16 +98,19 @@
                 return [vFirst];
             else if (end.r == aRow && start.c == 0)
                 return [hFirst];
-            else
+            else if (aRow == 3)
                 //otherwise we can do either
                 //some might be make higher steps quicker so return both
-                return new [] { hFirst, vFirst }.Distinct().ToList();
+                return new[] { hFirst, vFirst }.Distinct().ToList();
+            else
+                //order NEVER matters on a dirPad
+                return new[] { hFirst }.Distinct().ToList();
         }
 
-        static List<string> getDirPadMoves(char start, char end) 
+        static List<string> getDirPadMoves(char start, char end)
             => getMoves(dirPadCoords(start), dirPadCoords(end), 0).Select(str => $"{str}A").ToList();
 
-        static List<string> getKeyPadMoves(char start, char end) 
+        static List<string> getKeyPadMoves(char start, char end)
             => getMoves(keyPadCoords(start), keyPadCoords(end), 3).Select(str => $"{str}A").ToList();
 
         static (int r, int c) keyPadCoords(char key) => key switch
