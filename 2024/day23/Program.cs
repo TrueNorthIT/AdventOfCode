@@ -33,6 +33,9 @@ Console.WriteLine(p1.Count);
 //each computer is connected to X other computers, which we have in our list
 //we take a computer, enumerate all the computers it is connected to
 //and try adding each one to the set, with the condition it must connect to everything in our list already
+//potential issue is if adding a member to the connected set, which is not connected to the others, produces a smaller set
+//but this doesn't matter because we are building this set for each possible seed computer
+//and so one of these MUST result in the biggest set
 List<(string computer, HashSet<string> connected)> results = new();
 foreach ((string comp, HashSet<string> connectedTo) in computers)
 {
