@@ -36,6 +36,7 @@ Console.WriteLine(p1.Count);
 //potential issue is if adding a member to the connected set, which is not connected to the others, produces a smaller set
 //but doesn't seem a problem in reality. Even if we repeat many times with a randomised order, we get the same answer
 List<string> best = new List<string>();
+var rand = new Random();
 for (int r = 0; r < 100; r++)
 {
     List<(string computer, HashSet<string> connected)> results = new();
@@ -44,7 +45,7 @@ for (int r = 0; r < 100; r++)
         var connectedSet = new HashSet<string>();
         connectedSet.Add(comp);
         var connectToArr = connectedTo.ToArray();
-        new Random().Shuffle(connectToArr);
+        rand.Shuffle(connectToArr);
         foreach (var connection in connectToArr)
         {
             if (connectedSet.All(existing => computers[connection].Contains(existing)))
