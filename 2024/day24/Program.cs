@@ -31,8 +31,9 @@ int inputSize = 45;
 var rand = new Random();
 Dictionary<(int g1, int g2), double> averages = new Dictionary<(int g1, int g2), double>();
 for (int g1 = 0; g1 < gates.Length; g1++)
-    for (int g2 = 0; g2 < gates.Length; g2++)
+    for (int g2 = g1 + 1; g2 < gates.Length; g2++)
     {
+        gates = gates.ToArray();
         //swap a gate, we have to swap the outputs! not the gates :(
         var g1z = gates[g1].z;
         var g2z = gates[g2].z;
@@ -95,9 +96,9 @@ for (int g1 = 0; g1 < gates.Length; g1++)
             //totalMatchingBits += numberMatchingBits;
         }
 
-        //swap back!
-        gates[g1].z = g1z;
-        gates[g2].z = g2z;
+        ////swap back!
+        //gates[g1].z = g1z;
+        //gates[g2].z = g2z;
     }
 
 var results = averages.OrderByDescending(a => a.Value).ToList();
