@@ -2,7 +2,7 @@
 (string x, string y, string z, string operation)[] originalGates = files[1].Split("\r\n").Select(line => line.Split(" -> ")).Select(arr =>
 {
     var sp2 = arr[0].Split(" ");
-    return ((sp2[0], sp2[2], arr[1], sp2[1]));
+    return (sp2[0], sp2[2], arr[1], sp2[1]);
 
 }).ToArray();
 
@@ -15,7 +15,6 @@
 }
 
 //Part 2
-//swap 1
 var p2Swaps = new (int, int)[] { (75, 144), (9, 86), (37, 49), (0, 107) };
 foreach (var swap in p2Swaps)
 {
@@ -27,7 +26,7 @@ foreach (var swap in p2Swaps)
 }
 
 var p2 = String.Join(",", p2Swaps.SelectMany(tp => new[] { originalGates[tp.Item1].z, originalGates[tp.Item2].z }).OrderBy(str => str).ToArray());
-//fvw,grf,mdb,nwq,wpq,z18,z22,z36
+Console.WriteLine($"Part 2: {p2}");
 
 int inputSize = 45;
 var rand = new Random();
@@ -41,10 +40,8 @@ for (int g1 = 0; g1 < originalGates.Length; g1++)
         //either no swap, or swap a gate
         //clone our array with any swaps we had already made
         var gates = originalGates.ToArray();
-        var g1Val = gates[g1];
-        var g2Val = gates[g2];
-        gates[g1] = (g1Val.x, g1Val.y, g2Val.z, g1Val.operation);
-        gates[g2] = (g2Val.x, g2Val.y, g1Val.z, g2Val.operation); ;
+        (var g1z, var g2z) = (gates[g1].z, gates[g2].z);
+        (gates[g1].z, gates[g2].z) = (g2z, g1z);
 
         var _gates = gates.GroupBy(tp => tp.x).Concat(gates.GroupBy(tp => tp.y)).GroupBy(grp => grp.Key).ToDictionary(grp => grp.Key, grp => grp.SelectMany(grp => grp).ToArray());
 
@@ -77,8 +74,6 @@ for (int g1 = 0; g1 < originalGates.Length; g1++)
         break;
     failed:;
     }
-
-Console.WriteLine();
 
 Dictionary<string, bool> getOutputs(long x, long y)
 {
