@@ -6,10 +6,6 @@ on:
     branches:
       - '**'
 
-  # Scheduled run at midday
-  schedule:
-    - cron: "0 12 * * *"
-
 jobs:
   build-readme:
     runs-on: ubuntu-latest
