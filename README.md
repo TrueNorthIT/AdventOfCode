@@ -7,18 +7,18 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 
 |   Rank | Name                  |   Local Score |   Stars | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   |
 |--------|-----------------------|---------------|---------|-----|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
-|      1 | chriswaters78         |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      2 | Joe Pitts             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      3 | samhatts1             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      4 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      5 | kadable               |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      6 | JCottrell-TrueNorthIT |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      7 | RichKelsey            |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      1 | Joe Pitts             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      2 | JCottrell-TrueNorthIT |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      3 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      4 | kadable               |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      5 | RichKelsey            |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      6 | chriswaters78         |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      7 | samhatts1             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 
 
 ## What is Advent of Code?
 
-[Advent of Code](https://adventofcode.com/) is an Advent Calendar of coding puzzles, with a new challenge released every day from December 1st to December 25th. These puzzles are designed to hone your problem-solving abilities and provide an excellent opportunity to learn new coding techniques.
+[Advent of Code](https://adventofcode.com/) is an Advent Calendar of coding puzzles, with a new challenge released every day from December 1st to December 12th. These puzzles are designed to hone your problem-solving abilities and provide an excellent opportunity to learn new coding techniques.
 
 ## How to Get Started
 
