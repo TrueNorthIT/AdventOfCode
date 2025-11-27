@@ -17,7 +17,6 @@ This is **your personal branch** for Advent of Code! Please use this branch to a
 3. **Push to This Branch**:
    - Push your changes to this branch regularly to save your progress.
    - Ensure your code is complete and tested before pushing.
-     test
 
 ## Leaderboard Updates
 
