@@ -58,7 +58,7 @@ if not SESSION_COOKIE:
     raise ValueError("SESSION_COOKIE is not set. Please provide it as an environment variable.")
 
 WEBHOOK_ENDPOINT = os.getenv("WEBHOOK_ENDPOINT")
-if not SESSION_COOKIE:
+if not WEBHOOK_ENDPOINT:
     raise ValueError("WEBHOOK_ENDPOINT is not set. Please provide it as an environment variable.")
 
 def git_list_year_files(branch: str, year: int, repo_root: Path) -> list[str]:
