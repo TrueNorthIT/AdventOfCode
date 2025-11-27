@@ -62,9 +62,11 @@ def git_list_year_files(branch: str, year: int, repo_root: Path) -> list[str]:
     Return all tracked file paths under <year>/ for the given branch,
     e.g. '2024/day01/solution.py'.
     """
+    ref = f"origin/{branch}"  # <-- IMPORTANT
+
     cmd = [
         "git", "ls-tree", "-r", "--name-only",
-        branch, "--", str(year)
+        ref, "--", str(year)
     ]
     try:
         result = subprocess.run(
@@ -76,12 +78,12 @@ def git_list_year_files(branch: str, year: int, repo_root: Path) -> list[str]:
             text=True,
         )
     except subprocess.CalledProcessError as e:
-        # branch may not exist or have that path – just treat as no files
         print(f"Warning: failed to list files for branch {branch}: {e.stderr.strip()}")
         return []
 
     files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
     return files
+
 
 
 def compute_polyglot_scores_git(board: Leaderboard,) -> Dict[str, tuple[int, set[str]]]:
@@ -290,7 +292,7 @@ def generate_achievements_table(board: Leaderboard) -> str:
         key=lambda x: -x[1][0],  # sort by language count desc
     )
     
-    max_len = max(len(early_bird_entries), len(need_it_entries), len(hackerman_entries))
+    max_len = max(len(early_bird_entries), len(need_it_entries), len(hackerman_entries), len(polyglot_entries))
     
     
     # headers: "", "1st", "2nd", ..., "Nth"
