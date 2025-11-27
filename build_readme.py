@@ -283,7 +283,7 @@ def generate_achievements_table(board: Leaderboard) -> str:
             hackerman_entries.append((name, member.local_score))
     hackerman_entries.sort(key=lambda x: -x[1])  # highest score first
     
-    # --- Polyglot 🤓: most distinct languages per member via git ---
+    # --- Polyglot: most distinct languages per member via git ---
     polyglot_scores = compute_polyglot_scores_git(board)
     # polyglot_scores: { name: (count, langs_set) }
 
@@ -328,7 +328,6 @@ def generate_achievements_table(board: Leaderboard) -> str:
             cells.append("")
         return cells
 
-    # Polyglot & Golf Pro empty for now
     rows.append(
         [(
             f"<details>"
@@ -348,14 +347,6 @@ def generate_achievements_table(board: Leaderboard) -> str:
         )]
         + cells_from_entries(early_bird_entries, lambda s: format_duration_full(s), max_len)
     )
-
-    rows.append([(
-        f"<details>"
-        f"<summary>Golf Pro ⛳</summary>"
-        f"Shortest code solutions (TBD).<br>"
-        f"</details>"
-    )] + [""] * max_len)
-    
 
     rows.append(
         [(
