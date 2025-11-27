@@ -1,10 +1,9 @@
 import os
 import requests
-import json
 from tabulate import tabulate
 
 # Constants
-YEAR = 2024
+YEAR = 2025
 LEADERBOARD_URL = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/353270.json"
 
 # Fetch SESSION_COOKIE from environment variables
@@ -26,7 +25,7 @@ def fetch_leaderboard_data(url, session_cookie):
 def generate_markdown_table(data, branch_mapping):
     # Prepare table data
     table_data = []
-    headers = ["Rank", "Name", "Local Score", "Stars"] + [str(day) for day in range(1, 26)]
+    headers = ["Rank", "Name", "Local Score", "Stars"] + [str(day) for day in range(1, 13)]
 
     rank = 1
     for member_id, details in sorted(data["members"].items(), key=lambda x: -x[1]["local_score"]):
@@ -38,7 +37,7 @@ def generate_markdown_table(data, branch_mapping):
 
         # Build star progress with hyperlinks
         star_progress = []
-        for day in range(1, 26):
+        for day in range(1, 13):
             day_str = str(day)
             if day_str in completion:
                 stars_for_day = completion[day_str]
@@ -65,7 +64,8 @@ if __name__ == "__main__":
         "3357259": "alex-radice",
         "4264967": "rich-kelsey",
         "4265041": "kade-hennessy",
-        "4306321": "sam-hatts"
+        "5105599": "sam-hatts",
+        "5156198": "bogdan-michon"
     }
 
     # Fetch data
