@@ -283,13 +283,15 @@ def generate_achievements_table(board: Leaderboard) -> str:
             hackerman_entries.append((name, member.local_score))
     hackerman_entries.sort(key=lambda x: -x[1])  # highest score first
     
-        # --- Polyglot 🤓: most distinct languages per member via git ---
+    # --- Polyglot 🤓: most distinct languages per member via git ---
     polyglot_scores = compute_polyglot_scores_git(board)
-    # { name: (count, langs_set) }
-    polyglot_entries = sorted(
-        polyglot_scores.items(),
-        key=lambda x: -x[1][0],  # sort by language count desc
-    )
+    # polyglot_scores: { name: (count, langs_set) }
+
+    polyglot_entries = [
+        (name, count, langs)
+        for name, (count, langs) in polyglot_scores.items()
+    ]
+    polyglot_entries.sort(key=lambda x: -x[1])  # sort by language count desc
     
     max_len = max(len(early_bird_entries), len(need_it_entries), len(hackerman_entries), len(polyglot_entries))
     
