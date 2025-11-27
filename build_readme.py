@@ -330,24 +330,50 @@ def generate_achievements_table(board: Leaderboard) -> str:
 
     # Polyglot & Golf Pro empty for now
     rows.append(
-        ["Polyglot 🤓"]
+        [(
+            f"<details>"
+            f"<summary>Polyglot 🤓</summary>"
+            f"Most distinct programming languages used.<br>"
+            f"</details>"
+        )]
         + cells_for_polyglot(polyglot_entries, max_len)
     )
 
     rows.append(
-        ["Early Bird 🦜"]
+        [(
+            f"<details>"
+            f"<summary>Early Bird ⏰</summary>"
+            f"Fastest time to complete Star 1 after unlock.<br>"
+            f"</details>"
+        )]
         + cells_from_entries(early_bird_entries, lambda s: format_duration_full(s), max_len)
     )
 
-    rows.append(["Golf Pro 🏌️"] + [""] * max_len)
+    rows.append([(
+        f"<details>"
+        f"<summary>Golf Pro ⛳</summary>"
+        f"Shortest code solutions (TBD).<br>"
+        f"</details>"
+    )] + [""] * max_len)
+    
 
     rows.append(
-        ["You Are Gonna Need It 🎒"]
+        [(
+            f"<details>"
+            f"<summary>You Are Gonna Need It 🛠️</summary>"
+            f"Fastest time between Star 1 and Star 2.<br>"
+            f"</details>"
+        )]
         + cells_from_entries(need_it_entries, lambda s: format_duration_full(s), max_len)
     )
 
     rows.append(
-        ["Hackerman 🧑‍💻"]
+        [(
+            f"<details>"
+            f"<summary>Hackerman 💻</summary>"
+            f"Highest local score on the private leaderboard.<br>"
+            f"</details>"
+        ) ]
         + cells_from_entries(hackerman_entries, lambda s: str(s), max_len)
     )
 
