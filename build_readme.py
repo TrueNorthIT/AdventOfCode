@@ -53,7 +53,7 @@ BRANCH_MAPPING = {
     
 
 # Fetch SESSION_COOKIE from environment variables
-SESSION_COOKIE = os.getenv("SESSION_COOKIE")
+SESSION_COOKIE = "53616c7465645f5f5750dd84293ff1181dac00b5785c953aef7b1644be3fc4c6e1a78b0f0366b518b9ff3cfdaed5d5b62f56802e395baabb14bb1ba000635cc6" #os.getenv("SESSION_COOKIE")
 if not SESSION_COOKIE:
     raise ValueError("SESSION_COOKIE is not set. Please provide it as an environment variable.")
 
@@ -151,7 +151,7 @@ def fetch_leaderboard_data(url, session_cookie):
     response = requests.get(url, cookies=cookies)
     if response.status_code == 200:
         data = response.json()
-        return Leaderboard.from_dict(data)
+        return Leaderboard.from_dict(data), data
     else:
         print(f"Error: Unable to fetch data (status code: {response.status_code})")
         return None
@@ -389,31 +389,16 @@ def post_to_haWebhook(leaderboard):
 if __name__ == "__main__":
 
     # Fetch data
-    leaderboard_data = fetch_leaderboard_data(LEADERBOARD_URL, SESSION_COOKIE)
+    leaderboard_data, raw_data = fetch_leaderboard_data(LEADERBOARD_URL, SESSION_COOKIE)
 
     if leaderboard_data:
         # Post Leaderboard data to home assitant
-        post_to_haWebhook(leaderboard_data)
+        post_to_haWebhook(raw_data)
 
         # Generate and print markdown table
         markdown_table = generate_markdown_table(leaderboard_data)
         achievements_table = generate_achievements_table(leaderboard_data)
         
-        print(achievements_table)
-        
-        per_member = fastest_delta_per_member(leaderboard_data)
-
-        print("Fastest completion times between stars:")
-        for name, (day, delta) in per_member.items():
-            print(f"{name}: fastest on Day {day} with {format_duration_full(delta)} between stars")
-                    
-        per_member = fastest_p1_per_member(leaderboard_data)
-        print("\nFastest completion times after unlock for Star 1:")
-        for name, (day, delta) in sorted(per_member.items(), key=lambda x: x[1][1]):
-            print(f"{name}: Day {day}, {format_duration_full(delta)} after unlock")
-        # print(markdown_table)
-                
-        # template readme
         with open('README.template', encoding='utf-8') as f:
             readme_stub = f.read()
 
