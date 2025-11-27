@@ -376,6 +376,7 @@ def generate_achievements_table(board: Leaderboard) -> str:
 
 
 def post_to_haWebhook(leaderboard):
+    webhookstring = str(WEBHOOK_ENDPOINT)
     requests.post(
         "https://ha.tnapps.co.uk/api/webhook/"+WEBHOOK_ENDPOINT,
         data=json.dumps(leaderboard),
