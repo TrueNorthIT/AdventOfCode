@@ -29,6 +29,7 @@ EXT_TO_LANG = {
     ".swift": "Swift",
     ".scala": "Scala",
     ".jl": "Julia",
+    ".xlsx": "Excel",
 }
 
 
@@ -152,18 +153,18 @@ def fetch_leaderboard_data(url, session_cookie):
         return None
 
 # Generate markdown table with hyperlinks   
-def generate_markdown_table(data: Leaderboard , branch_mapping):
+def generate_markdown_table(data: Leaderboard):
     # Prepare table data
     table_data = []
     headers = ["Rank", "Name", "Local Score", "Stars"] + [str(day) for day in range(1, data.num_days + 1)]
 
     rank = 1
-    for member_id, details in sorted(data.members.items(), key=lambda x: -x[1].local_score):
+    for _, details in sorted(data.members.items(), key=lambda x: -x[1].local_score):
         name = details.name
         local_score = details.local_score
         stars = details.stars
         completion = details.completion_day_level
-        branch = branch_mapping.get(member_id, None)
+        branch = BRANCH_MAPPING.get(str(details.id), None)
 
         # Build star progress with hyperlinks
         star_progress = []
@@ -379,7 +380,7 @@ if __name__ == "__main__":
 
     if leaderboard_data:
         # Generate and print markdown table
-        markdown_table = generate_markdown_table(leaderboard_data, BRANCH_MAPPING)
+        markdown_table = generate_markdown_table(leaderboard_data)
         achievements_table = generate_achievements_table(leaderboard_data)
         
         print(achievements_table)
