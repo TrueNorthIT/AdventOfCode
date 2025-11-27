@@ -4,7 +4,7 @@ on:
   # Trigger on push to any branch
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   build-readme:
@@ -15,15 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          # Ensure full history is fetched 
+          # Ensure full history is fetched
           fetch-depth: 0
-          persist-credentials : true
+          persist-credentials: true
 
       - name: Fetch all remote branches
         run: |
           git fetch origin "+refs/heads/*:refs/remotes/origin/*"
           git branch -a
-          
 
       # Step 2: Set up Python environment
       - name: Set up Python
@@ -39,6 +38,7 @@ jobs:
       - name: Run build_readme.py
         env:
           SESSION_COOKIE: ${{ secrets.SESSION_COOKIE }}
+          WEBHOOK_ENDPOINT: ${{ secrets.WEBHOOK_ENDPOINT }}
         run: python build_readme.py
 
       # Step 5: Commit and push updated README.md to main branch
