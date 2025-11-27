@@ -35,7 +35,7 @@ EXT_TO_LANG = {
 
 
 # Constants
-YEAR = 2024
+YEAR = 2025
 LEADERBOARD_URL = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/353270.json"
 
 BRANCH_MAPPING = {
@@ -46,7 +46,8 @@ BRANCH_MAPPING = {
     "4264967": "rich-kelsey",
     "4265041": "kade-hennessy",
     "5105599": "sam-hatts",
-    "5156198": "bogdan-michon"
+    "5156198": "bogdan-michon",
+    "5175448": "muhamad-hewa-rahim",
 }
     
 
