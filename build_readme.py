@@ -56,7 +56,9 @@ SESSION_COOKIE = os.getenv("SESSION_COOKIE")
 if not SESSION_COOKIE:
     raise ValueError("SESSION_COOKIE is not set. Please provide it as an environment variable.")
 
-
+WEBHOOK_ENDPOINT = os.getenv("WEBHOOK_ENDPOINT")
+if not SESSION_COOKIE:
+    raise ValueError("WEBHOOK_ENDPOINT is not set. Please provide it as an environment variable.")
 
 def git_list_year_files(branch: str, year: int, repo_root: Path) -> list[str]:
     """
@@ -373,6 +375,14 @@ def generate_achievements_table(board: Leaderboard) -> str:
     return tabulate(rows, headers=headers, tablefmt="github")
 
 
+def post_to_haWebhook(leaderboard):
+    requests.post(
+        "https://ha.tnapps.co.uk/api/webhook/"+WEBHOOK_ENDPOINT,
+        data=json.dumps(leaderboard),
+        headers={"Content-Type": "application/json"},
+        timeout=60
+    )
+
 # Main script
 if __name__ == "__main__":
 
@@ -380,6 +390,9 @@ if __name__ == "__main__":
     leaderboard_data = fetch_leaderboard_data(LEADERBOARD_URL, SESSION_COOKIE)
 
     if leaderboard_data:
+        # Post Leaderboard data to home assitant
+        post_to_haWebhook(leaderboard_data)
+
         # Generate and print markdown table
         markdown_table = generate_markdown_table(leaderboard_data)
         achievements_table = generate_achievements_table(leaderboard_data)
