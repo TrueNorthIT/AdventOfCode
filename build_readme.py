@@ -29,7 +29,6 @@ EXT_TO_LANG = {
     ".swift": "Swift",
     ".scala": "Scala",
     ".jl": "Julia",
-    # add more if needed
 }
 
 
@@ -311,11 +310,26 @@ def generate_achievements_table(board: Leaderboard) -> str:
         while len(cells) < num_slots:
             cells.append("")
         return cells
+    
+    def cells_for_polyglot(entries, num_slots):
+        cells = []
+        for name, count, langs in entries[:num_slots]:
+            lang_list = "<br>".join(sorted(langs))  # multiline inside <details>
+            cell = (
+                f"<details>"
+                f"<summary>{name} ({count})</summary>"
+                f"{lang_list}"
+                f"</details>"
+            )
+            cells.append(cell)
+        while len(cells) < num_slots:
+            cells.append("")
+        return cells
 
     # Polyglot & Golf Pro empty for now
     rows.append(
         ["Polyglot 🤓"]
-        + cells_from_entries(polyglot_entries, lambda c: str(c[0]), num_members)
+        + cells_for_polyglot(polyglot_entries, max_len)
     )
 
     rows.append(
