@@ -259,6 +259,15 @@ def ordinal(n: int) -> str:
         suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
     return f"{n}{suffix}"
 
+def calculate_hackerman(board):
+    hackerman_entries = []
+    for member in board.members.values():
+        name = member.name or str(member.id)
+        if member.local_score > 0:
+            hackerman_entries.append((name, member.local_score))
+    hackerman_entries.sort(key=lambda x: -x[1])  # highest score first
+    return hackerman_entries
+
 
 def generate_achievements_table(board: Leaderboard) -> str:
     num_members = len(board.members)
@@ -282,11 +291,7 @@ def generate_achievements_table(board: Leaderboard) -> str:
 
     # --- Hackerman: local_score (descending) ---
     hackerman_entries = []
-    for member in board.members.values():
-        name = member.name or str(member.id)
-        if member.local_score > 0:
-            hackerman_entries.append((name, member.local_score))
-    hackerman_entries.sort(key=lambda x: -x[1])  # highest score first
+    hackerman_entries = calculate_hackerman(board)
     
     # --- Polyglot: most distinct languages per member via git ---
     polyglot_scores = compute_polyglot_scores_git(board)
@@ -377,10 +382,11 @@ def generate_achievements_table(board: Leaderboard) -> str:
 
 
 def post_to_haWebhook(leaderboard):
+    hackermanleaderboard = calculate_hackerman(leaderboard)
     webhookstring = str(WEBHOOK_ENDPOINT)
     requests.post(
         "https://ha.tnapps.co.uk/api/webhook/"+webhookstring,
-        data=json.dumps(leaderboard),
+        data=json.dumps(hackermanleaderboard),
         headers={"Content-Type": "application/json"},
         timeout=60
     )
