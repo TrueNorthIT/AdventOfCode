@@ -34,6 +34,7 @@ jobs:
       - name: Run build_readme.py
         env:
           SESSION_COOKIE: ${{ secrets.SESSION_COOKIE }}
+          WEBHOOK_ENDPOINT: ${{ secrets.WEBHOOK_ENDPOINT }}
         run: python build_readme.py
 
       # Step 5: Commit and push updated README.md to main branch
