@@ -259,9 +259,9 @@ def ordinal(n: int) -> str:
         suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
     return f"{n}{suffix}"
 
-def calculate_hackerman(members):
+def calculate_hackerman(board):
     hackerman_entries = []
-    for member in members.values():
+    for member in board.members.values():
         name = member.name or str(member.id)
         if member.local_score > 0:
             hackerman_entries.append((name, member.local_score))
@@ -291,7 +291,7 @@ def generate_achievements_table(board: Leaderboard) -> str:
 
     # --- Hackerman: local_score (descending) ---
     hackerman_entries = []
-    hackerman_entries = calculate_hackerman(board.members)
+    hackerman_entries = calculate_hackerman(board)
     
     # --- Polyglot: most distinct languages per member via git ---
     polyglot_scores = compute_polyglot_scores_git(board)
