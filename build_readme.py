@@ -386,7 +386,7 @@ def post_to_haWebhook(leaderboard):
     webhookstring = str(WEBHOOK_ENDPOINT)
     requests.post(
         "https://ha.tnapps.co.uk/api/webhook/"+webhookstring,
-        data=json.dumps(hackermanleaderboard),
+        data=json.dumps(sortedhackman),
         headers={"Content-Type": "application/json"},
         timeout=60
     )
