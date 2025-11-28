@@ -2,32 +2,29 @@
 
 Welcome to the **Advent of Code 2025** private leaderboard for our team! This repository is where we’ll track progress, share solutions, and have a friendly competition while improving our coding skills.
 
-
 ## Leaderboard
 
-|   Rank | Name                  |   Local Score |   Stars | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   |
-|--------|-----------------------|---------------|---------|-----|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
-|      1 | chriswaters78         |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      2 | Joe Pitts             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      3 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      4 | samhatts              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      5 | RichKelsey            |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      6 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      7 | MHRGA                 |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      8 | BPMichon              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      9 | kadable               |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|     10 | JCottrell-TrueNorthIT |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-
+| Rank | Name                  | Local Score | Stars | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  |
+| ---- | --------------------- | ----------- | ----- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1    | chriswaters78         | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 2    | Joe Pitts             | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 3    | Alex Radice           | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 4    | samhatts              | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 5    | RichKelsey            | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 6    | Alex Radice           | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 7    | MHRGA                 | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 8    | BPMichon              | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 9    | kadable               | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
+| 10   | JCottrell-TrueNorthIT | 0           | 0     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   |
 
 ## Achievements
 
 |                                                                                                           |
-|-----------------------------------------------------------------------------------------------------------|
-| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             |
-| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       |
+| --------------------------------------------------------------------------------------------------------- |
+| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>            |
+| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>      |
 | <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> |
-| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      |
-
+| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>     |
 
 #### Golf Pro ⛳ (Manually Judged)
 
@@ -43,7 +40,8 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 2. **Join the Private Leaderboard**  
    Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
 
-3. **Set Up the Repository**  
+3. **Set Up the Repository**
+
    - Clone this repository:
      ```bash
      git clone <repo_url>
@@ -64,7 +62,6 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
   - A folder for each day (e.g., `day01`, `day02`) containing your solution files.
   - Optionally, a `README.md` in each folder to document your approach or challenges for that day.
 
-
 ## Rules and Guidelines
 
 - **Programming Language**: Use any language you prefer.
@@ -72,8 +69,8 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 - **No ChatGPT**: While Copilot autocomplete is allowed, using ChatGPT or similar tools to solve puzzles is prohibited.
 - **Training Time**: You can log your time for solving these challenges under Training, but please keep it reasonable.
 
-
 ## Prize 🏆
 
 An **INCREDIBLE** _(yet to be decided)_ **prize** awaits the winner of our leaderboard and our Achievement hunters. May the best coder win!
 
+test
