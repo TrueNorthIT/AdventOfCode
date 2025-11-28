@@ -399,7 +399,7 @@ if __name__ == "__main__":
 
     if leaderboard_data:
         # Post Leaderboard data to home assitant
-        post_to_haWebhook(raw_data)
+        post_to_haWebhook(leaderboard_data)
 
         # Generate and print markdown table
         markdown_table = generate_markdown_table(leaderboard_data)
