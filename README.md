@@ -8,25 +8,25 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 |   Rank | Name                  |   Local Score |   Stars | 1                                                                              | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   |
 |--------|-----------------------|---------------|---------|--------------------------------------------------------------------------------|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
 |      1 | Joe Pitts             |            20 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/joe-pitts/2025/day01)     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      2 | BPMichon              |             9 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/bogdan-michon/2025/day01) | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      3 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      4 | Alex Radice           |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      5 | kadable               |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      6 | RichKelsey            |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      7 | samhatts              |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      8 | Alex Radice           |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      9 | MHRGA                 |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|     10 | chriswaters78         |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      2 | BPMichon              |            18 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/bogdan-michon/2025/day01) | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      3 | Alex Radice           |             8 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/None/2025/day01)          | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      4 | samhatts              |             7 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/sam-hatts/2025/day01)     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      5 | chriswaters78         |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      6 | MHRGA                 |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      7 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      8 | kadable               |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      9 | RichKelsey            |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|     10 | Alex Radice           |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 
 
 ## Achievements
 
-|                                                                                                           | 1st                                                       | 2nd                   |
-|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|-----------------------|
-| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             | <details><summary>Joe Pitts (1)</summary>Python</details> |                       |
-| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s)                                     | BPMichon (2h 32m 14s) |
-| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)                                       |                       |
-| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)                                            | BPMichon (9)          |
+|                                                                                                           | 1st                                                      | 2nd                   | 3rd                     | 4th                   |
+|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------|-----------------------|-------------------------|-----------------------|
+| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             | <details><summary>samhatts (1)</summary>Python</details> |                       |                         |                       |
+| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s)                                    | BPMichon (2h 32m 14s) | Alex Radice (3h 58m 2s) | samhatts (4h 21m 41s) |
+| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)                                      | BPMichon (1h 22m 21s) |                         |                       |
+| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)                                           | BPMichon (18)         | Alex Radice (8)         | samhatts (7)          |
 
 
 #### Golf Pro ⛳ (Manually Judged)
