@@ -5,4 +5,4 @@ foreach (var s in File.ReadLines("i"))
         if (c == 0) b++;
     if (c == 0) a++;
 }
-int.Parse($"{(a,b)}");
+throw new((a,b)+"");
