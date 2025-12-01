@@ -14,9 +14,9 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 |      5 | chriswaters78         |            12 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/christian-waters/2025/day01)   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      6 | RichKelsey            |             9 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/rich-kelsey/2025/day01)        | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      7 | MHRGA                 |             5 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/muhamad-hewa-rahim/2025/day01) | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      8 | Alex Radice           |             0 |       0 | ·                                                                                   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      8 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                                   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      9 | kadable               |             0 |       0 | ·                                                                                   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|     10 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                                   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|     10 | Alex Radice           |             0 |       0 | ·                                                                                   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 
 
 ## Achievements
