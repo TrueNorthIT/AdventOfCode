@@ -296,3 +296,6 @@ __pycache__/
 *.hi
 
 *.o
+
+input*.txt
+Day01/i
