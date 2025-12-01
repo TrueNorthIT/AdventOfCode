@@ -1,27 +1,22 @@
-import sys; from pathlib import Path; sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
+import sys; from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
+from itertools import chain, repeat, accumulate
 
+USE_GOLF = False
 class Day01Solver(JoesAoCSolver):
 
-    def parse_input(self):
-        numbers = []
-
-        for line in self.input_data.splitlines():
-          sign = line[0]
-          value = int(line[1:])
-          if sign == 'L':
-              value = -value 
-          numbers.append(value)
-
-        return numbers
+    def parse_input(self):    
+      return [int(line[1:]) * (-1 if line[0] == 'L' else 1) for line in self.input_data.splitlines()]
       
+    def part1_golf(self):
+        return sum(1 for x in accumulate(self.parse_input(), initial=50) if x % 100 == 0)
       
-    def part1(self):
+    def part1_algo(self):
         numbers = self.parse_input()
         value = 50
         zero_stops = 0
         
         for num in numbers:
-          old_value = value
           value += num
           value %= 100
 
@@ -30,6 +25,12 @@ class Day01Solver(JoesAoCSolver):
 
         return zero_stops
 
+    def part1(self):
+        if USE_GOLF:
+            return self.part1_golf()
+        else:
+            return self.part1_algo()
+    
     def part1_examples(self):
         return [
             ("""L68
@@ -44,30 +45,27 @@ R14
 L82""", 3)]
         
 
-    
-    def part2(self):
+    def part2_algo(self):
       zero_passes = 0
       value = 50
-      
       for rot in self.parse_input():
-          full_rotations = abs(rot) // 100
-          
-          zero_passes += full_rotations
-          
-          rot = (rot % 100) if rot > 0 else (rot % 100) - 100
-          
-          if rot % 100 == 0 :
-              continue
-          elif rot < 0 and value != 0 and value + rot <= 0:
+          full_rotations, rem = divmod(abs(rot), 100)
+          zero_passes += full_rotations  
+          if rot > 0 and rem != 0 and value + rem >= 100:
               zero_passes += 1
-          elif rot > 0 and rot + value >= 100:
-              zero_passes += 1
+          elif rot < 0 and rem != 0 and value != 0  and value - rem <= 0:
+              zero_passes += 1            
+          value = (value + rem if rot > 0 else value - rem) % 100
+      return zero_passes    
 
-          value += rot
-          value %= 100
+    def part2_golf(self):
+      return sum(1 for i, pos in enumerate(accumulate(chain.from_iterable(repeat(1 if n > 0 else -1, abs(n)) for n in self.parse_input()), initial=50)) if i and pos % 100 == 0)
 
-      return zero_passes
-      
+    def part2(self):
+        if USE_GOLF:
+            return self.part2_golf()
+        else:
+            return self.part2_algo()
       
     def part2_examples(self):
         return [
@@ -87,6 +85,6 @@ L82""", 6)]
 if __name__ == "__main__":
     solver = Day01Solver()
     # solver.run("assertions")
-    solver.run("real")
-    # solver.benchmark(1000)
+    # solver.run("real")
+    solver.benchmark(1000)
     
