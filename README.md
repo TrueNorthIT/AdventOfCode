@@ -21,12 +21,12 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 
 ## Achievements
 
-|                                                                                                           | 1st                                                      | 2nd                   | 3rd                     | 4th                   |
-|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------|-----------------------|-------------------------|-----------------------|
-| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             | <details><summary>samhatts (1)</summary>Python</details> |                       |                         |                       |
-| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s)                                    | BPMichon (2h 32m 14s) | Alex Radice (3h 58m 2s) | samhatts (4h 21m 41s) |
-| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)                                      | BPMichon (1h 22m 21s) |                         |                       |
-| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)                                           | BPMichon (18)         | Alex Radice (8)         | samhatts (7)          |
+|                                                                                                           | 1st                                                        | 2nd                   | 3rd                     | 4th                   |
+|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------------|-----------------------|-------------------------|-----------------------|
+| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             | <details><summary>Alex Radice (1)</summary>Excel</details> |                       |                         |                       |
+| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s)                                      | BPMichon (2h 32m 14s) | Alex Radice (3h 58m 2s) | samhatts (4h 21m 41s) |
+| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)                                        | BPMichon (1h 22m 21s) |                         |                       |
+| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)                                             | BPMichon (18)         | Alex Radice (8)         | samhatts (7)          |
 
 
 #### Golf Pro ⛳ (Manually Judged)
