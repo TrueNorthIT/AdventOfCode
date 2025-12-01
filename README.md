@@ -9,24 +9,24 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 |--------|-----------------------|---------------|---------|-----------------------------------------------------------------------------------|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
 |      1 | Joe Pitts             |            20 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/joe-pitts/2025/day01)        | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      2 | BPMichon              |            18 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/bogdan-michon/2025/day01)    | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      3 | Alex Radice           |             8 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/None/2025/day01)             | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      3 | Alex Radice           |            16 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/None/2025/day01)             | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      4 | samhatts              |             7 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/sam-hatts/2025/day01)        | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      5 | chriswaters78         |             6 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/christian-waters/2025/day01) | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      6 | kadable               |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      7 | Alex Radice           |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      8 | RichKelsey            |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      9 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|     10 | MHRGA                 |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      9 | MHRGA                 |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|     10 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                                 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 
 
 ## Achievements
 
-|                                                                                                           | 1st                   | 2nd                   | 3rd                     | 4th                   | 5th                        |
-|-----------------------------------------------------------------------------------------------------------|-----------------------|-----------------------|-------------------------|-----------------------|----------------------------|
-| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             |                       |                       |                         |                       |                            |
-| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s) | BPMichon (2h 32m 14s) | Alex Radice (3h 58m 2s) | samhatts (4h 21m 41s) | chriswaters78 (4h 39m 52s) |
-| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)   | BPMichon (1h 22m 21s) |                         |                       |                            |
-| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)        | BPMichon (18)         | Alex Radice (8)         | samhatts (7)          | chriswaters78 (6)          |
+|                                                                                                           | 1st                                                        | 2nd                     | 3rd                     | 4th                   | 5th                        |
+|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------------|-------------------------|-------------------------|-----------------------|----------------------------|
+| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             | <details><summary>Alex Radice (1)</summary>Excel</details> |                         |                         |                       |                            |
+| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s)                                      | BPMichon (2h 32m 14s)   | Alex Radice (3h 58m 2s) | samhatts (4h 21m 41s) | chriswaters78 (4h 39m 52s) |
+| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)                                        | Alex Radice (1h 8m 22s) | BPMichon (1h 22m 21s)   |                       |                            |
+| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)                                             | BPMichon (18)           | Alex Radice (16)        | samhatts (7)          | chriswaters78 (6)          |
 
 
 #### Golf Pro ⛳ (Manually Judged)
