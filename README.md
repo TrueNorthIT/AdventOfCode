@@ -5,28 +5,28 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
 
 ## Leaderboard
 
-|   Rank | Name                  |   Local Score |   Stars | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   |
-|--------|-----------------------|---------------|---------|-----|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
-|      1 | samhatts              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      2 | Joe Pitts             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      3 | kadable               |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      4 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      5 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      6 | MHRGA                 |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      7 | JCottrell-TrueNorthIT |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      8 | chriswaters78         |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      9 | BPMichon              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|     10 | RichKelsey            |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|   Rank | Name                  |   Local Score |   Stars | 1                                                                              | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   |
+|--------|-----------------------|---------------|---------|--------------------------------------------------------------------------------|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
+|      1 | Joe Pitts             |            20 |       2 | [★](https://github.com/TrueNorthIT/AdventOfCode/tree/joe-pitts/2025/day01)     | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      2 | BPMichon              |             9 |       1 | [✩](https://github.com/TrueNorthIT/AdventOfCode/tree/bogdan-michon/2025/day01) | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      3 | kadable               |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      4 | Alex Radice           |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      5 | samhatts              |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      6 | Alex Radice           |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      7 | chriswaters78         |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      8 | JCottrell-TrueNorthIT |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      9 | RichKelsey            |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|     10 | MHRGA                 |             0 |       0 | ·                                                                              | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 
 
 ## Achievements
 
-|                                                                                                           |
-|-----------------------------------------------------------------------------------------------------------|
-| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             |
-| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       |
-| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> |
-| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      |
+|                                                                                                           | 1st                                                       | 2nd                   |
+|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|-----------------------|
+| <details><summary>Polyglot 🤓</summary>Most distinct programming languages used.<br></details>             | <details><summary>Joe Pitts (1)</summary>Python</details> |                       |
+| <details><summary>Early Bird ⏰</summary>Fastest time to complete Star 1 after unlock.<br></details>       | Joe Pitts (2h 6m 19s)                                     | BPMichon (2h 32m 14s) |
+| <details><summary>You Are Gonna Need It 🛠️</summary>Fastest time between Star 1 and Star 2.<br></details> | Joe Pitts (24m 39s)                                       |                       |
+| <details><summary>Hackerman 💻</summary>Highest local score on the private leaderboard.<br></details>      | Joe Pitts (20)                                            | BPMichon (9)          |
 
 
 #### Golf Pro ⛳ (Manually Judged)
