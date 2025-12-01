@@ -1,11 +1,8 @@
-﻿var(c, a, b) = (50, 0, 0);
-foreach (var s in File.ReadAllLines("i"))
+﻿var (c, a, b) = (50, 0, 0);
+foreach (var s in File.ReadLines("i"))
 {
-    for (int i = 0; i < int.Parse(s[1..]); i++)
-    {
-        c += s[0] == 'R' ? 1 : -1;
-        if (c % 100 == 0) b++;
-    }
-    if (c % 100 == 0) a++;
+    for (int i = 0; i < int.Parse(s[1..]); (i, c) = (i + 1, (c + (s[0] == 'R' ? 1 : -1)) % 100))
+        if (c == 0) b++;
+    if (c == 0) a++;
 }
-Console.WriteLine((a,b));
+int.Parse($"{(a,b)}");
