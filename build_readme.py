@@ -267,7 +267,14 @@ def calculate_hackerman(board):
             hackerman_entries.append((name, member.local_score))
     hackerman_entries.sort(key=lambda x: -x[1])  # highest score first
     return hackerman_entries
-
+def number_of_stars(board):
+    starsentries = []
+    for member in board.members.values():
+        name = member.name or str(member.id)
+        if member.local_score > 0:
+            starsentries.append((name, member.local_score,member.stars))
+    starsentries.sort(key=lambda x: -x[1])  # highest score first
+    return starsentries
 
 def generate_achievements_table(board: Leaderboard) -> str:
     num_members = len(board.members)
@@ -382,7 +389,7 @@ def generate_achievements_table(board: Leaderboard) -> str:
 
 
 def post_to_haWebhook(leaderboard):
-    sortedhackman = calculate_hackerman(leaderboard)
+    sortedhackman = number_of_stars(leaderboard)
     webhookstring = str(WEBHOOK_ENDPOINT)
     requests.post(
         "https://ha.tnapps.co.uk/api/webhook/"+webhookstring,
