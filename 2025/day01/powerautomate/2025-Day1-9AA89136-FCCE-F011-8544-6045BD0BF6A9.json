@@ -1,0 +1,416 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cw_sharedoffice365_95518"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      },
+      "shared_onedriveforbusiness": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cw_sharedonedriveforbusiness_7dcf2"
+        },
+        "api": {
+          "name": "shared_onedriveforbusiness"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_file_is_created": {
+          "recurrence": {
+            "frequency": "Minute",
+            "interval": 1
+          },
+          "evaluatedRecurrence": {
+            "frequency": "Minute",
+            "interval": 1
+          },
+          "metadata": {
+            "b!JMfGLOvTYUWDbujmJ3Ld3j33-h--weFOsZK9pILOdcqtqQLgLv5_SKSUrBnC99Dn.01JXBFU4LGKFQY3AZNVRFZBJRM7QBSW3U6": "/AoC/2025/Day1/Input",
+            "operationMetadataId": "4b42d15e-ba45-4e48-9e7e-ba19dfa21184"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness",
+              "connectionName": "shared_onedriveforbusiness",
+              "operationId": "OnNewFileV2"
+            },
+            "parameters": {
+              "folderId": "b!JMfGLOvTYUWDbujmJ3Ld3j33-h--weFOsZK9pILOdcqtqQLgLv5_SKSUrBnC99Dn.01JXBFU4LGKFQY3AZNVRFZBJRM7QBSW3U6",
+              "includeSubfolders": false,
+              "inferContentType": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Parse_JSON": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "66a06262-0b17-44d4-be0d-1eafaeb9f40e"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": "@triggerOutputs()?['body']",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "For_each_instruction": {
+          "foreach": "@body('Parse_JSON')",
+          "actions": {
+            "Set_val_from_stripped_and_parsed_instruction": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "447eeac8-eb65-4613-b1c3-a5a29d4ea5f6"
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "val",
+                "value": "@int(substring(items('For_each_instruction'),1))"
+              }
+            },
+            "Set_div": {
+              "runAfter": {
+                "Set_val_from_stripped_and_parsed_instruction": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "0d5c21e0-23f0-41d6-a18b-e0a72522abab"
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "div",
+                "value": "@div(variables('val'),100)"
+              }
+            },
+            "Set_mod": {
+              "runAfter": {
+                "Set_div": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "cb571e64-fabd-4225-be00-c622277b4ac6"
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "mod",
+                "value": "@mod(variables('val'), 100)"
+              }
+            },
+            "Is_Left": {
+              "actions": {
+                "Set_current_(L)": {
+                  "runAfter": {
+                    "Increment_p2_(L)": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "ddd5ad2c-24e1-4c80-83f1-b2aa8b3e9d91"
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "current",
+                    "value": "@mod(add(100,add(variables('tmp'),mul(-1,variables('mod')))), 100)"
+                  }
+                },
+                "Increment_p2_(L)": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "82fba3af-33ca-4ac4-be07-dca86b757845"
+                  },
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "p2",
+                    "value": "@\tadd(\r\n\t\tvariables('div'),\r\n\t\tif(\r\n\t\t\tand(greater(variables('mod'),variables('current')),not(equals(variables('current'),0))),\r\n\t\t\t\t1,\r\n\t\t\t\t0\r\n\t\t)\r\n\t)\r\n"
+                  }
+                }
+              },
+              "runAfter": {
+                "Store_current_in_tmp": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Set_current_(R)": {
+                    "runAfter": {
+                      "Increment_p2_(R)": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "5e1f761c-e52f-47f0-9540-465146d82e95"
+                    },
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "current",
+                      "value": "@mod(add(100,add(variables('tmp'),variables('mod'))), 100)"
+                    }
+                  },
+                  "Increment_p2_(R)": {
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "2aa8b73e-906c-4d85-8bec-d6c2bef78487"
+                    },
+                    "type": "IncrementVariable",
+                    "inputs": {
+                      "name": "p2",
+                      "value": "@\tadd(\r\n\t\tvariables('div'),\r\n\t\tif(\r\n\t\t\tgreater(variables('mod'),sub(100,variables('current'))),\r\n\t\t\t\t1,\r\n\t\t\t\t0\r\n\t\t)\r\n\t)"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "startsWith": [
+                  "@items('For_each_instruction')",
+                  "L"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "d9f3ceb6-2949-4a5d-8cae-92eb9e4e3a5a"
+              },
+              "type": "If"
+            },
+            "Store_current_in_tmp": {
+              "runAfter": {
+                "Set_mod": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "6f588965-7cdf-4f3d-96fd-7f974101e4c0"
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "tmp",
+                "value": "@variables('current')"
+              }
+            },
+            "Increment_p1": {
+              "runAfter": {
+                "Is_Left": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c57545de-fdaa-4244-a10b-e6501de699e7"
+              },
+              "type": "IncrementVariable",
+              "inputs": {
+                "name": "p1",
+                "value": "@if(equals(variables('current'),0),1,0)"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_tmp": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "6174e4de-a450-47f3-928e-cb379e9fffb6"
+          },
+          "type": "Foreach",
+          "runtimeConfiguration": {
+            "concurrency": {
+              "repetitions": 1
+            }
+          }
+        },
+        "Initialize_current": {
+          "runAfter": {
+            "Parse_JSON": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "5c9725e1-5981-4407-b8ea-ebdf6bcc68df"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "current",
+                "type": "integer",
+                "value": 50
+              }
+            ]
+          }
+        },
+        "Initialize_p1": {
+          "runAfter": {
+            "Initialize_current": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "aa6960b2-833b-408b-b0d6-96f4662534fc"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "p1",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Initialize_p2": {
+          "runAfter": {
+            "Initialize_p1": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2519dc41-fa95-4481-be1f-42c961ab0e48"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "p2",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Initialize_div": {
+          "runAfter": {
+            "Initialize_p2": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "18dc8bc0-cafa-4def-a011-7ab56e07efff"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "div",
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "Initialize_mod": {
+          "runAfter": {
+            "Initialize_div": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "d17f23a4-a6d7-4f6c-ab27-35457e118c87"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "mod",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Initialize_val": {
+          "runAfter": {
+            "Initialize_mod": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "1bb3e98e-95d6-4607-9a7c-f68a6569a91d"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "val",
+                "type": "integer"
+              }
+            ]
+          }
+        },
+        "Initialize_tmp": {
+          "runAfter": {
+            "Initialize_val": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b45a90d6-f8ef-4934-a13d-60eb49d41ac1"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "tmp",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Send_an_email_(V2)": {
+          "runAfter": {
+            "For_each_instruction": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "53a5c214-f1f4-48a4-8169-56457d04d7a4"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2"
+            },
+            "parameters": {
+              "emailMessage/To": "cwaters@truenorthit.co.uk",
+              "emailMessage/Subject": "Your advent of code solution is ready. Day 1, 2025",
+              "emailMessage/Body": "<p>Part 1: @{variables('p1')}<br>\nPart 2: @{add(variables('p1'),variables('p2'))}</p>",
+              "emailMessage/Importance": "Normal"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}
