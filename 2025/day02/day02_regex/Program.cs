@@ -1,36 +1,18 @@
 ﻿using System.Text.RegularExpressions;
 
-(long start, long end)[] ranges = [.. File.ReadAllText("input.txt").Split(',').Select(range =>
-{
-    var sp = range.Split('-');
-    return (long.Parse(sp[0]), long.Parse(sp[1]));
-})];
+HashSet<long> p1 = [], p2 = [];
+var r = "^(\\d{1,})\\1{1";
+bool m(long i, bool b) => Regex.IsMatch(i + "", r + (b ? "}$" : ",100}$"));
 
-const string template = "^({0})\\1";
-
-var p1 = new HashSet<long>();
-var p2 = new HashSet<long>();
-foreach (var range in ranges)
-{
-    for (long i = range.start; i <= range.end; i++)
-    {
-        var st = i.ToString();
-
-        for (int divisor = 2; divisor <= st.Length; divisor++)
-        {
-            if (st.Length % divisor != 0)
-                continue;
-
-            var size = st.Length / divisor;
-            var regex = String.Format(template, String.Join("", Enumerable.Repeat("\\d", size))) + "{1,}$";
-            var matches = new Regex(regex).Match(st);
-            if (matches.Success)
-            {
-                if (divisor == 2)
-                    p1.Add(i);
-                p2.Add(i);
-            }
-        }
+foreach ((long st, long en) in File.ReadAllText("example.txt").Split(',').Select(r =>
+    r.Split('-') switch {
+        [var a, var b] => (long.Parse(a), long.Parse(b))
     }
-}
-Console.WriteLine($"{p1.Sum()},{p2.Sum()}");
+))
+    for (var i = st; i <= en; i++)
+        if (m(i,true))
+            p1.Add(i);
+        else if (m(i, false))
+            p2.Add(i);
+
+int.Parse($"{p1.Sum()},{p1.Concat(p2).Sum()}");
