@@ -1,4 +1,5 @@
 import functools
+import itertools
 import math
 import sys; from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver
@@ -45,29 +46,24 @@ class Day02Solver(JoesAoCSolver):
                     divisors.append(n // i)
         divisors.sort() 
         return divisors[1:]
-
-    def is_repeated_p2(self, n):
-        str_n = str(n)
-        for d in self.find_divisors(len(str_n)):
-            section_length = len(str_n) // d
-            first_section = str_n[:section_length]
-            for i in range(d):
-                if str_n[i*section_length:(i+1)*section_length] != first_section:
-                    break
-                else:
-                    if i == d - 1:
-                        return True
-        return False
+    
+    
+    def is_repeated_p2_divisors(self, str_n):
+        return str_n in (str_n[:len(str_n) // d] * d for d in self.find_divisors(len(str_n)))
         
+    
+    
+    # https://stackoverflow.com/questions/29481088/how-can-i-tell-if-a-string-repeats-itself-in-python/29482936#29482936
+    # This is mental, a string is periodic if and only if it is equal to a nontrivial rotation of itself
+    # Way more efficient than checking all divisors
+    def is_repeated_p2(self, s):
+        if len(s) <= 1:
+            return False
+        return s in (s + s)[1:-1]
+
 
     def part2(self):
-        total = 0
-        for r in self.parse_input():
-            for num in range(r[0], r[1]+1):
-                if self.is_repeated_p2(num):
-                    total += num
-        return total
-
+        return sum(num for lo, hi in self.parse_input() for num in range(lo, hi + 1) if str(num) in (str(num) + str(num))[1:-1])
 
     def part2_examples(self):
         return [
