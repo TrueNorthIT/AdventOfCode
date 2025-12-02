@@ -1,8 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
 HashSet<long> p1 = [], p2 = [];
-var r = "^(\\d{1,})\\1{1";
-bool m(long i, bool b) => Regex.IsMatch(i + "", r + (b ? "}$" : ",100}$"));
+bool m(long i, bool b) => Regex.IsMatch(i + "", "^(\\d{1,})\\1{1" + (b ? "}$" : ",100}$"));
 
 foreach (var arr in File.ReadAllText("example.txt").Split(',').Select(r =>
     r.Split('-').Select(long.Parse).ToArray()))
