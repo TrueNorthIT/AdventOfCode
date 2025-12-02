@@ -31,6 +31,7 @@ EXT_TO_LANG = {
     ".scala": "Scala",
     ".jl": "Julia",
     ".xlsx": "Excel",
+    ".ps1": "PowerShell",
 }
 
 
@@ -43,7 +44,7 @@ BRANCH_MAPPING = {
     "1427047": "christian-waters",
     "353270": "joe-pitts",
     "4472230": "josh-cottrell",
-    "3357259": "alex-radice",
+    "4947218": "alex-radice",
     "4264967": "rich-kelsey",
     "4265041": "kade-hennessy",
     "5105599": "sam-hatts",
