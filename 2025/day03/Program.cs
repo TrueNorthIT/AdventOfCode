@@ -7,20 +7,16 @@ foreach (var bank in banks)
     p2 += best(bank, [], 12);
 }
 
-long best(string remainder, List<char> digits, int maxLength)
+long best(string remainder, List<char> digits, int L)
 {
-    if (digits.Count == maxLength)
+    if (digits.Count == L)
         return long.Parse(String.Join("", digits));
 
-    for (char c = '9'; c >= '0'; c--)
-    {
-        var indexOf = remainder.IndexOf(c,0,remainder.Length - maxLength - digits.Count + 1);
-        if (indexOf == -1)
-            continue;
+    var next = remainder[..^(L - digits.Count)].Index()
+        .OrderByDescending(tp => tp.Item)
+        .ThenBy(tp => tp.Index).First();
 
-        return best(remainder[(indexOf + 1)..], [.. digits, c], maxLength);
-    }
-    throw new();
+    return best(remainder[(next.Index + 1)..], [.. digits, next.Item], L);
 }
 
 Console.WriteLine((p1,p2));
