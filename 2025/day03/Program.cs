@@ -1,32 +1,27 @@
 ﻿var banks = File.ReadAllLines("input.txt");
 
-var joltages = new List<long>();
+(var p1, var p2) = (0L, 0L);
 foreach (var bank in banks)
 {
-    var joltage = best(bank, new List<char>(), 12);
-    joltages.Add(joltage);
+    p1 += best(bank, new List<char>(), 2);
+    p2 += best(bank, new List<char>(), 12);
 }
 
 long best(string remainder, List<char> digits, int maxLength)
 {
-    if (digits.Count == 0 && String.IsNullOrEmpty(remainder))
-        return 0;
-
-    if (digits.Count == maxLength || String.IsNullOrEmpty(remainder))
-    {
+    if (digits.Count == maxLength)
         return long.Parse(String.Join("", digits));
-    }
 
-    //two options, take or skip
-    var o1 = best(remainder[1..], digits.ToList(), maxLength);
-    var o2 = best(remainder[1..], digits.Concat(new [] {remainder[0] }).ToList(), maxLength);
-
-    if (o1 > o2)
+    var remainingDigits = maxLength - digits.Count;
+    for (char c = '9'; c >= '0'; c--)
     {
-        return o1;
+        var indexOf = remainder.IndexOf(c,0,remainder.Length - remainingDigits + 1);
+        if (indexOf == -1)
+            continue;
+
+        return best(remainder[(indexOf + 1)..], digits.Concat([c]).ToList(), maxLength);
     }
-    return o2;
+    throw new();
 }
 
-var p1 = joltages.Sum();
-Console.WriteLine($"Part 1: {p1}");
+Console.WriteLine((p1,p2));
