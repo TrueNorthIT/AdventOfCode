@@ -32,6 +32,7 @@ EXT_TO_LANG = {
     ".jl": "Julia",
     ".xlsx": "Excel",
     ".ps1": "PowerShell",
+    ".sql": "SQL",
 }
 
 
