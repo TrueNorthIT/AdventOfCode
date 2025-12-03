@@ -3,20 +3,18 @@
 (var p1, var p2) = (0L, 0L);
 foreach (var bank in banks)
 {
-    p1 += best(bank, [], 2);
-    p2 += best(bank, [], 12);
+    p1 += best(bank, "", 2);
+    p2 += best(bank, "", 12);
 }
 
-long best(string remainder, List<char> digits, int L)
-{
-    if (digits.Count == L)
-        return long.Parse(String.Join("", digits));
-
-    var next = remainder[..^(L - digits.Count)].Index()
+long best(string rem, string num, int L) => num.Length == L ?
+    long.Parse(num)
+    : rem[..^(L - num.Length - 1)]
+        .Index()
         .OrderByDescending(tp => tp.Item)
-        .ThenBy(tp => tp.Index).First();
-
-    return best(remainder[(next.Index + 1)..], [.. digits, next.Item], L);
-}
+        .ThenBy(tp => tp.Index)
+        .First() switch {
+            var next => best(rem[(next.Index + 1)..], num + next.Item, L)
+        };
 
 Console.WriteLine((p1,p2));
