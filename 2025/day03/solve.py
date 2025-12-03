@@ -34,7 +34,7 @@ class Day02Solver(JoesAoCSolver):
             if largest_value is None or candidate_value > largest_value:
               largest_value = candidate_value
           
-        print(f"Largest value for bank {raw_bank} is {largest_value}")
+        # print(f"Largest value for bank {raw_bank} is {largest_value}")
         total += largest_value
       return total
         
@@ -79,7 +79,7 @@ class Day02Solver(JoesAoCSolver):
         end = bank_len - (12 - pos)
         # we know we need 12 digits so limit our window so there is enough room left after we pick this digit
         window = bank_str[start:end + 1]
-        print(f"Position {pos}, start {start}, end {end}, window {window}")
+        # print(f"Position {pos}, start {start}, end {end}, window {window}")
 
         largest = max(window)
         largest_index = start + window.index(largest)
@@ -94,7 +94,7 @@ class Day02Solver(JoesAoCSolver):
 
         for raw_bank in battery_banks:
             largest_value = self.sliding_window(raw_bank)
-            print(f"Largest value for bank {raw_bank} is {largest_value}")
+            # print(f"Largest value for bank {raw_bank} is {largest_value}")
             total += largest_value
 
         return total
@@ -111,7 +111,7 @@ class Day02Solver(JoesAoCSolver):
  
 if __name__ == "__main__":
     solver = Day02Solver()
-    solver.run("assertions")
+    # solver.run("assertions")
     # solver.run("real")
-    # solver.benchmark(1000)
+    solver.benchmark(100)
     
