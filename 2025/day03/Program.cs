@@ -4,16 +4,12 @@ var joltages = new List<long>();
 foreach (var bank in banks)
 {
     var joltage = best(bank, new List<char>(), 12);
-    Console.WriteLine($"Best for {bank}: {joltage}");
     joltages.Add(joltage);
 }
 
 long best(string remainder, List<char> digits, int maxLength)
 {
     if (digits.Count == 0 && String.IsNullOrEmpty(remainder))
-        return 0;
-
-    if (remainder.Length + digits.Count < maxLength)
         return 0;
 
     if (digits.Count == maxLength || String.IsNullOrEmpty(remainder))
