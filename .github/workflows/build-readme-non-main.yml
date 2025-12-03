@@ -13,12 +13,23 @@ jobs:
     steps:
       # Step 1: Check out the repository and switch to the main branch
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
+        with:
+          # Ensure full history is fetched
+          fetch-depth: 0
+          persist-credentials: true
 
+
+      - name: Fetch all remote branches
+        run: |
+          git fetch origin "+refs/heads/*:refs/remotes/origin/*"
+          git branch -a
+          
       - name: Switch to main branch
         run: |
           git fetch origin main
           git checkout main
+
 
       # Step 2: Set up Python environment
       - name: Set up Python
