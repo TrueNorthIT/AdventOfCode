@@ -28,5 +28,22 @@ def part1 (lines):
         overallnum = str(biggestnum)+str(secondnum)
         total+=int(overallnum)
     return total
+def part2(lines):
+    total = 0
+    for line in lines:
+        stringline = str(line)
+        currentpos = 0
+        overallnum=""
+        for posnum in range(1,13):
+            biggestnum =0
+            for charnum in range(currentpos, len(stringline)  - (12-posnum)):
+                if int(stringline[charnum]) > biggestnum:
+                    biggestnum = int(stringline[charnum])
+                    currentpos = charnum
+            currentpos+=1
+            overallnum = overallnum+str(biggestnum)
+        print(overallnum)
+        total+=int(overallnum)
+    return total
 
-print(part1(inputting()))
+print(part2(inputting()))
