@@ -65,25 +65,40 @@ class Day02Solver(JoesAoCSolver):
           if largest_value is None or candidate_value > largest_value:
             largest_value = candidate_value
       return largest_value
-        
-    def part2(self):
-      battery_banks = self.input_data.splitlines()
-      
-      total = 0
-      for raw_bank in battery_banks:
-        bank = [int(x) for x in raw_bank]
-        numbers_and_indices = list(enumerate(bank))
-        numbers_and_indices.sort(key=lambda x: x[1], reverse=True)
-        
-        largest_value = self.recurse_down(0, 0, bank)
+    
+    
+    def sliding_window(self, bank_str):
+      bank_len = len(bank_str)
+      if len(bank_str) < 12:
+        return None
 
-  
-          
-        print(f"Largest value for bank {raw_bank} is {largest_value}")
-        total += largest_value
-      return total
-        
-        
+      start = 0
+      result = []
+
+      for pos in range(12):     
+        end = bank_len - (12 - pos)
+        # we know we need 12 digits so limit our window so there is enough room left after we pick this digit
+        window = bank_str[start:end + 1]
+        print(f"Position {pos}, start {start}, end {end}, window {window}")
+
+        largest = max(window)
+        largest_index = start + window.index(largest)
+
+        result.append(largest)
+        start = largest_index + 1
+      return int("".join(result))
+
+    def part2(self):
+        battery_banks = self.input_data.splitlines()
+        total = 0
+
+        for raw_bank in battery_banks:
+            largest_value = self.sliding_window(raw_bank)
+            print(f"Largest value for bank {raw_bank} is {largest_value}")
+            total += largest_value
+
+        return total
+
     def part2_examples(self):
         return [
             ("""987654321111111
@@ -96,7 +111,7 @@ class Day02Solver(JoesAoCSolver):
  
 if __name__ == "__main__":
     solver = Day02Solver()
-    # solver.run("assertions")
-    solver.run("real")
+    solver.run("assertions")
+    # solver.run("real")
     # solver.benchmark(1000)
     
