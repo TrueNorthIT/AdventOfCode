@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-var grid = File.ReadAllLines("example.txt").Index().SelectMany(tpr => tpr.Item.Index().Select(tpc => (new Complex(tpr.Index, tpc.Index), tpc.Item)))
+var grid = File.ReadAllLines("input.txt").Index().SelectMany(tpr => tpr.Item.Index().Select(tpc => (new Complex(tpr.Index, tpc.Index), tpc.Item)))
     .ToDictionary(tp => tp.Item1, tp => tp.Item2);
 
 var offsets = 
