@@ -1,25 +1,25 @@
-﻿var grid = File.ReadAllLines("input.txt").Index().SelectMany(tpr => tpr.Item.Index().Select(tpc => ((tpr.Index, tpc.Index), tpc.Item)))
+﻿using System.Numerics;
+
+var grid = File.ReadAllLines("example.txt").Index().SelectMany(tpr => tpr.Item.Index().Select(tpc => (new Complex(tpr.Index, tpc.Index), tpc.Item)))
     .ToDictionary(tp => tp.Item1, tp => tp.Item2);
 
-var offsets = new (int r, int c)[] { (-1, 0), (-1, -1), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1) };
+var offsets = 
+    from r in Enumerable.Range(-1, 3)
+    from c in Enumerable.Range(-1, 3)
+    where !(r == 0 && c == 0)
+    select new Complex(r, c);
 
-bool accessible((int r, int c) tp) => offsets.Where(os => grid.ContainsKey((tp.r + os.r, tp.c + os.c)) && grid[(tp.r + os.r, tp.c + os.c)] == '@').Count() < 4;
+bool accessible(Complex p) => offsets.Where(os => grid.TryGetValue(p + os, out char c) && c == '@').Count() < 4;
 
-var p1 = grid.Keys.Where(key => grid[key] == '@').Count(accessible);
-Console.WriteLine(p1);
-
-int removed = 0;
-int p2 = 0;
+var removed = new List<List<Complex>>();
 do
 {
-    var toRemove = grid.Keys.Where(key => grid[key] == '@').Where(accessible).ToArray();
-    removed = toRemove.Count();
-    p2 += removed;
-    foreach (var item in toRemove)
+    removed.Add([]);
+    foreach (var c in grid.Keys.Where(key => grid[key] == '@').Where(accessible).ToArray())
     {
-        grid[item] = '.';
+        removed.Last().Add(c);
+        grid[c] = '.';
     }
 }
-while (removed > 0);
-
-Console.WriteLine(p2);
+while (removed.Last().Count > 0);
+Console.WriteLine((removed.First().Count, removed.Sum(l => l.Count)));
