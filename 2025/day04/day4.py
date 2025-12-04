@@ -15,6 +15,7 @@ def positionchecker(lines,rownum,colnum):
 def part1(lines):
     columnlength=len(lines)
     rowlength=len(lines[0])
+    changetoxarray=[]
     total=0
     for linenum in range(0,columnlength):
         for colnum in range(0,rowlength):
@@ -106,11 +107,24 @@ def part1(lines):
                     if (positionchecker(lines, linenum - 1, colnum + 1)):
                         aroundtotal += 1
                 if aroundtotal<=3:
+                    changetoxarray.append([linenum,colnum])
                     total+=1
                 else:
                     pass
         print("\n")
-    return total
+    return total,changetoxarray
+def changetox(lines,changetox):
+    for change in changetox:
+        lines[change[0]] = lines[change[0]][:change[1]]+"X"+lines[change[0]][change[1]+1:]
+    return lines
+overalltotal =0
+lines=inputting()
+while True:
 
-print(part1(inputting()))
+    part1print =part1(lines)
+    overalltotal+=part1print[0]
+    if part1print[0]==0:
+        break
+    lines=changetox(lines,part1print[1])
+print(overalltotal)
 
