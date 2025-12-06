@@ -1,23 +1,43 @@
-with open("values.txt", 'r') as file:
-    rows = [line.split() for line in file.read().strip().splitlines()]
-    columns = list(zip(*rows))
+with open("values.txt", "r") as f:
+    lines = f.read().splitlines()
 
+max_length = max(len(l) for l in lines)
+lines = [l.ljust(max_length) for l in lines]
+columns = [''.join(col) for col in zip(*lines)]
+rtl_cols = list(reversed(columns))
 results = []
-total = 0
+groups = []
+current = []
 
-for column in columns:
-    operator = column[-1]
-    numbers = list(map(int, column[:-1]))
-    line_total = 0
-    if operator == "+":
+for col in rtl_cols:
+    if col.strip() == "":
+        if current:
+            groups.append(current)
+            current = []
+    else:
+        current.append(col)
+
+if current:
+    groups.append(current)
+
+for group in groups:
+    op = None
+    for col in group:
+        if col[-1] in "+*":
+            op = col[-1]
+            break
+    numbers = []
+    for col in group:
+        num_str = col[:-1].strip()
+        if num_str:
+            numbers.append(int(num_str))
+    if op == "+":
         line_total = sum(numbers)
-    elif operator == "*":
+    else:
         line_total = 1
         for num in numbers:
             line_total *= num
     results.append(line_total)
 
-for result in results:
-    total += result
-
-print(total)
+grand_total = sum(results)
+print(grand_total)
