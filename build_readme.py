@@ -33,6 +33,10 @@ EXT_TO_LANG = {
     ".xlsx": "Excel",
     ".ps1": "PowerShell",
     ".sql": "SQL",
+    ".vb": "VB.NET",
+    ".vbs": "VBScript",
+    ".xslt": "XSLT",
+    ".sh": "Bash",
 }
 
 
