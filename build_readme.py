@@ -39,7 +39,7 @@ EXT_TO_LANG = {
     ".sh": "Bash",
     ".fs": "F#",
     ".asm": "Assembly",
-    ".powerautomate.json": "Power Automate",
+    ".powerautomate": "Power Automate",
 }
 
 
