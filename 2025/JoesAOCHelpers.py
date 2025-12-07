@@ -22,6 +22,10 @@ class Grid:
         self.xmax = max(self.xmax, x)
         self.ymin = min(self.ymin, y)
         self.ymax = max(self.ymax, y)
+        
+    def index_of(self, value: str) -> List[Tuple[int, int]]:
+        """Returns a list of coordinates where the grid has the specified value."""
+        return [pos for pos, val in self.data.items() if val == value]
 
     def pprint(self):
         """Pretty print the grid."""
