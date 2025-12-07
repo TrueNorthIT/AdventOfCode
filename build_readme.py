@@ -37,6 +37,9 @@ EXT_TO_LANG = {
     ".vbs": "VBScript",
     ".xslt": "XSLT",
     ".sh": "Bash",
+    ".fs": "F#",
+    ".asm": "Assembly",
+    ".powerautomate.json": "Power Automate",
 }
 
 
