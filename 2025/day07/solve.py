@@ -13,11 +13,10 @@ for r in range(rows):
     if start_row is not None:
         break
 
-splits = 0
-beams = {start_col}
+beams = {start_col: 1}
 
 for r in range(start_row + 1, rows):
-    active = set(beams)
+    active = dict(beams)
     while True:
         any_on_splitter = False
         for c in active:
@@ -27,18 +26,16 @@ for r in range(start_row + 1, rows):
                 break
         if not any_on_splitter:
             break
-        next_active = set()
-        for c in active:
+        next_active = {}
+        for c, cnt in active.items():
             ch = grid[r][c] if 0 <= c < len(grid[r]) else "."
             if ch == "^":
-                splits += 1
                 if c - 1 >= 0:
-                    next_active.add(c - 1)
+                    next_active[c - 1] = next_active.get(c - 1, 0) + cnt
                 if c + 1 < cols:
-                    next_active.add(c + 1)
+                    next_active[c + 1] = next_active.get(c + 1, 0) + cnt
             else:
-                next_active.add(c)
+                next_active[c] = next_active.get(c, 0) + cnt
         active = next_active
     beams = active
-
-print(splits)
+print(sum(beams.values()))
