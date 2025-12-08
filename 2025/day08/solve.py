@@ -38,19 +38,22 @@ distances.sort(key=lambda t: t[0])
 parent = list(range(len(x)))
 size = [1] * len(x)
 
-connections_considered = 0
-target_connections = 1000
-idx = 0
+components = len(x)
+last_pair = None 
 
-while connections_considered < target_connections and idx < len(distances):
-    _, i, j = distances[idx]
-    connections_considered += 1
-    union(i, j)
-    idx += 1
+for dist, i, j in distances:
+    if union(i, j):  
+        components -= 1
+        last_pair = (i, j)
+        if components == 1:  
+            break
 
-roots = [find(i) for i in range(len(x))]
-counts = Counter(roots)
-largest_three = sorted(counts.values(), reverse=True)[:3]
-result = largest_three[0] * largest_three[1] * largest_three[2]
-print(largest_three)    
-print(result)
+i, j = last_pair
+
+last_a = (x[i], y[i], z[i])
+last_b = (x[j], y[j], z[j])
+
+x_product = x[i] * x[j]
+
+print("Last connection between:", last_a, "and", last_b)
+print("Product of their X coordinates:", x_product)
