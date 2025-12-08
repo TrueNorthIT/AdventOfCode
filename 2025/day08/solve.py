@@ -177,7 +177,6 @@ class Day07Solver(JoesAoCSolver):
 
 
 if __name__ == "__main__":
-  
     solver = Day07Solver()
     # solver.run("assertions")
     solver.run("real")
