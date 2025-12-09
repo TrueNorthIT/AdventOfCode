@@ -28,8 +28,9 @@ var start = points.Index().OrderBy(p => p.Item.y).ThenBy(p => p.Item.x).First();
 var prevP = (x: start.Item.x - 0.5, y: start.Item.y - 0.5);
 var prevTurnRight = true;
 //assume we are going CLOCKWISE, and we turned right prev, check this for real input!
-var polygonBoundary = new List<(double x, double y)>();
-polygonBoundary.Add(prevP);
+var polygonBoundary = new List<(double x, double y)> {
+    prevP
+};
 for (int c = 1; c < points.Count; c++)
 {
     var pi = points[(c + start.Index - 1) % points.Count];
@@ -143,10 +144,6 @@ bool crosses((double x, double y) p1, (double x, double y) p2, (double x, double
     }
 
     throw new();
-    //var sorted = new[] { p1.y, p2.y }.OrderBy(y => y).ToArray();
-    //if (sorted[0] < l1.y && sorted[1] > l2.y)
-    //    return true;
-    //return false;
 }
 double crossproduct((double x, double y) p, (double x, double y) l1, (double x, double y) l2)
 {
@@ -154,12 +151,3 @@ double crossproduct((double x, double y) p, (double x, double y) l1, (double x, 
     var fy = l2.y - l1.y;
     return fx * (p.y - l1.y) - fy * (p.x - l1.x);
 }
-
-//bool crosses((double x, double y) p1, (double x, double y) p2, (double x, double y) l1, (double x, double y) l2)
-//{
-//    var c1 = crossproduct(p1, l1, l2);
-//    var c2 = crossproduct(p2, l1, l2);
-
-//    return Math.Sign(c1) != Math.Sign(c2);
-//}
-
