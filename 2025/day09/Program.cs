@@ -1,10 +1,15 @@
-﻿var points = File.ReadAllLines("input.txt")
+﻿using System.Diagnostics;
+
+Stopwatch watch = Stopwatch.StartNew();
+
+var points = File.ReadAllLines("input.txt")
                 .Select(line => line.Split(',').Select(double.Parse) switch { 
                     var sp => (x: sp.First(), y: sp.Skip(1).First()) })
             .ToArray();
 
 var rectangles = from c1 in points from c2 in points where c1.x < c2.x || c1.y < c2.y select (c1, c2);
-Console.WriteLine($"Part 1: {rectangles.Max(tp => (1 + Math.Abs(tp.c2.x - tp.c1.x)) * (1 + Math.Abs(tp.c2.y - tp.c1.y)))}");
+Console.WriteLine($"Part 1: {rectangles.Max(tp => (1 + Math.Abs(tp.c2.x - tp.c1.x)) * (1 + Math.Abs(tp.c2.y - tp.c1.y)))} in {watch.ElapsedMilliseconds}ms");
+watch.Restart();
 
 //rectangle is entirely inside if no side of polygon crosses any side of the rectangle
 //however we must ensure we are checking against the outside of the polygon
@@ -42,8 +47,6 @@ for (int c = 1; c < points.Length; c++)
     polygonBoundary.Add((polygonBoundary.Last().x + currVector.x, polygonBoundary.Last().y + currVector.y));
 }
 
-Console.WriteLine("Outline found");
-
 var found = new List<((double x, double y) c1, (double x, double y) c2, double )>();
 foreach (var rectangle in rectangles)
 {
@@ -76,21 +79,19 @@ foreach (var rectangle in rectangles)
 skip:;
 }
 
-var p2ans = found.MaxBy(tp => tp.Item3);
-Console.WriteLine(p2ans);
+Console.WriteLine($"Part 2: {found.MaxBy(tp => tp.Item3)} in {watch.ElapsedMilliseconds}ms");
 
 bool crosses((double x, double y) p1, (double x, double y) p2, (double x, double y) l1, (double x, double y) l2)
 {
     if (l1.x == l2.x)
     {
-        //polygon side is vertical, so two points are on a horizontal
-        var sortedx = new[] { p1.x, p2.x }.OrderBy(x => x).ToArray();
-        if (sortedx[0] < l1.x && sortedx[1] > l2.x)
+        if ((p1.x <= p2.x && p1.x < l1.x && p2.x > l2.x)
+            || (p2.x < l1.x && p1.x > l2.x))
         {
             //the horizontal points cross
             //is the vertical range within the line (incl.)
-            var sortedy = new[] { l1.y, l2.y }.OrderBy(x => x).ToArray();
-            if (p1.y > sortedy[0] && p1.y < sortedy[1])
+            if ((l1.y <= l2.y && p1.y > l1.y && p1.y < l2.y)
+                || (p1.y > l2.y && p1.y < l1.y))
             {
                 return true;
             }
@@ -99,11 +100,11 @@ bool crosses((double x, double y) p1, (double x, double y) p2, (double x, double
     }
     if (l1.y == l2.y)
     {
-        var sortedy = new[] { p1.y, p2.y }.OrderBy(y => y).ToArray();
-        if (sortedy[0] < l1.y && sortedy[1] > l2.y)
+        if ((p1.y < p2.y && p1.y < l1.y && p2.y > l2.y)
+            || (p2.y < l1.y && p1.y > l2.y) )
         {
-            var sortedx = new[] { l1.x, l2.x };
-            if (p1.x >= sortedx[0] && p1.x <= sortedx[1])
+            if ((l1.x < l2.x && p1.x >= l1.x && p1.x <= l2.x)
+                || p1.x >= l2.x && p1.x <= l1.x)
             {
                 return true;
             }
