@@ -7,7 +7,9 @@ var points = File.ReadAllLines("input.txt")
                     var sp => (x: sp.First(), y: sp.Skip(1).First()) })
             .ToArray();
 
-var rectangles = from c1 in points from c2 in points where c1.x < c2.x || c1.y < c2.y select (c1, c2);
+double size((double x, double y) p1, (double x, double y) p2) => (1 + Math.Abs(p2.x - p1.x)) * (1 + Math.Abs(p2.y - p1.y));
+
+var rectangles = from c1 in points from c2 in points where c1.x < c2.x || c1.y < c2.y select (c1, c2, size: size(c1,c2));
 Console.WriteLine($"Part 1: {rectangles.Max(tp => (1 + Math.Abs(tp.c2.x - tp.c1.x)) * (1 + Math.Abs(tp.c2.y - tp.c1.y)))} in {watch.ElapsedMilliseconds}ms");
 watch.Restart();
 
@@ -15,7 +17,7 @@ watch.Restart();
 //however we must ensure we are checking against the outside of the polygon
 //so first step is to walk the outside of the polygon storing its boundary
 
-//find the TL corner to start at
+//find the Top Left corner to start at
 var start = points.Index().OrderBy(p => p.Item.y).ThenBy(p => p.Item.x).First();
 //and assume we are going CLOCKWISE, 0check this for real input!
 var prevTurnRight = true;
@@ -47,10 +49,8 @@ for (int c = 1; c < points.Length; c++)
     polygonBoundary.Add((polygonBoundary.Last().x + currVector.x, polygonBoundary.Last().y + currVector.y));
 }
 
-var found = new List<((double x, double y) c1, (double x, double y) c2, double )>();
-foreach (var rectangle in rectangles)
-{
-    bool valid = true;
+foreach (var rectangle in rectangles.OrderByDescending(tp => tp.size))
+{    
     var minx = Math.Min(rectangle.c1.x, rectangle.c2.x);
     var maxx = Math.Max(rectangle.c1.x, rectangle.c2.x);
     var miny = Math.Min(rectangle.c1.y, rectangle.c2.y);
@@ -69,17 +69,13 @@ foreach (var rectangle in rectangles)
             var p2 = polygonBoundary[(p + 1) % points.Length];
 
             if (crosses(side.Item1, side.Item2, p1, p2))
-            {
-                valid = false;
                 goto skip;
-            }
         }
     }
-    found.Add((rectangle.c1, rectangle.c2, (1 + Math.Abs(rectangle.c2.x - rectangle.c1.x)) * (1 + Math.Abs(rectangle.c2.y - rectangle.c1.y))));
+    Console.WriteLine($"Part 2: {rectangle.size} in {watch.ElapsedMilliseconds}ms");
+    return;
 skip:;
 }
-
-Console.WriteLine($"Part 2: {found.MaxBy(tp => tp.Item3)} in {watch.ElapsedMilliseconds}ms");
 
 bool crosses((double x, double y) p1, (double x, double y) p2, (double x, double y) l1, (double x, double y) l2)
 {
