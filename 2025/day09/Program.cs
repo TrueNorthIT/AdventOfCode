@@ -1,6 +1,6 @@
 ﻿using System;
 
-List<(double x, double y)> points = File.ReadAllLines("example.txt").Select(line => line.Split(','))
+List<(double x, double y)> points = File.ReadAllLines("input.txt").Select(line => line.Split(','))
             .Select(arr => (double.Parse(arr[0]), double.Parse(arr[1])))
             .ToList();
 
