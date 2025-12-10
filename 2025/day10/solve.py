@@ -6,6 +6,7 @@ import sys; from pathlib import Path
 
 from sympy import S, Eq, Eq, linsolve, symbols
 sys.path.append(str(Path(__file__).resolve().parent.parent)); from JoesAoCSolver import JoesAoCSolver; from JoesAOCHelpers import Grid, read_input_as_grid
+from z3 import Int, Solver, Sum, sat
 
 class Day10Solver(JoesAoCSolver):
 
@@ -62,8 +63,8 @@ class Day10Solver(JoesAoCSolver):
 [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}""", 7)]
       
     
-
-    def configure_machine_joltage(self, buttons: list[tuple[int, ...]], joltage: list[int]) -> int:
+  
+    def configure_machine_joltage_bfs(self, buttons: list[tuple[int, ...]], joltage: list[int]) -> int:
       num_counters = len(joltage)
       target = tuple(joltage)
 
@@ -120,6 +121,42 @@ class Day10Solver(JoesAoCSolver):
           visited.add(next_state)
           queue.append((next_state, presses + 1))
 
+    def configure_machine_joltage_z3(self, buttons: list[tuple[int, ...]], joltage: list[int]) -> int:
+      
+      # very bad very slow z3 solution 
+      # basicly just sets up equations for each counter and tries increasing totals of button presses until it finds a solution
+      
+      # im sure you can set up liner eqations or smth but this works and i'm sad that i couldn't use a bfs :( 
+      
+      num_counters = len(joltage)
+      num_buttons = len(buttons)
+      target = list(joltage)
+
+
+      press_vars = [Int(f"b{j}") for j in range(num_buttons)]
+      base_constraints = []
+
+      for counter_idx in range(num_counters):
+          affecting = [press_vars[j] for j, wiring in enumerate(buttons)
+                      if counter_idx in wiring]
+
+          if affecting:
+              base_constraints.append(Sum(affecting) == target[counter_idx])
+
+      total_expr = Sum(press_vars)
+      max_total = sum(target)
+
+      # Try totals from 0 upward until SAT
+      for total in range(max_total + 1):
+          solver = Solver()
+
+          for c in base_constraints:
+              solver.add(c)
+          solver.add(total_expr == total)
+
+          if solver.check() == sat:
+              return total 
+
 
     def part2(self):
       machines = self.parse_input()
@@ -129,11 +166,11 @@ class Day10Solver(JoesAoCSolver):
       solved = 0
       to_solve = len(machines)
       
-      # sort machines by len of joltage to try and solve easier ones first, then by buttons to try and get small press counts early
+      # sort machines by len of joltage to try and solve harder ones first so we confirm the solution sooner
       machines.sort(key=lambda x: (len(x[2]), len(x[1])))
       for _, buttons, joltage in machines[::-1]:
         print(f"Solving machine with joltage: {joltage}, buttons: {buttons}")
-        presses += self.configure_machine_joltage(buttons, joltage)
+        presses += self.configure_machine_joltage_z3(buttons, joltage)
         solved += 1
         print(f"Solved {solved} of {to_solve} machines. We are at {presses} total presses so far. With {solved / to_solve * 100:.2f}% complete.")
           
