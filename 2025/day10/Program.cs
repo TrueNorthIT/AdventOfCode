@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-var input = File.ReadAllLines("example.txt").Select(line => line.Split(' ') switch
+var input = File.ReadAllLines("input.txt").Select(line => line.Split(' ') switch
 {
     var arr =>
         (arr.First(), arr.Skip(1).Take(arr.Length - 2).ToArray(), arr.Skip(arr.Length - 1).Single())
@@ -103,6 +103,13 @@ long solvep2(int index)
 
 int backSub(int index, double[][] arr, double[] b)
 {
+    if (index == 131)
+    {
+        //62277040675 - TOO HIGH!
+        //must be able to do this one lower
+        //return 275;
+    }
+
     int best = int.MaxValue;
     HashSet<string> cache = new HashSet<string>();
     Stack<(int row, Dictionary<int, int> pressed)> queue = new ();
@@ -116,21 +123,21 @@ int backSub(int index, double[][] arr, double[] b)
         (var row, var pressed) = queue.Pop();
         if (row < 0) continue;
 
-        var cacheKey = $"R:{row}-" + String.Join(",", Enumerable.Range(0, buttons[index].Length).Select(i => pressed.ContainsKey(i) ? pressed[i] : -1).ToArray());
+        //var cacheKey = $"R:{row}-" + String.Join(",", Enumerable.Range(0, buttons[index].Length).Select(i => pressed.ContainsKey(i) ? pressed[i] : -1).ToArray());
+        //if (cache.Contains(cacheKey))
+        //    continue;
 
-        if (row == bestRow)
-            Console.WriteLine(cacheKey);
+        //cache.Add(cacheKey);
+        //if (row == bestRow)
+        //    Console.WriteLine(cacheKey);
 
         if (row < bestRow)
         {
             bestRow = row;
-            Console.WriteLine($"Reached row {row}");
-            Console.WriteLine(cacheKey);
+            //Console.WriteLine($"Reached row {row}");
+            //Console.WriteLine(cacheKey);
         }
-        if (cache.Contains(cacheKey))
-            continue;
 
-        cache.Add(cacheKey);
         
         //we have a row of the form x0 + x1 + x2 ... = br
         //we need to sub in any values we know and then start brute forcing the rest
@@ -175,8 +182,8 @@ int backSub(int index, double[][] arr, double[] b)
         var param = arr[row].Index().Where(tp => tp.Item != 0 && !pressed.ContainsKey(tp.Index)).First();
         {
             //max that this parameter can be
-            var max = Math.Ceiling(checkSum / arr[row][param.Index]);
-            //var max = Math.Abs(checkSum);
+            //var max = Math.Ceiling(checkSum / arr[row][param.Index]);
+            var max = Math.Abs(checkSum);
             for (int p = (int) max; p >= 0; p--)
             {
                 var newPressed = pressed.ToDictionary();
