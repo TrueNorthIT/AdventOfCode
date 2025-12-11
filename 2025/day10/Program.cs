@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 var input = File.ReadAllLines("input.txt").Select(line => line.Split(' ') switch {
     var arr => (    arr.First(), 
@@ -76,48 +77,54 @@ int backSub(int index, int R, int C, int[][] A)
     var maximums = buttons[index].Select(toggles => toggles.Min(bi => joltages[index][bi])).ToArray();
 
     int best = int.MaxValue;
-    Stack<(int row, Dictionary<int, int> pressed)> stack = new ();
+    Stack<(int row, int[] pressed)> stack = new();
 
-    stack.Push((R - 1, new Dictionary<int, int>()));
+    stack.Push((R - 1, Enumerable.Repeat(-1,C).ToArray()));
     while (stack.Any())
     {
-        (var row, var pressed) = stack.Pop();
+        (var r, var pressed) = stack.Pop();
 
-        if (row < 0)
+        if (r < 0)
         {
             //we've reached the end with no failures, this must be a solution
-            best = Math.Min(pressed.Sum(kvp => kvp.Value), best);
-            Console.WriteLine($"#{index} in {best} total: {String.Join(", ", pressed.Select(kvp => $"b{kvp.Key}={kvp.Value}").ToArray())}");
+            best = Math.Min(pressed.Sum(), best);
+            //Console.WriteLine($"#{index} in {best} total: {String.Join(", ", pressed.Index().Select(tp => $"b{tp.Index}={tp.Item}").ToArray())}");
             continue;
         }
 
-        //we have a row of the form x0 + x1 + x2 ... = br
+        //we have a row of the form 0 + 0 + ... xr + r(r+1) ... xfinal = br
         //we need to sub in any values we know and then start brute forcing the rest
-        int rowTotal = A[row][C];
-        for (int c = 0; c < C; c++)
-            if (A[row][c] != 0)
-                if (pressed.ContainsKey(c))
-                    rowTotal-= A[row][c] * pressed[c];                    
+        int rowTotal = A[r][C];
+        for (int c = r; c < C; c++)
+            if (A[r][c] != 0)
+                if (pressed[c] >= 0)
+                    rowTotal -= A[r][c] * pressed[c];                    
                 else
                     goto bruteForce;
 
         //1) rowTotal = 0, the row is consistent and all values are specified, move to next row
         //2) rowTotal != 0, this was a failed substitution so quit this path
         if (rowTotal == 0)
-            stack.Push((row - 1, pressed));
+            stack.Push((r - 1, pressed));
         continue;
     bruteForce:;
         //we need to choose our next value
         //so push all the options to test
-        var param = A[row].Index().Where(tp => tp.Index != C && tp.Item != 0 && !pressed.ContainsKey(tp.Index)).First();
-        //upper bound of our choice is confusing because of -'ve numbers in the matrix
-        //so just use an easily calculated pre-computed max
-        var max = maximums[param.Index];
-        for (int p = max; p >= 0; p--)
+        for (int c = 0; c < C; c++)
         {
-            var newPressed = pressed.ToDictionary();
-            newPressed[param.Index] = p;
-            stack.Push((row, newPressed));
+            if (A[r][c] != 0 && pressed[c] == -1)
+            {
+                //upper bound of our choice is confusing because of -'ve numbers in the matrix
+                //so just use an easily calculated pre-computed max
+                var max = maximums[c];
+                for (int p = max; p >= 0; p--)
+                {
+                    var newPressed = pressed.ToArray();
+                    newPressed[c] = p;
+                    stack.Push((r, newPressed));
+                }
+                break;
+            }
         }
     }
     Console.WriteLine($"#{index}: {best}");
