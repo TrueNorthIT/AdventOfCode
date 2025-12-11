@@ -31,7 +31,9 @@ class JoesAoCSolver:
         self.day = self.script_path.parent.name
 
         self.input_file = (
-            Path(input_file).resolve() if input_file else self.script_path.parent / "input.txt"
+            Path(input_file).resolve()
+            if input_file
+            else self.script_path.parent / "input.txt"
         )
         self.input_data = self.read_input()
 
@@ -64,7 +66,6 @@ class JoesAoCSolver:
         result = func()  # Capture the result of the function
         elapsed_time = time.time() - start_time
         return result, elapsed_time
-
 
     def benchmark(self, times: int = 100):
         self.log(f"Benchmarking Part 1 and Part 2 with {times} iterations...", "INFO")
@@ -99,13 +100,20 @@ class JoesAoCSolver:
                 return value * 1e9, "ns"
 
         table = PrettyTable()
-        table.field_names = ["Part", "Avg Time", "Median", "95th %ile", "99th %ile", "Unit"]
+        table.field_names = [
+            "Part",
+            "Avg Time",
+            "Median",
+            "95th %ile",
+            "99th %ile",
+            "Unit",
+        ]
 
         for part, timings in results.items():
             avg_time = statistics.mean(timings)
             median_time = statistics.median(timings)
-            p95 = statistics.quantiles(timings, n=100)[94]  
-            p99 = statistics.quantiles(timings, n=100)[98] 
+            p95 = statistics.quantiles(timings, n=100)[94]
+            p99 = statistics.quantiles(timings, n=100)[98]
 
             # Adjust units
             avg_time, unit = adjust_units(avg_time)
@@ -113,10 +121,18 @@ class JoesAoCSolver:
             p95, _ = adjust_units(p95)
             p99, _ = adjust_units(p99)
 
-            table.add_row([part, f"{avg_time:.6f}", f"{median_time:.6f}", f"{p95:.6f}", f"{p99:.6f}", unit])
+            table.add_row(
+                [
+                    part,
+                    f"{avg_time:.6f}",
+                    f"{median_time:.6f}",
+                    f"{p95:.6f}",
+                    f"{p99:.6f}",
+                    unit,
+                ]
+            )
 
         print(table)
-
 
     def run_phase(
         self,
@@ -134,13 +150,23 @@ class JoesAoCSolver:
 
         if run_real:
             result, elapsed_time = self.time_function(solver)
-            self.log(f"{phase_name} Result: {result} (took {elapsed_time:.4f} seconds)", "SUCCESS")
+            self.log(
+                f"{phase_name} Result: {result} (took {elapsed_time:.4f} seconds)",
+                "SUCCESS",
+            )
             print()
 
-    def run_examples(self, examples: List[Tuple[str, Any]], solver: Callable[[str], Any]):
+    def run_examples(
+        self, examples: List[Tuple[str, Any]], solver: Callable[[str], Any]
+    ):
         original_input_data = self.input_data
         table = PrettyTable()
-        table.field_names = ["Example Input", "Expected Output", "Actual Output", "Status"]
+        table.field_names = [
+            "Example Input",
+            "Expected Output",
+            "Actual Output",
+            "Status",
+        ]
         for i, (example_input, expected_output) in enumerate(examples, start=1):
             self.input_data = example_input
             actual_output = solver()
@@ -163,7 +189,9 @@ class JoesAoCSolver:
         self.log(f"Advent of Code - {self.day}", "INFO")
         print("=" * 40)
         try:
-            self.run_phase("Part 1", self.part1, self.part1_examples(), run_assertions, run_real)
+            self.run_phase(
+                "Part 1", self.part1, self.part1_examples(), run_assertions, run_real
+            )
         except NotImplementedError:
             self.log("Part 1: Not implemented.", "WARNING")
         except AssertionError as e:
@@ -175,7 +203,9 @@ class JoesAoCSolver:
         print("-" * 40)
 
         try:
-            self.run_phase("Part 2", self.part2, self.part2_examples(), run_assertions, run_real)
+            self.run_phase(
+                "Part 2", self.part2, self.part2_examples(), run_assertions, run_real
+            )
         except NotImplementedError:
             self.log("Part 2: Not implemented.", "WARNING")
         except AssertionError as e:
