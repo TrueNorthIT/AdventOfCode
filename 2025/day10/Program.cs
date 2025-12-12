@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 var input = File.ReadAllLines("input.txt").Select(line => line.Split(' ') switch {
     var arr => (    arr.First(), 
@@ -66,7 +65,7 @@ long reduceAndBackSubstitute(int index)
             A[p][C] = A[p][C] * deltaDen - A[r][C] * deltaNom;
         }
         //we have fully reduced from r+1 to the end
-    }   
+    }
     //now we have to start substituting in
     //and if we get stuck start brute forcing the parameters
     return backSub(index, R, C, A);
@@ -83,7 +82,6 @@ int backSub(int index, int R, int C, int[][] A)
     while (stack.Any())
     {
         (var r, var pressed) = stack.Pop();
-
         if (r < 0)
         {
             //we've reached the end with no failures, this must be a solution
@@ -110,14 +108,24 @@ int backSub(int index, int R, int C, int[][] A)
     bruteForce:;
         //we need to choose our next value
         //so push all the options to test
-        for (int c = 0; c < C; c++)
+        for (int c = r; c < C; c++)
         {
             if (A[r][c] != 0 && pressed[c] == -1)
             {
                 //upper bound of our choice is confusing because of -'ve numbers in the matrix
                 //so just use an easily calculated pre-computed max
                 var max = maximums[c];
-                for (int p = max; p >= 0; p--)
+
+                //this tigher bound reduces runtime by about 20%
+                //even better might be to find the min number of presses for any button to reach
+                //each joltage total this button doesn't impact
+                var pressedSoFar = pressed.Sum();
+                if (pressedSoFar + max >= best)
+                {
+                    max = best - pressedSoFar;
+                }
+
+                for (int p = 0; p <= max; p++)
                 {
                     var newPressed = pressed.ToArray();
                     newPressed[c] = p;
