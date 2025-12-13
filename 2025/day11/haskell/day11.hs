@@ -1,6 +1,6 @@
 import Data.Function.Memoize
 fj (Just a) = a
-m = do
+main = do
  content <- readFile "input.txt"
  print $ count' content (0::Int) "svr"
 
