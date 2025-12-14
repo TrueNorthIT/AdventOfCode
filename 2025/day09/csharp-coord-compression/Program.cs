@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using Point = (long x, long y);
 
 var watch = Stopwatch.StartNew();
 var redTiles = File.ReadAllLines("input.txt")
-        .Select(line => line.Split(',').Select(long.Parse) switch {
+        .Select(line => line.Split(',').Select(int.Parse) switch {
             var sp => (x: sp.First(), y: sp.Skip(1).First())
         })
     .ToArray();
@@ -13,32 +12,35 @@ var xMap = redTiles.Select(p => p.x).Distinct().OrderBy(x => x).Index().ToArray(
 var invXMap = xMap.ToDictionary(tp => tp.Item, tp => tp.Index);
 var yMap = redTiles.Select(p => p.y).Distinct().OrderBy(y => y).Index().ToArray();
 var invYMap = yMap.ToDictionary(tp => tp.Item, tp => tp.Index);
+var compressed = redTiles.Select(p => new Point(invXMap[p.x], invYMap[p.y])).ToArray();
 
-var comp = redTiles.Select(p => new Point(invXMap[p.x], invYMap[p.y])).ToArray();
+watch.Stop();
+Console.WriteLine($"Parsing complete by {watch.ElapsedMilliseconds}ms");
+watch.Start();
 
 var grid = new int[xMap.Length, yMap.Length];
 
 //draw the polygon on our compressed grid
-for (int e = 0; e < comp.Length; e++)
+for (int e = 0; e < compressed.Length; e++)
 {
-    var next = comp[(e + 1) % comp.Length];
-    if (next.x == comp[e].x)
+    var next = compressed[(e + 1) % compressed.Length];
+    if (next.x == compressed[e].x)
     {
-        for (var y = comp[e].y; y != next.y; y += Math.Sign(next.y - comp[e].y))
-            grid[comp[e].x, y] = 1; //green
+        for (var y = compressed[e].y; y != next.y; y += Math.Sign(next.y - compressed[e].y))
+            grid[compressed[e].x, y] = 1; //green
     }
     else
     {
-        for (var x = comp[e].x; x != next.x; x += Math.Sign(next.x - comp[e].x))
-            grid[x, comp[e].y] = 1; //green
+        for (var x = compressed[e].x; x != next.x; x += Math.Sign(next.x - compressed[e].x))
+            grid[x, compressed[e].y] = 1; //green
     }
-    grid[comp[e].x, comp[e].y] = 2; //red
+    grid[compressed[e].x, compressed[e].y] = 2; //red
 }
 
-#if DEBUG
-Console.WriteLine($"Compressed grid:");
+watch.Stop();
 print(grid);
-#endif
+Console.WriteLine($"Grid compressed by {watch.ElapsedMilliseconds}ms:");
+watch.Start();
 
 //for every point along the edge of our grid, start a flood fill
 //we go along the edges just to avoid expanding our grid
@@ -63,35 +65,21 @@ while (queue.Any())
     var curr = queue.Dequeue();
     grid[curr.x, curr.y] = -1;
     foreach (var neighbour in neighbours(curr))
-    {
         if (grid[neighbour.x, neighbour.y] == 0)
         {
             grid[neighbour.x, neighbour.y] = -1; //outside
             queue.Enqueue(neighbour);
         }        
-    }
 }
 
-#if DEBUG
-Console.WriteLine($"Flood filled grid:");
+watch.Stop();
 print(grid);
-#endif
-
-List<Point> interior = new();
-//find all interior points and put into a range tree
-//then query the rectangles against that
-for (int x = 0; x < xMap.Length; x++)
-    for (int y = 0; y < yMap.Length; y++)
-    {
-        if (grid[x, y] == 0)
-            interior.Add(new Point(x, y));
-    }
-
-Console.WriteLine($"Found {interior.Count} interior points");
+Console.WriteLine($"Grid flood filled by {watch.ElapsedMilliseconds}ms:");
+watch.Start();
 
 var p2 = (
- from c1 in comp
- from c2 in comp
+ from c1 in compressed
+ from c2 in compressed
  where c1.x < c2.x || (c1.x == c2.x && c1.y < c2.y)
  let c1E = new Point(xMap[c1.x].Item, yMap[c1.y].Item)
  let c2E = new Point(xMap[c2.x].Item, yMap[c2.y].Item)
@@ -99,63 +87,38 @@ var p2 = (
 .OrderByDescending(tp => tp.expandedArea)
 .First(tp =>
 {
-    if (true)
-    {
-        //simple 4 corner check first speeds things up a little
-        if (grid[tp.c1.x, tp.c1.y] == -1
-           || grid[tp.c1.x, tp.c2.y] == -1
-           || grid[tp.c2.x, tp.c1.y] == -1
-           || grid[tp.c2.x, tp.c2.y] == -1
-        ) return false;
+    //4 corner check first speeds things up a little
+    if (grid[tp.c1.x, tp.c1.y] == -1
+        || grid[tp.c1.x, tp.c2.y] == -1
+        || grid[tp.c2.x, tp.c1.y] == -1
+        || grid[tp.c2.x, tp.c2.y] == -1
+    ) return false;
 
-        //simple loop over all rectangle points to find if there are any outside points
-        for (var x = Math.Min(tp.c1.x, tp.c2.x); x <= Math.Max(tp.c1.x, tp.c2.x); x++)
-            for (var y = Math.Min(tp.c1.y, tp.c2.y); y <= Math.Max(tp.c1.y, tp.c2.y); y++)
-                if (grid[x, y] == -1)
-                    return false;
-    }
-    else
-    {
-        for (var x = Math.Min(tp.c1.x, tp.c2.x); x <= Math.Max(tp.c1.x, tp.c2.x); x++)
-            for (var y = Math.Min(tp.c1.y, tp.c2.y); y <= Math.Max(tp.c1.y, tp.c2.y); y++)
-            {
-                if (grid[x, y] <= 0) //not a red tile or green edge which we have marekd
-                {
-                    var w = winding(new Point(x, y));
-                    if (Math.Abs(w) < 1) //its an outside point
-                        return false;
-                }
-            }
-    }
-
+    //loop over all rectangle points to find if there are any outside points
+    (var minY, var maxY) = tp.c1.y < tp.c2.y ? (tp.c1.y, tp.c2.y) : (tp.c2.y, tp.c1.y);
+    for (var x = tp.c1.x; x <= tp.c2.x; x++)
+        for (var y = minY; y <= maxY; y++)
+            if (grid[x, y] == -1)
+                return false;
     return true;
 });
+
 watch.Stop();
-Console.WriteLine(((p2.c1, p2.c2),(p2.c1E, p2.c2E), p2.expandedArea) + $" in {watch.ElapsedMilliseconds}ms");
-
-List<Point> neighbours(Point point) => [.. new [] {
-    new Point(point.x - 1, point.y - 1),
-    new Point(point.x    , point.y - 1),
-    new Point(point.x + 1, point.y - 1),
-    new Point(point.x - 1, point.y    ),
-    new Point(point.x + 1, point.y    ),
-    new Point(point.x - 1, point.y + 1),
-    new Point(point.x    , point.y + 1),
-    new Point(point.x + 1, point.y + 1),
-}.Where(p => p.x >= 0 && p.x < xMap.Length && p.y > 0 && p.y < yMap.Length)];
-
-double winding(Point p1)
-{
-    //yeah this obviously isn't going to be correct you could get anything
-    double res = 0;
-    foreach (var c in comp)
-    {
-        res += Math.Atan2(c.y - p1.y, c.x - p1.x);
-    }
-    return res;
-}
+Console.WriteLine($"Best found in {watch.ElapsedMilliseconds}ms");
+Console.WriteLine(((p2.c1, p2.c2),(p2.c1E, p2.c2E), p2.expandedArea));
 
 long rectArea(Point p1, Point p2) => (1 + Math.Abs(p2.x - p1.x)) * (1 + Math.Abs(p2.y - p1.y));
+
+IEnumerable<Point> neighbours(Point point)
+{
+    for (int x = -1; x <= 1; x++)
+        for (int y = -1; y <= 1; y++)
+        {
+            var neighbour = new Point(point.x + x, point.y + y);
+            if (neighbour.x >= 0 && neighbour.x < xMap.Length && neighbour.y >= 0 && neighbour.y < yMap.Length)
+                yield return neighbour;
+        }
+}
 
 void print(int[,] arr)
 {
@@ -174,3 +137,4 @@ void print(int[,] arr)
     }
     Console.WriteLine();
 }
+record struct Point(int x, int y);
