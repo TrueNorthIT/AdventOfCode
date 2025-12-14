@@ -77,6 +77,18 @@ Console.WriteLine($"Flood filled grid:");
 print(grid);
 #endif
 
+List<Point> interior = new();
+//find all interior points and put into a range tree
+//then query the rectangles against that
+for (int x = 0; x < xMap.Length; x++)
+    for (int y = 0; y < yMap.Length; y++)
+    {
+        if (grid[x, y] == 0)
+            interior.Add(new Point(x, y));
+    }
+
+Console.WriteLine($"Found {interior.Count} interior points");
+
 var p2 = (
  from c1 in comp
  from c2 in comp
@@ -87,23 +99,39 @@ var p2 = (
 .OrderByDescending(tp => tp.expandedArea)
 .First(tp =>
 {
-    //simple 4 corner check first speeds things up a little
-    if (grid[tp.c1.x, tp.c1.y] == -1
-       || grid[tp.c1.x, tp.c2.y] == -1
-       || grid[tp.c2.x, tp.c1.y] == -1
-       || grid[tp.c2.x, tp.c2.y] == -1
-    ) return false;
+    if (true)
+    {
+        //simple 4 corner check first speeds things up a little
+        if (grid[tp.c1.x, tp.c1.y] == -1
+           || grid[tp.c1.x, tp.c2.y] == -1
+           || grid[tp.c2.x, tp.c1.y] == -1
+           || grid[tp.c2.x, tp.c2.y] == -1
+        ) return false;
 
-    //simple loop over all rectangle points to find if there are any outside points
-    for (var x = Math.Min(tp.c1.x, tp.c2.x); x <= Math.Max(tp.c1.x, tp.c2.x); x++)
-    for (var y = Math.Min(tp.c1.y, tp.c2.y); y <= Math.Max(tp.c1.y, tp.c2.y); y++)
-        if (grid[x, y] == -1)
-            return false;
+        //simple loop over all rectangle points to find if there are any outside points
+        for (var x = Math.Min(tp.c1.x, tp.c2.x); x <= Math.Max(tp.c1.x, tp.c2.x); x++)
+            for (var y = Math.Min(tp.c1.y, tp.c2.y); y <= Math.Max(tp.c1.y, tp.c2.y); y++)
+                if (grid[x, y] == -1)
+                    return false;
+    }
+    else
+    {
+        for (var x = Math.Min(tp.c1.x, tp.c2.x); x <= Math.Max(tp.c1.x, tp.c2.x); x++)
+            for (var y = Math.Min(tp.c1.y, tp.c2.y); y <= Math.Max(tp.c1.y, tp.c2.y); y++)
+            {
+                if (grid[x, y] <= 0) //not a red tile or green edge which we have marekd
+                {
+                    var w = winding(new Point(x, y));
+                    if (Math.Abs(w) < 1) //its an outside point
+                        return false;
+                }
+            }
+    }
 
     return true;
 });
 watch.Stop();
-Console.WriteLine((p2.c1E, p2.c2E, p2.expandedArea) + $" in {watch.ElapsedMilliseconds}ms");
+Console.WriteLine(((p2.c1, p2.c2),(p2.c1E, p2.c2E), p2.expandedArea) + $" in {watch.ElapsedMilliseconds}ms");
 
 List<Point> neighbours(Point point) => [.. new [] {
     new Point(point.x - 1, point.y - 1),
@@ -115,6 +143,17 @@ List<Point> neighbours(Point point) => [.. new [] {
     new Point(point.x    , point.y + 1),
     new Point(point.x + 1, point.y + 1),
 }.Where(p => p.x >= 0 && p.x < xMap.Length && p.y > 0 && p.y < yMap.Length)];
+
+double winding(Point p1)
+{
+    //yeah this obviously isn't going to be correct you could get anything
+    double res = 0;
+    foreach (var c in comp)
+    {
+        res += Math.Atan2(c.y - p1.y, c.x - p1.x);
+    }
+    return res;
+}
 
 long rectArea(Point p1, Point p2) => (1 + Math.Abs(p2.x - p1.x)) * (1 + Math.Abs(p2.y - p1.y));
 
