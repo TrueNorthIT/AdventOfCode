@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="KDBush">
+      <HintPath>..\..\..\..\kdbush\KDBush\bin\Release\KDBush.dll</HintPath>
+    </Reference>
+    <Reference Include="RBush">
+      <HintPath>..\..\..\..\RBush\RBush\bin\Debug\net8.0\RBush.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="example.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
