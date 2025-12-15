@@ -217,9 +217,10 @@ def fastest_delta_per_member(board: Leaderboard) -> dict[str, tuple[int, int]]:
             if delta < 0:
                 continue
 
-            if best_delta is None or delta < best_delta:
-                best_delta = delta
-                best_day = day
+            if (day != board.num_days):
+                if best_delta is None or delta < best_delta:
+                    best_delta = delta
+                    best_day = day
 
         if best_delta is not None and best_day is not None:
             key = member.name or str(member.id)
@@ -248,10 +249,9 @@ def fastest_p1_per_member(board: Leaderboard) -> Dict[str, Tuple[int, int]]:
             if time_diff < 0:
                 continue
 
-            if (day != board.num_days):
-                if best_delta is None or time_diff < best_delta:
-                    best_delta = time_diff
-                    best_day = day
+            if best_delta is None or time_diff < best_delta:
+                best_delta = time_diff
+                best_day = day
 
         if best_delta is not None and best_day is not None:
             name = member.name or str(member.id)
