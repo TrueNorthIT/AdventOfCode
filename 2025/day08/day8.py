@@ -15,43 +15,77 @@ def distance(point1,point2):
     point2split =point2.split(",")
     return (math.sqrt(math.pow(int(pointsplit[0])-int(point2split[0]),2)+math.pow(int(pointsplit[1])-int(point2split[1]),2)+math.pow(int(pointsplit[2])-int(point2split[2]),2)))
 def treechecker(connected,point1,point2,checked):
-    currentpoint=point1
     truthvalue =True
-    if currentpoint == point2:
+    if point2 ==point1:
         return False
     if connected == []:
         return True
+    overlaps =[]
     for connect in connected:
-        if connect[0]==currentpoint:
-            if connect[0] in checked:
-                continue
-            else:
-                checked.append(connect[0])
-            currentpoint=connect[1]
-            #lowerconnected = copy.deepcopy(connected)
-            #lowerconnected.remove(connect)
-            truthvalue = treechecker(connected,currentpoint,point2,checked)
+        if connect[0] ==point1 or connect[0]==point2 or connect[1]==point1 or connect[1]==point2:
+            overlaps.append(connect)
+    for overlap in overlaps:
+        if overlap in checked:
+            continue
+        else:
+            checked.append(overlap)
+        if overlap[0] ==point1:
+            truthvalue = treechecker(connected,overlap[1],point2,checked)
+            if truthvalue ==False:
+                return False
+        if overlap[1] ==point1:
+            truthvalue =treechecker(connected,overlap[0],point2,checked)
+            if truthvalue ==False:
+                return False
+        if overlap[0] ==point2:
+            truthvalue = treechecker(connected,overlap[1],point1,checked)
+            if truthvalue ==False:
+                return False
+        if overlap[1] ==point2:
+            truthvalue =treechecker(connected,overlap[0],point1,checked)
+            if truthvalue ==False:
+                return False
     return truthvalue
 def findindex(connections,newconnection):
     split=0
     minimumbound = 0
     maximumbound = len(connections)
     while True:
+        difference = (maximumbound - minimumbound)
+        #print(difference)
         if split>maximumbound:
+            if newconnection in connections:
+                return -1
             return maximumbound
         if connections ==[]:
             return 0
-        difference =(maximumbound-minimumbound)
-        if split ==maximumbound:
+        if split ==maximumbound and difference<=2:
+            if newconnection >= 347.59 and newconnection < 348:
+                print("herse")
+                print(newconnection)
+                print(connections[int(split)-1])
+                print(connections)
+                try:
+                    print(connections[int(split)])
+                    print(connections[int(minimumbound)])
+                    print(connections[int(maximumbound)])
+                except:
+                    print("nope")
+                if connections[int(split)-1] == newconnection:
+                    print("here")
             return maximumbound
         if connections[int(split)]==newconnection and difference<=2:
+            #print(connections[int(split)])
+            #print(difference)
             return -1
         if connections[int(split)]>=newconnection:
             try:
                 if connections[int(split) + 1] <= newconnection and difference<=2:
+
                     return split
             except:
-                return split
+                if difference<=2:
+                    return split
         if connections[int(split)]>=newconnection:
             lastsplit=split
             maximumbound =split
@@ -83,13 +117,16 @@ def treesize(connected,currenttree):
                 pass
             else:
                 currenttree.append(connect[1])
+                #print(connected)
                 #print(currenttree,"b")
                 currenttree = treesize(connected,currenttree)
+                #print(currenttree,"a")
         if connect[1] in currenttree:
             if connect[0] in currenttree:
                 pass
             else:
                 currenttree.append(connect[0])
+                #print(connected)
                 #print(currenttree,"b")
                 currenttree =treesize(connected,currenttree)
                 #print(currenttree,"a")
@@ -103,8 +140,15 @@ def part1(lines):
     connections =[]
     print("stage 1")
     print(len(lines))
+    firstnum=0
+    secondnum=0
     for coord in lines:
+        firstnum+=1
+        secondnum=0
         for coord2 in lines:
+            if secondnum<firstnum:
+                secondnum+=1
+                continue
             if coord ==coord2:
                 #print("moving")
                 continue
@@ -126,33 +170,24 @@ def part1(lines):
             if len(connectionlengths)%10000==0:
                 print(len(connectionlengths)/10000)
 
-    connnumber = 1000
+    connnumber = 10
     print(connectionlengths)
     print(connections)
     print("stage 2")
-    for con in range(0,len(connectionlengths)):
-        try:
-            if connectionlengths[con]== connectionlengths[con+1]:
-                if connections[con][0]==connections[con+1][1]:
-                    connections.remove(connections[con])
-                    connectionlengths.remove(connectionlengths[con])
-        except:
-            break
-        if con%10000==0:
-            print(con/10000)
 
 
     connectionind =0
-    while len(connected)!=connnumber and connectionind<len(connections):
+    while len(connected)!=(connnumber) and connectionind<len(connections):
         checked=[]
         connection = connections[connectionind]
         point1 = connection[0]
         point2 =connection[1]
         check = treechecker(connected,point1,point2,checked)
         if  check ==False:
+            pass
             print("ever false")
         else:
-            #print("here")
+            print("here")
             connected.append(connection)
             addedlengths.append(connectionlengths[connectionind])
            # print(len(connected))
@@ -169,12 +204,16 @@ def part1(lines):
     tree3=[]
     temptree = []
     print(connected)
+    i=connected[0]
+    tree = []
+    tree.append(i[0])
+    tree.append(i[1])
     for i in connected:
         tree=[]
         tree.append(i[0])
         tree.append(i[1])
         findbigtree =treesize(connected,tree)
-        print(len(findbigtree))
+        #print(len(findbigtree))
         if len(findbigtree)>len(tree1):
             if i[0] in tree1:
                 tree1 = findbigtree
@@ -218,6 +257,7 @@ def part1(lines):
     if len(tree3)>1:
         thirdbiggest=len(tree3)
     return biggesttree*secondbiggest*thirdbiggest
+    return 0
 
 
 

@@ -38,6 +38,7 @@ def part1(nums,operators):
         total+=sumtotal
     return total
 def part2(nums,operators):
+    print(nums)
     operationlength = 4
     numbersarray = []
     operatorslist = operators[0].split(" ")
