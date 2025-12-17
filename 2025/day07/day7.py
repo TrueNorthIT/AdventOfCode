@@ -56,30 +56,35 @@ def part1(lines):
         part2total +=beamdict[beam]
     return total,length,part2total
 
-def part2(beamnumber,linenumber):
+def part2(beamnumber,linenumber,alreadycalculated):
     total=0
+    for calculated in alreadycalculated:
+        if calculated[0]==beamnumber and calculated[1] == linenumber:
+            return calculated[2],alreadycalculated
     if linenumber==linelength:
-        return 1
+        return 1,alreadycalculated
     if linenumber%2==1:
-        total += part2(beamnumber, linenumber + 1)
+        value = part2(beamnumber, linenumber + 1,alreadycalculated)[0]
+        total += value
     else:
         if lines[linenumber][beamnumber]=="^":
-            total+= part2(beamnumber-1,linenumber+1)
-            total+= part2(beamnumber+1,linenumber+1)
+            value = part2(beamnumber-1,linenumber+1,alreadycalculated)[0]+part2(beamnumber+1,linenumber+1,alreadycalculated)[0]
+            total+= value
         else:
-            total+=part2(beamnumber,linenumber+1)
-    return total
+            value = part2(beamnumber,linenumber+1,alreadycalculated)[0]
+            total+= value
+    if [beamnumber,linenumber,value] in alreadycalculated:
+        return total,alreadycalculated
+    alreadycalculated.append([beamnumber,linenumber,value])
+    return total,alreadycalculated
 
 
 lines=inputting()
-part1print =part1(lines)
-print("hellooo?")
-print(part1print,"end")
 line1 = lines[0]
 linelength =len(lines)
 firstindex = line1.find("S")
 curr=time.time()
-part2print =part2(firstindex,0)
+part2print =part2(firstindex,0,[])
 after=time.time()
 print(after-curr)
 print(part2print)
