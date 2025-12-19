@@ -14,9 +14,7 @@ var yMap = redTiles.Select(p => p.y).Distinct().OrderBy(y => y).Index().ToArray(
 var invYMap = yMap.ToDictionary(tp => tp.Item, tp => tp.Index);
 var comp = redTiles.Select(p => new Point(invXMap[p.x], invYMap[p.y])).ToArray();
 
-watch.Stop();
 Console.WriteLine($"Parsing complete by {watch.ElapsedMilliseconds}ms");
-watch.Start();
 
 var grid = new int[xMap.Length, yMap.Length];
 
@@ -36,11 +34,6 @@ for (int e = 0; e < comp.Length; e++)
     }
     grid[comp[e].x, comp[e].y] = 2; //red
 }
-
-watch.Stop();
-//print(grid);
-Console.WriteLine($"Grid compressed by {watch.ElapsedMilliseconds}ms:");
-watch.Start();
 
 //for every point along the edge of our grid, start a flood fill
 //we go along the edges just to avoid expanding our grid
@@ -72,10 +65,7 @@ while (queue.TryDequeue(out Point curr))
         }        
 }
 
-watch.Stop();
-//print(grid);
 Console.WriteLine($"Grid flood filled by {watch.ElapsedMilliseconds}ms:");
-watch.Start();
 
 //Using a Summed Area Table (https://en.wikipedia.org/wiki/Summed-area_table)
 // Fill the grid in one pass using this recursion
