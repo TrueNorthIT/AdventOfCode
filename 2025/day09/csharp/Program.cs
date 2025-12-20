@@ -1,14 +1,14 @@
 ﻿using System.Diagnostics;
-using Point = (double x, double y);
+using Point = (long x, long y);
 
 var watch = Stopwatch.StartNew();
 var points = File.ReadAllLines("input.txt")
-                .Select(line => line.Split(',').Select(double.Parse) switch { 
-                    var sp => (x: sp.First(), y: sp.Skip(1).First()) })
+                .Select(line => line.Split(',').Select(long.Parse) switch { 
+                    var sp => (x: sp.First() * 2, y: sp.Skip(1).First() * 2) })
             .ToArray();
 
 var rectangles = from c1 in points from c2 in points 
-                 where c1.x < c2.x || c1.y < c2.y 
+                 where c1.x < c2.x || ((c1.x == c2.x) && c1.y < c2.y)
                  select (sides: sides(c1,c2), size: size(c1,c2));
 
 Console.WriteLine($"Part 1: {rectangles.Max(tp => tp.size)} in {watch.ElapsedMilliseconds}ms");
@@ -40,7 +40,7 @@ watch.Restart();
 //if we are the top most point we must have just made a right turn if we are going clockwise
 var prevTurnRight = true;
 
-List<Point> boundary = [(x: startPoint.x - 0.5, y: startPoint.y - 0.5)];
+List<Point> boundary = [(x: startPoint.x - 1, y: startPoint.y - 1)];
 for (int c = 1; c < points.Length; c++)
 {
     var pi = points[(c + startIndex - 1) % points.Length];
@@ -53,17 +53,24 @@ for (int c = 1; c < points.Length; c++)
 
     //the length of our curent side depends if we are going R-R (+1), L-R / R-L (+0), L-L (-1)
     int delta = nextTurnRight && prevTurnRight 
-                ? 1 : nextTurnRight ^ prevTurnRight ? 0 : -1;
+                ? 2 : nextTurnRight ^ prevTurnRight ? 0 : -2;
 
     if (currVector.x == 0)
-        currVector = (0, currVector.y + delta * currVector.y / Math.Abs(currVector.y));
+        if (currVector.y > 0)
+            currVector = (0, currVector.y + delta);
+        else
+            currVector = (0, currVector.y - delta);
     else
-        currVector = (currVector.x + delta * currVector.x / Math.Abs(currVector.x), 0);
+        if (currVector.x > 0)
+            currVector = (currVector.x + delta, 0);
+        else
+            currVector = (currVector.x - delta, 0);
 
     prevTurnRight = nextTurnRight;
     boundary.Add((boundary.Last().x + currVector.x, boundary.Last().y + currVector.y));
 }
 
+long best = 0;
 foreach (var rect in rectangles.OrderByDescending(tp => tp.size))
 {    
     foreach (var side in rect.sides)
@@ -86,7 +93,7 @@ skip:;
     ((p2.x, p1.y), (p1.x, p1.y)),
 ];
 
-double size(Point p1, Point p2) => (1 + Math.Abs(p2.x - p1.x)) * (1 + Math.Abs(p2.y - p1.y));
+long size(Point p1, Point p2) => (1 + Math.Abs(p2.x - p1.x) / 2) * (1 + Math.Abs(p2.y - p1.y) / 2);
 
 bool crosses(Point p1, Point p2, Point l1, Point l2) =>
     l1.x == l2.x 
@@ -99,4 +106,4 @@ bool crosses(Point p1, Point p2, Point l1, Point l2) =>
             && ((l1.x < l2.x && p1.x >= l1.x && p1.x <= l2.x)
                 || p1.x >= l2.x && p1.x <= l1.x);
 
-double crossproduct(Point p, Point l2) => l2.x * p.y - l2.y * p.x;
+long crossproduct(Point p, Point l2) => l2.x * p.y - l2.y * p.x;

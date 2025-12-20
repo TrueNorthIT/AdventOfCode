@@ -3,22 +3,22 @@
 var watch = Stopwatch.StartNew();
 var redTiles = File.ReadAllLines("input.txt")
         .Select(line => line.Split(',').Select(int.Parse) switch {
-            var sp => (x: sp.First(), y: sp.Skip(1).First())
+            var sp => new [] {sp.First(), sp.Skip(1).First() }
         })
     .ToArray();
-
-//maps both ways for our compressed coordinates
-var xMap = redTiles.Select(p => p.x).Distinct().OrderBy(x => x).Index().ToArray();
-var invXMap = xMap.ToDictionary(tp => tp.Item, tp => tp.Index);
-var yMap = redTiles.Select(p => p.y).Distinct().OrderBy(y => y).Index().ToArray();
-var invYMap = yMap.ToDictionary(tp => tp.Item, tp => tp.Index);
-var comp = redTiles.Select(p => new Point(invXMap[p.x], invYMap[p.y])).ToArray();
-
 Console.WriteLine($"Parsing complete by {watch.ElapsedMilliseconds}ms");
 
-var grid = new int[xMap.Length, yMap.Length];
+//maps both ways for our compressed coordinates
+var xMap = redTiles.Select(p => p[0]).Distinct().OrderBy(x => x).Index().ToArray();
+var invXMap = xMap.ToDictionary(tp => tp.Item, tp => tp.Index);
+var yMap = redTiles.Select(p => p[1]).Distinct().OrderBy(y => y).Index().ToArray();
+var invYMap = yMap.ToDictionary(tp => tp.Item, tp => tp.Index);
+var comp = redTiles.Select(p => new Point(invXMap[p[0]], invYMap[p[1]])).ToArray();
+
+Console.WriteLine($"Coords compressed by {watch.ElapsedMilliseconds}ms");
 
 //draw the polygon on our compressed grid
+var grid = new int[xMap.Length, yMap.Length];
 for (int e = 0; e < comp.Length; e++)
 {
     var next = comp[(e + 1) % comp.Length];
@@ -34,6 +34,8 @@ for (int e = 0; e < comp.Length; e++)
     }
     grid[comp[e].x, comp[e].y] = 2; //red
 }
+
+Console.WriteLine($"Polygon drawn by {watch.ElapsedMilliseconds}ms");
 
 //for every point along the edge of our grid, start a flood fill
 //we go along the edges just to avoid expanding our grid
