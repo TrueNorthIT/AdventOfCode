@@ -1,38 +1,60 @@
 ﻿using System.Diagnostics;
 
 var watch = Stopwatch.StartNew();
-var redTiles = File.ReadAllLines("input.txt")
-        .Select(line => line.Split(',').Select(int.Parse) switch {
-            var sp => new [] {sp.First(), sp.Skip(1).First() }
-        })
-    .ToArray();
+var lines = File.ReadAllLines("input.txt");
+var redTiles = new int[lines.Length, 2];
+for (int l = 0; l < lines.Length; l++)
+{
+    var numbers = lines[l].Split(',');
+    redTiles[l, 0] = int.Parse(numbers[0]);
+    redTiles[l, 1] = int.Parse(numbers[1]);
+}
+//var redTiles = File.ReadAllLines("input.txt")
+//        .Select(line => line.Split(',').Select(int.Parse) switch {
+//            var sp => new [] {sp.First(), sp.Skip(1).First() }
+//        })
+//    .ToArray();
 Console.WriteLine($"Parsing complete by {watch.ElapsedMilliseconds}ms");
 
+var xSet = new SortedSet<int>();
+var ySet = new SortedSet<int>();
+for (int l = 0; l < lines.Length; l++)
+{
+    xSet.Add(redTiles[l, 0]);
+    ySet.Add(redTiles[l, 1]);
+}
+var xMap = xSet.ToArray();
+var yMap = ySet.ToArray();
+
 //maps both ways for our compressed coordinates
-var xMap = redTiles.Select(p => p[0]).Distinct().OrderBy(x => x).Index().ToArray();
-var invXMap = xMap.ToDictionary(tp => tp.Item, tp => tp.Index);
-var yMap = redTiles.Select(p => p[1]).Distinct().OrderBy(y => y).Index().ToArray();
-var invYMap = yMap.ToDictionary(tp => tp.Item, tp => tp.Index);
-var comp = redTiles.Select(p => new Point(invXMap[p[0]], invYMap[p[1]])).ToArray();
+var invXMap = xMap.Index().ToDictionary(tp => tp.Item, tp => tp.Index);
+var invYMap = yMap.Index().ToDictionary(tp => tp.Item, tp => tp.Index);
+
+var comp = new int[lines.Length,2];
+for (int l = 0; l < lines.Length; l++)
+{
+    comp[l, 0] = invXMap[redTiles[l, 0]];
+    comp[l, 1] = invYMap[redTiles[l, 1]];
+}
 
 Console.WriteLine($"Coords compressed by {watch.ElapsedMilliseconds}ms");
 
 //draw the polygon on our compressed grid
 var grid = new int[xMap.Length, yMap.Length];
-for (int e = 0; e < comp.Length; e++)
+for (int e = 0; e < lines.Length; e++)
 {
-    var next = comp[(e + 1) % comp.Length];
-    if (next.x == comp[e].x)
+    (var nextx, var nexty) = (comp[(e + 1) % lines.Length,0], comp[(e + 1) % lines.Length, 1]);
+    if (nextx == comp[e,0])
     {
-        for (var y = comp[e].y; y != next.y; y += Math.Sign(next.y - comp[e].y))
-            grid[comp[e].x, y] = 1; //green
+        for (var y = comp[e,1]; y != nexty; y += Math.Sign(nexty - comp[e,1]))
+            grid[comp[e,0], y] = 1; //green
     }
     else
     {
-        for (var x = comp[e].x; x != next.x; x += Math.Sign(next.x - comp[e].x))
-            grid[x, comp[e].y] = 1; //green
+        for (var x = comp[e,0]; x != nextx; x += Math.Sign(nextx - comp[e,0]))
+            grid[x, comp[e,1]] = 1; //green
     }
-    grid[comp[e].x, comp[e].y] = 2; //red
+    grid[comp[e,0], comp[e,1]] = 2; //red
 }
 
 Console.WriteLine($"Polygon drawn by {watch.ElapsedMilliseconds}ms");
@@ -92,14 +114,14 @@ Console.WriteLine($"Prefix sums calculated by {watch.ElapsedMilliseconds}ms");
 watch.Start();
 
 long best = 0;
-for (int c1 = 0; c1 < comp.Length; c1++)
-    for (int c2 = c1+1; c2 < comp.Length; c2++)
+for (int c1 = 0; c1 < lines.Length; c1++)
+    for (int c2 = c1+1; c2 < lines.Length; c2++)
     {
-        (var minY, var maxY) = comp[c1].y < comp[c2].y ? (comp[c1].y, comp[c2].y) : (comp[c2].y, comp[c1].y);
-        if ((sums[comp[c2].x + 1, maxY + 1] + sums[comp[c1].x, minY ] 
-            - sums[comp[c2].x + 1, minY] - sums[comp[c1].x, maxY + 1]) == 0)
+        (var minY, var maxY) = comp[c1,1] < comp[c2,1] ? (comp[c1,1], comp[c2,1]) : (comp[c2,1], comp[c1,1]);
+        if ((sums[comp[c2,0] + 1, maxY + 1] + sums[comp[c1,0], minY ] 
+            - sums[comp[c2,0] + 1, minY] - sums[comp[c1,0], maxY + 1]) == 0)
         {
-            best = Math.Max(best, rectArea(new Point(xMap[comp[c1].x].Item, yMap[comp[c1].y].Item), new Point(xMap[comp[c2].x].Item, yMap[comp[c2].y].Item)));
+            best = Math.Max(best, rectArea(new Point(xMap[comp[c1,0]], yMap[comp[c1,1]]), new Point(xMap[comp[c2,0]], yMap[comp[c2,1]])));
         }
     }
 
