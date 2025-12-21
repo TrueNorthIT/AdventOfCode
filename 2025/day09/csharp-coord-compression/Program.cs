@@ -1,39 +1,35 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 var watch = Stopwatch.StartNew();
 var lines = File.ReadAllLines("input.txt");
 
-var redTiles = new int[lines.Length, 2];
-for (int l = 0; l < lines.Length; l++)
-{
-    var numbers = lines[l].Split(',');
-    redTiles[l, 0] = int.Parse(numbers[0]);
-    redTiles[l, 1] = int.Parse(numbers[1]);
-}
+(var redXs, var redYs)= parseRedTiles(lines);
 
 Console.WriteLine($"Parsing complete by {watch.ElapsedMilliseconds}ms");
 
-(var xMap, var yMap, var invXMap, var invYMap) = getCompressionMaps();
+(var xMap, var X, var yMap, var Y, var invXMap, var invYMap) = compressionMaps();
 
 Console.WriteLine($"Compression complete by {watch.ElapsedMilliseconds}ms");
 
 //create an array of the red tiles in the compressed coordinates
-var comp = new int[lines.Length,2];
+var comp = new short[lines.Length,2];
 for (int l = 0; l < lines.Length; l++)
 {
-    comp[l, 0] = invXMap[redTiles[l, 0]];
-    comp[l, 1] = invYMap[redTiles[l, 1]];
+    comp[l, 0] = invXMap[redXs[l]];
+    comp[l, 1] = invYMap[redYs[l]];
 }
 
 //draw the polygon on our compressed grid
-var grid = new int[xMap.Length, yMap.Length];
+var grid = new sbyte[X, Y];
 for (int e = 0; e < lines.Length; e++)
 {
     (var nextx, var nexty) = (comp[(e + 1) % lines.Length,0], comp[(e + 1) % lines.Length, 1]);
     if (nextx == comp[e,0])
-        for (var y = comp[e,1]; y != nexty; y += Math.Sign(nexty - comp[e,1]))
+        for (var y = comp[e,1]; y != nexty; y += (short) Math.Sign(nexty - comp[e,1]))
             grid[comp[e,0], y] = 1; //green
     else
-        for (var x = comp[e,0]; x != nextx; x += Math.Sign(nextx - comp[e,0]))
+        for (var x = comp[e,0]; x != nextx; x += (short) Math.Sign(nextx - comp[e,0]))
             grid[x, comp[e,1]] = 1; //green
 
     grid[comp[e,0], comp[e,1]] = 2; //red
@@ -41,17 +37,11 @@ for (int e = 0; e < lines.Length; e++)
 
 Console.WriteLine($"Polygon drawn by {watch.ElapsedMilliseconds}ms");
 
-//Try and start the flood fill in all 4 corners (obviously not guaranteed to be sufficient for all shapes)
-var queue = new Queue<Point>([new Point(0,0), new Point(0, yMap.Length - 1), new Point(xMap.Length - 1, 0), new Point(xMap.Length - 1, yMap.Length - 1)]);
-while (queue.TryDequeue(out Point curr))
-{
-    if (grid[curr.x, curr.y] != 0)
-        continue;
-        
-    grid[curr.x, curr.y] = -1;
-    foreach (var neighbour in neighbours(curr))
-        queue.Enqueue(neighbour);
-}
+//Flood fill with fast scan line algorithm
+floodFillScanLine(grid, 0, 0);
+floodFillScanLine(grid, X - 1, 0);
+floodFillScanLine(grid, 0, Y - 1);
+floodFillScanLine(grid, X - 1, Y - 1);
 
 Console.WriteLine($"Grid flood filled by {watch.ElapsedMilliseconds}ms:");
 
@@ -63,45 +53,127 @@ Console.WriteLine($"Grid flood filled by {watch.ElapsedMilliseconds}ms:");
 // = i(x1,y1) + i(x0 - 1,y0 - 1) - i(x0 - 1,y1) - i(x1, y0 - 1)
 
 //start grid at 1 to provide a convenient 0 row / column that is all 0's
-int[,] sums = new int[xMap.Length + 1, yMap.Length + 1];
-for (int y = 1; y < yMap.Length + 1; y++)
-    for (int x = 1; x < xMap.Length + 1; x++)
+int[,] sums = new int[X + 1, Y + 1];
+for (int y = 1; y <= Y ; y++)
+    for (int x = 1; x <= X ; x++)
         sums[x, y] = ((grid[x - 1, y - 1] == -1) ? 1 : 0) + sums[x, y - 1] + sums[x - 1, y] - sums[x - 1, y - 1];
 
-watch.Stop();
 Console.WriteLine($"Prefix sums calculated by {watch.ElapsedMilliseconds}ms");
-watch.Start();
 
 long best = 0;
 for (int c1 = 0; c1 < lines.Length; c1++)
     for (int c2 = c1+1; c2 < lines.Length; c2++)
     {
-        int[] ys = comp[c1,1] < comp[c2,1] ? [comp[c1,1], comp[c2,1]] : [comp[c2,1], comp[c1,1]];
-        if ((sums[comp[c2,0] + 1, ys[1] + 1] + sums[comp[c1,0], ys[0]] 
-            - sums[comp[c2,0] + 1, ys[0]] - sums[comp[c1,0], ys[1] + 1]) == 0)
+        (var minY, var maxY) = comp[c1,1] < comp[c2,1] ? (comp[c1,1], comp[c2,1]) : (comp[c2,1], comp[c1,1]);
+        if ((sums[comp[c2,0] + 1, maxY + 1] + sums[comp[c1,0], minY] 
+            - sums[comp[c2,0] + 1, minY] - sums[comp[c1,0], maxY + 1]) == 0)
             best = Math.Max(best, rectArea(new Point(xMap[comp[c1,0]], yMap[comp[c1,1]]), new Point(xMap[comp[c2,0]], yMap[comp[c2,1]])));
     }
 
 watch.Stop();
 Console.WriteLine($"Best of {best} found in {watch.ElapsedMilliseconds}ms");
 
-(int[] xMap, int[] yMap, Dictionary<int,int> invXMap, Dictionary<int, int> invYMap) getCompressionMaps()
+void floodFillScanLine(sbyte[,] grid, int x, int y)
 {
-    var xSet = new SortedSet<int>();
-    var ySet = new SortedSet<int>();
+    //see second to last example for a fast scan-line based recursive flood fill
+    //https://lodev.org/cgtutor/floodfill.html
+    
+    (int X, int Y) = (grid.GetLength(0), grid.GetLength(1));
+    if (grid[x, y] != 0)
+        return;
+
+    //fill in right and left of our starting position
+    int x1 = x;
+    while (x1 < X && grid[x1,y] == 0)
+    {
+        grid[x1,y] = -1;
+        x1++;
+    }
+    x1 = x - 1;
+    while (x1 >= 0 && grid[x1, y] == 0)
+    {
+        grid[x1, y] = -1;
+        x1--;
+    }
+
+    //test for new scan lines above
+    x1 = x;
+    while (x1 < X && grid[x1,y] == -1)
+    {
+        if (y > 0 && grid[x1,y-1] == 0)
+            floodFillScanLine(grid, x1, y - 1);
+        x1++;
+    }
+    x1 = x - 1;
+    while (x1 >= 0 && grid[x1,y] == -1)
+    {
+        if (y > 0 && grid[x1, y - 1] == 0)
+            floodFillScanLine(grid, x1, y - 1);
+        x1--;
+    }
+
+    //test for new scan lines below
+    x1 = x;
+    while (x1 < X && grid[x1, y] == -1)
+    {
+        if (y < (Y-1) && grid[x1, y + 1] == 0)
+            floodFillScanLine(grid, x1, y + 1);
+        x1++;
+    }
+    x1 = x - 1;
+    while (x1 >= 0 && grid[x1, y] == -1)
+    {
+        if (y < (Y-1) && grid[x1, y + 1] == 0)
+            floodFillScanLine(grid, x1, y + 1);
+        x1--;
+    }
+}
+
+(int[] xMap, int X, int[] yMap, int Y, Dictionary<int, short> invXMap, Dictionary<int, short> invYMap) compressionMaps()
+{
+    (var xMap, var X) = fastCompress(redXs);
+    (var yMap, var Y) = fastCompress(redYs); 
+
+    (var invXMap, var invYMap) = (new Dictionary<int, short>(), new Dictionary<int, short>());
+    for (short x = 0; x < X; x++)
+        invXMap.TryAdd(xMap[x], x);
+    for (short y = 0; y < Y; y++)
+        invYMap.TryAdd(yMap[y], y);
+
+    return (xMap, X, yMap, Y, invXMap, invYMap);
+}
+
+(int[], int) fastCompress(int[] coords)
+{
+    //fast sort and dedupe into a single array, up to index is the sorted set, beyond that are the dupes
+    int[] elements = new int[coords.Length];
+    for (int i  = 0; i < coords.Length; i++)
+        elements[i] = coords[i];
+    
+    Array.Sort(elements);
+    
+    // As in SortedSet<T> source code when initialised with a collection
+    // Overwrite duplicates while shifting the distinct elements towards
+    // the front of the array
+    int index = 1;
+    for (int i = 1; i < elements.Length; i++)
+        if (elements[i] != elements[i - 1])
+            elements[index++] = elements[i];
+
+    return (elements, index);
+}
+
+(int[] xs, int[] ys) parseRedTiles(string[] lines)
+{
+    var xs = new int[lines.Length];
+    var ys = new int[lines.Length];
     for (int l = 0; l < lines.Length; l++)
     {
-        xSet.Add(redTiles[l, 0]);
-        ySet.Add(redTiles[l, 1]);
+        var numbers = lines[l].Split(',');
+        xs[l] = int.Parse(numbers[0]);
+        ys[l] = int.Parse(numbers[1]);
     }
-    var xMap = xSet.ToArray();
-    var yMap = ySet.ToArray();
-
-    //maps both ways for our compressed coordinates
-    var invXMap = xMap.Index().ToDictionary(tp => tp.Item, tp => tp.Index);
-    var invYMap = yMap.Index().ToDictionary(tp => tp.Item, tp => tp.Index);
-
-    return (xMap, yMap, invXMap, invYMap);
+    return (xs,ys);
 }
 
 long rectArea(Point p1, Point p2) => (1 + Math.Abs(p2.x - p1.x)) * (1 + Math.Abs(p2.y - p1.y));
