@@ -45,22 +45,28 @@ mapping = {"1001": "alice-example"}
 existing = {"main", "2026-base", "feature/kdtree", "alice-example", "bob-example"}
 members = {
     "1001": "Alice Example",       # already mapped: left alone
-    "1002": "Bob Example",         # clashes with an existing branch
+    "1002": "Bob Example",         # existing unmapped branch: claimed
+    "1012": "Bob Example",         # same name again: branch already claimed this run
     "1003": "Jane Example",        # normal
     "1004": None,                  # anonymous
     "1005": "例",                  # slug comes out empty
     "1007": "Sam Example",         # same name twice in one run: lower id keeps the plain slug
     "1006": "Sam Example",
     "1008": "Main",                # clashes with main
+    "1009": "Alice Example",       # clashes with a mapped branch
+    "1010": "2026 Base",           # clashes with a base branch
 }
 assert br.assign_branches(members, mapping, existing) == {
-    "1002": "bob-example-1002",
+    "1002": "bob-example",
+    "1012": "bob-example-1012",
     "1003": "jane-example",
     "1004": "user-1004",
     "1005": "user-1005",
     "1006": "sam-example",
     "1007": "sam-example-1007",
     "1008": "main-1008",
+    "1009": "alice-example-1009",
+    "1010": "2026-base-1010",
 }
 assert br.assign_branches({"1001": "Alice Example"}, mapping, existing) == {}
 assert mapping == {"1001": "alice-example"}  # input not mutated

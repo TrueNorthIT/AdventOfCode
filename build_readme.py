@@ -103,13 +103,18 @@ def slugify(name: str | None) -> str:
 def assign_branches(members: dict[str, str | None], mapping: dict[str, str], existing: set[str]) -> dict[str, str]:
     """
     Pick a branch for every member id in `members` ({id: name}) that has no entry in `mapping`.
-    Clashes with an existing branch, a mapped branch or one assigned earlier in this call get '-<id>'.
+    An existing personal branch nobody is mapped to is claimed (people who made their own branch).
+    Any other clash (mapped branch, main, *-base, feature/..., or one assigned earlier in this call) gets '-<id>'.
     """
     taken = set(existing) | set(mapping.values())
+    claimable = {b for b in existing - set(mapping.values())
+                 if b not in ("main", "HEAD") and not b.endswith("-base") and "/" not in b}
     assigned = {}
     for mid in sorted((m for m in members if m not in mapping), key=int):  # lowest id keeps the plain slug
         branch = slugify(members[mid]) or f"user-{mid}"
-        if branch in taken:
+        if branch in claimable:
+            claimable.discard(branch)
+        elif branch in taken:
             branch = f"{branch}-{mid}"
         taken.add(branch)
         assigned[mid] = branch
@@ -167,8 +172,12 @@ def onboard_new_members(board: Leaderboard) -> None:
     existing = set(git("for-each-ref", "--format=%(refname:lstrip=3)", "refs/remotes/origin").split()) - {"HEAD"}
     members = {str(m.id): m.name for m in board.members.values()}
     year = int(board.event)
+    # an existing branch is claimed as-is; only new ones are created
     created = {mid: branch for mid, branch in assign_branches(members, BRANCH_MAPPING, existing).items()
-               if create_branch(branch, members[mid] or f"anonymous user #{mid}", year)}
+               if branch in existing or create_branch(branch, members[mid] or f"anonymous user #{mid}", year)}
+    for mid, branch in created.items():
+        if branch in existing:
+            print(f"Claimed existing branch {branch} for {members[mid] or mid}")
     if not created:
         return
     BRANCH_MAPPING.update(created)
