@@ -1,36 +1,62 @@
 {
+ "day1_ts": 1796101200,
+ "event": "2026",
  "members": {
-  "5156198": {
-   "id": 5156198,
-   "local_score": 0,
-   "stars": 0,
-   "last_star_ts": 0,
-   "name": "BPMichon",
-   "completion_day_level": {}
-  },
-  "4264967": {
-   "last_star_ts": 0,
-   "completion_day_level": {},
-   "name": "RichKelsey",
-   "stars": 0,
-   "id": 4264967,
-   "local_score": 0
-  },
-  "4947218": {
-   "id": 4947218,
-   "local_score": 0,
-   "last_star_ts": 0,
-   "completion_day_level": {},
-   "name": "Alex Radice",
-   "stars": 0
-  },
   "4472230": {
    "stars": 0,
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "name": "JCottrell-TrueNorthIT",
+   "local_score": 0,
+   "id": 4472230
+  },
+  "5175448": {
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "stars": 0,
+   "name": "MHRGA",
+   "local_score": 0,
+   "id": 5175448
+  },
+  "4947218": {
+   "name": "Alex Radice",
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "stars": 0,
+   "local_score": 0,
+   "id": 4947218
+  },
+  "4264967": {
+   "id": 4264967,
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "stars": 0,
+   "name": "RichKelsey",
+   "local_score": 0
+  },
+  "353270": {
+   "id": 353270,
+   "stars": 0,
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "name": "Joe Pitts",
+   "local_score": 0
+  },
+  "5105599": {
+   "id": 5105599,
    "last_star_ts": 0,
    "completion_day_level": {},
-   "name": "JCottrell-TrueNorthIT",
-   "id": 4472230,
+   "name": "samhatts",
+   "stars": 0,
    "local_score": 0
+  },
+  "5156198": {
+   "completion_day_level": {},
+   "stars": 0,
+   "last_star_ts": 0,
+   "local_score": 0,
+   "name": "BPMichon",
+   "id": 5156198
   },
   "1427047": {
    "completion_day_level": {},
@@ -39,35 +65,9 @@
    "stars": 0,
    "local_score": 0,
    "id": 1427047
-  },
-  "5105599": {
-   "completion_day_level": {},
-   "name": "samhatts",
-   "last_star_ts": 0,
-   "stars": 0,
-   "local_score": 0,
-   "id": 5105599
-  },
-  "5175448": {
-   "local_score": 0,
-   "id": 5175448,
-   "stars": 0,
-   "name": "MHRGA",
-   "completion_day_level": {},
-   "last_star_ts": 0
-  },
-  "353270": {
-   "last_star_ts": 0,
-   "name": "Joe Pitts",
-   "completion_day_level": {},
-   "stars": 0,
-   "id": 353270,
-   "local_score": 0
   }
  },
  "owner_id": 353270,
- "day1_ts": 1796101200,
- "event": "2026",
  "num_days": 12,
  "tn": {
   "branches": {
@@ -82,14 +82,14 @@
    "5175448": "muhamad-hewa-rahim"
   },
   "order": [
-   5156198,
-   4264967,
-   4947218,
    4472230,
-   1427047,
-   5105599,
    5175448,
-   353270
+   4947218,
+   4264967,
+   353270,
+   5105599,
+   5156198,
+   1427047
   ],
   "achievements": [
    {
@@ -115,37 +115,7 @@
   ],
   "languages": {},
   "series": {
-   "5156198": [
-    [
-     1796101200,
-     0
-    ]
-   ],
-   "4264967": [
-    [
-     1796101200,
-     0
-    ]
-   ],
-   "4947218": [
-    [
-     1796101200,
-     0
-    ]
-   ],
    "4472230": [
-    [
-     1796101200,
-     0
-    ]
-   ],
-   "1427047": [
-    [
-     1796101200,
-     0
-    ]
-   ],
-   "5105599": [
     [
      1796101200,
      0
@@ -157,7 +127,37 @@
      0
     ]
    ],
+   "4947218": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "4264967": [
+    [
+     1796101200,
+     0
+    ]
+   ],
    "353270": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "5105599": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "5156198": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "1427047": [
     [
      1796101200,
      0
