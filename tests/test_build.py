@@ -34,3 +34,35 @@ assert ach == {
 }, ach
 
 print("OK: score series matches local_score for", len(board.members), "members; achievements in expected order")
+
+# Onboarding: slug and branch assignment (pure, no git)
+assert br.slugify("Jane Example") == "jane-example"
+assert br.slugify("MHRGA") == "mhrga"
+assert br.slugify("  Zoë Example, Jr. (TN)!! ") == "zoe-example-jr-tn"
+assert br.slugify("例") == "" and br.slugify(None) == ""
+
+mapping = {"1001": "alice-example"}
+existing = {"main", "2026-base", "feature/kdtree", "alice-example", "bob-example"}
+members = {
+    "1001": "Alice Example",       # already mapped: left alone
+    "1002": "Bob Example",         # clashes with an existing branch
+    "1003": "Jane Example",        # normal
+    "1004": None,                  # anonymous
+    "1005": "例",                  # slug comes out empty
+    "1007": "Sam Example",         # same name twice in one run: lower id keeps the plain slug
+    "1006": "Sam Example",
+    "1008": "Main",                # clashes with main
+}
+assert br.assign_branches(members, mapping, existing) == {
+    "1002": "bob-example-1002",
+    "1003": "jane-example",
+    "1004": "user-1004",
+    "1005": "user-1005",
+    "1006": "sam-example",
+    "1007": "sam-example-1007",
+    "1008": "main-1008",
+}
+assert br.assign_branches({"1001": "Alice Example"}, mapping, existing) == {}
+assert mapping == {"1001": "alice-example"}  # input not mutated
+
+print("OK: branch assignment")
