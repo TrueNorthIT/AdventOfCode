@@ -79,7 +79,14 @@
       if (c.tagName === "A") c.href = `https://github.com/TrueNorthIT/AdventOfCode/tree/${branch}/${year}/day${String(day).padStart(2, "0")}`;
       d.append(c);
     }
-    r.append(span("rank", `${i + 1})`), span("name", name(m), nameWidth), span("num", String(m.local_score)), span("num", String(m.stars)), d);
+    const nm = span("name", branch ? "" : name(m), nameWidth);
+    if (branch) {
+      const a = el("a", "", name(m));
+      a.href = `https://github.com/TrueNorthIT/AdventOfCode/tree/${branch}`;
+      a.title = `Branch: ${branch}`;
+      nm.append(a);
+    }
+    r.append(span("rank", `${i + 1})`), nm, span("num", String(m.local_score)), span("num", String(m.stars)), d);
     table.append(r);
   });
   $("board").hidden = false;

@@ -27,16 +27,13 @@ Welcome to the **Advent of Code 2026** private leaderboard for our team! This re
 2. **Join the Private Leaderboard**  
    Go to the [Leaderboard page](https://adventofcode.com/2026/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
 
-3. **Set Up the Repository**  
-   - Clone this repository:
+3. **Get Your Branch**
+   - You don't need to create one: shortly after you join the leaderboard, a branch named after your AoC name (e.g. `jane-example`) is made for you, with the day folders ready. Your name on the [leaderboard site](https://truenorthit.github.io/AdventOfCode/) links to it (hover to see the branch name).
+   - Ask the organiser for write access to this repository, then clone your branch:
      ```bash
-     git clone <repo_url>
+     git clone -b your-branch-name https://github.com/TrueNorthIT/AdventOfCode.git
      ```
-   - Returning? Check out your existing branch (`git checkout joseph-pitts`). New? Create your branch from `2026-base` (replace `your-branch-name` with your name i.e `joseph-pitts`):
-     ```bash
-     git checkout -b your-branch-name origin/2026-base
-     ```
-   - Each participant will have their own branch. Please keep your solutions and notes in your branch to avoid conflicts with others.
+   - Please keep your solutions and notes in your own branch to avoid conflicts with others.
 
 4. **Log Your Progress**  
    Commit and push your solutions to your branch regularly. You can also share any thoughts, approaches, or challenges you faced for each day's puzzle.

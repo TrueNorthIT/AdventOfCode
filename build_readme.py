@@ -6,8 +6,12 @@ from tabulate import tabulate
 import requests
 import json
 
+import re
+import shutil
 import subprocess
 import sys
+import tempfile
+import unicodedata
 import argparse
 from pathlib import Path
 
@@ -51,18 +55,12 @@ YEAR = 2026  # current competition year: the only year that updates README and t
 LEADERBOARD_URL = "https://adventofcode.com/{year}/leaderboard/private/view/353270.json"
 DATA_DIR = Path("docs/data")
 
-BRANCH_MAPPING = {
-    "1427047": "christian-waters",
-    "353270": "joe-pitts",
-    "4472230": "josh-cottrell",
-    "4947218": "alex-radice",
-    "4264967": "rich-kelsey",
-    "4265041": "kade-hennessy",
-    "5105599": "sam-hatts",
-    "5156198": "bogdan-michon",
-    "5175448": "muhamad-hewa-rahim",
-}
-    
+# AoC member id -> branch name; new members are added by onboard_new_members
+BRANCHES_FILE = Path(__file__).with_name("branches.json")
+BRANCH_MAPPING: dict[str, str] = json.loads(BRANCHES_FILE.read_text(encoding="utf-8"))
+REPO_URL = "https://github.com/TrueNorthIT/AdventOfCode"
+SITE_URL = "https://truenorthit.github.io/AdventOfCode/"
+
 
 # Secrets come from the environment and are only needed for a live fetch (checked in main)
 SESSION_COOKIE = os.getenv("SESSION_COOKIE")
@@ -94,6 +92,100 @@ def git_list_year_files(branch: str, year: int, repo_root: Path) -> list[str]:
 
     files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
     return files
+
+
+def slugify(name: str | None) -> str:
+    """'Jane Example' -> 'jane-example'. Accents are folded to ASCII; anything else becomes '-'."""
+    ascii_name = unicodedata.normalize("NFKD", name or "").encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", ascii_name.lower()).strip("-")
+
+
+def assign_branches(members: dict[str, str | None], mapping: dict[str, str], existing: set[str]) -> dict[str, str]:
+    """
+    Pick a branch for every member id in `members` ({id: name}) that has no entry in `mapping`.
+    An existing personal branch nobody is mapped to is claimed (people who made their own branch).
+    Any other clash (mapped branch, main, *-base, feature/..., or one assigned earlier in this call) gets '-<id>'.
+    """
+    taken = set(existing) | set(mapping.values())
+    claimable = {b for b in existing - set(mapping.values())
+                 if b not in ("main", "HEAD") and not b.endswith("-base") and "/" not in b}
+    assigned = {}
+    for mid in sorted((m for m in members if m not in mapping), key=int):  # lowest id keeps the plain slug
+        branch = slugify(members[mid]) or f"user-{mid}"
+        if branch in claimable:
+            claimable.discard(branch)
+        elif branch in taken:
+            branch = f"{branch}-{mid}"
+        taken.add(branch)
+        assigned[mid] = branch
+    return assigned
+
+
+def git(*args: str, cwd: Path | str = ".") -> str:
+    return subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True, text=True).stdout
+
+
+def onboarding_readme(name: str, branch: str, year: int) -> str:
+    return f"""# Advent of Code {year}: {name}
+
+Welcome, {name}. This is your own branch, `{branch}`, made for you when you joined the leaderboard.
+
+## Getting started
+
+1. Ask the organiser for write access to this repository. You need it to push your solutions.
+2. Clone your branch:
+
+   ```bash
+   git clone -b {branch} {REPO_URL}.git
+   ```
+
+3. Put each day's solution in `{year}/dayNN/` (for example `{year}/day01/`). The folders are already there,
+   each with an optional `README.md` for your notes.
+4. Commit and push to this branch. Your stars on the leaderboard link to your solutions.
+
+Leaderboard, charts and achievements: {SITE_URL}
+"""
+
+
+def create_branch(branch: str, name: str, year: int) -> bool:
+    """Push a new branch made from origin/<year>-base with a personalised README. Never overwrites."""
+    wt = Path(tempfile.mkdtemp()) / "wt"
+    try:
+        git("worktree", "add", "--detach", str(wt), f"origin/{year}-base")
+        (wt / "README.md").write_text(onboarding_readme(name, branch, year), encoding="utf-8", newline="\n")
+        git("add", "README.md", cwd=wt)
+        git("-c", "user.name=github-actions[bot]", "-c", "user.email=github-actions[bot]@users.noreply.github.com",
+            "commit", "-m", f"Create branch for {name}", cwd=wt)
+        git("push", "origin", f"HEAD:refs/heads/{branch}", cwd=wt)  # plain push: fails if the branch exists
+        print(f"Created branch {branch} for {name}")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: could not create branch {branch} for {name}: {e.stderr.strip()}")
+        return False
+    finally:
+        subprocess.run(["git", "worktree", "remove", "--force", str(wt)], capture_output=True)
+        shutil.rmtree(wt.parent, ignore_errors=True)
+
+
+def onboard_new_members(board: Leaderboard) -> None:
+    """Create a branch for each unmapped member and record it in branches.json."""
+    existing = set(git("for-each-ref", "--format=%(refname:lstrip=3)", "refs/remotes/origin").split()) - {"HEAD"}
+    members = {str(m.id): m.name for m in board.members.values()}
+    year = int(board.event)
+    # an existing branch is claimed as-is; only new ones are created
+    created = {mid: branch for mid, branch in assign_branches(members, BRANCH_MAPPING, existing).items()
+               if branch in existing or create_branch(branch, members[mid] or f"anonymous user #{mid}", year)}
+    for mid, branch in created.items():
+        if branch in existing:
+            print(f"Claimed existing branch {branch} for {members[mid] or mid}")
+    if not created:
+        return
+    BRANCH_MAPPING.update(created)
+    with open(BRANCHES_FILE, "w", encoding="utf-8", newline="\n") as f:
+        json.dump(BRANCH_MAPPING, f, indent=2, sort_keys=True)
+        f.write("\n")
+    # Member branches carry an older copy of the workflow that only commits README.md and docs/data
+    git("add", BRANCHES_FILE.name, cwd=BRANCHES_FILE.parent)
 
 
 
@@ -360,7 +452,7 @@ def write_site_data(raw: dict, board: Leaderboard, achievements: list[dict]) -> 
     """Write docs/data/<year>.json (raw AoC JSON plus a "tn" key) and refresh docs/data/years.json."""
     order = [m.id for m in sorted(board.members.values(), key=lambda m: -m.local_score)]  # same order as README
     raw = dict(raw, tn={
-        "branches": BRANCH_MAPPING,
+        "branches": dict(sorted(BRANCH_MAPPING.items())),  # same order as branches.json, so reruns don't diff
         "order": order,
         "achievements": achievements,
         "languages": {e["name"]: e["langs"] for e in achievements[0]["entries"]},
@@ -392,6 +484,8 @@ if __name__ == "__main__":
                         help=f"year to fetch (default: AOC_YEAR env var, else {YEAR})")
     parser.add_argument("--input", type=Path,
                         help="read the leaderboard JSON from this file instead of fetching it; skips the webhook")
+    parser.add_argument("--create-branches", action="store_true",
+                        help="create branches for unmapped members even with --input (for testing against a scratch remote)")
     args = parser.parse_args()
 
     if args.input:
@@ -411,6 +505,10 @@ if __name__ == "__main__":
     year = int(leaderboard_data.event)
     if args.year and year != args.year:
         print(f"Warning: --year {args.year} but the data is for {year}; using {year}")
+
+    # New members get a branch from origin/<year>-base: live runs for the current year only
+    if year == YEAR and (not args.input or args.create_branches):
+        onboard_new_members(leaderboard_data)
 
     achievements = compute_achievements(leaderboard_data)
     write_site_data(raw_data, leaderboard_data, achievements)
