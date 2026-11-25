@@ -1,0 +1,115 @@
+{
+  "event": "2025",
+  "owner_id": 1001,
+  "num_days": 12,
+  "day1_ts": 1764565200,
+  "members": {
+    "1001": {
+      "id": 1001,
+      "name": "Alice Example",
+      "stars": 5,
+      "local_score": 16,
+      "global_score": 0,
+      "last_star_ts": 1764747000,
+      "completion_day_level": {
+        "1": {
+          "1": {
+            "get_star_ts": 1764565500,
+            "star_index": 1
+          },
+          "2": {
+            "get_star_ts": 1764566100,
+            "star_index": 4
+          }
+        },
+        "2": {
+          "1": {
+            "get_star_ts": 1764652080,
+            "star_index": 8
+          },
+          "2": {
+            "get_star_ts": 1764652800,
+            "star_index": 10
+          }
+        },
+        "3": {
+          "1": {
+            "get_star_ts": 1764747000,
+            "star_index": 13
+          }
+        }
+      }
+    },
+    "1002": {
+      "id": 1002,
+      "name": "Bob Example",
+      "stars": 4,
+      "local_score": 13,
+      "global_score": 0,
+      "last_star_ts": 1764745200,
+      "completion_day_level": {
+        "1": {
+          "1": {
+            "get_star_ts": 1764565800,
+            "star_index": 2
+          },
+          "2": {
+            "get_star_ts": 1764565920,
+            "star_index": 3
+          }
+        },
+        "2": {
+          "1": {
+            "get_star_ts": 1764653400,
+            "star_index": 11
+          }
+        },
+        "3": {
+          "1": {
+            "get_star_ts": 1764745200,
+            "star_index": 12
+          }
+        }
+      }
+    },
+    "1003": {
+      "id": 1003,
+      "name": "Carol Example",
+      "stars": 4,
+      "local_score": 12,
+      "global_score": 0,
+      "last_star_ts": 1764652140,
+      "completion_day_level": {
+        "1": {
+          "1": {
+            "get_star_ts": 1764566400,
+            "star_index": 5
+          },
+          "2": {
+            "get_star_ts": 1764567600,
+            "star_index": 6
+          }
+        },
+        "2": {
+          "1": {
+            "get_star_ts": 1764651780,
+            "star_index": 7
+          },
+          "2": {
+            "get_star_ts": 1764652140,
+            "star_index": 9
+          }
+        }
+      }
+    },
+    "1004": {
+      "id": 1004,
+      "name": "Dave Example",
+      "stars": 0,
+      "local_score": 0,
+      "global_score": 0,
+      "last_star_ts": 0,
+      "completion_day_level": {}
+    }
+  }
+}

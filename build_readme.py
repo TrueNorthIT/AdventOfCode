@@ -7,6 +7,8 @@ import requests
 import json
 
 import subprocess
+import sys
+import argparse
 from pathlib import Path
 
 EXT_TO_LANG = {
@@ -45,8 +47,9 @@ EXT_TO_LANG = {
 
 
 # Constants
-YEAR = 2025
-LEADERBOARD_URL = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/353270.json"
+YEAR = 2025  # current competition year: the only year that updates README and the webhook
+LEADERBOARD_URL = "https://adventofcode.com/{year}/leaderboard/private/view/353270.json"
+DATA_DIR = Path("docs/data")
 
 BRANCH_MAPPING = {
     "1427047": "christian-waters",
@@ -61,14 +64,9 @@ BRANCH_MAPPING = {
 }
     
 
-# Fetch SESSION_COOKIE from environment variables
-SESSION_COOKIE = "53616c7465645f5f5750dd84293ff1181dac00b5785c953aef7b1644be3fc4c6e1a78b0f0366b518b9ff3cfdaed5d5b62f56802e395baabb14bb1ba000635cc6" #os.getenv("SESSION_COOKIE")
-if not SESSION_COOKIE:
-    raise ValueError("SESSION_COOKIE is not set. Please provide it as an environment variable.")
-
+# Secrets come from the environment and are only needed for a live fetch (checked in main)
+SESSION_COOKIE = os.getenv("SESSION_COOKIE")
 WEBHOOK_ENDPOINT = os.getenv("WEBHOOK_ENDPOINT")
-if not WEBHOOK_ENDPOINT:
-    raise ValueError("WEBHOOK_ENDPOINT is not set. Please provide it as an environment variable.")
 
 def git_list_year_files(branch: str, year: int, repo_root: Path) -> list[str]:
     """
@@ -117,7 +115,7 @@ def compute_polyglot_scores_git(board: Leaderboard,) -> Dict[str, tuple[int, set
         if not branch:
             continue  # no branch configured for this member
 
-        file_paths = git_list_year_files(branch, YEAR, repo_root)
+        file_paths = git_list_year_files(branch, int(board.event), repo_root)
         if not file_paths:
             continue
 
@@ -157,13 +155,12 @@ def format_duration_full(seconds: int) -> str:
 # Fetch leaderboard data
 def fetch_leaderboard_data(url, session_cookie):
     cookies = {"session": session_cookie}
-    response = requests.get(url, cookies=cookies)
+    response = requests.get(url, cookies=cookies, timeout=60)
     if response.status_code == 200:
         data = response.json()
         return Leaderboard.from_dict(data), data
     else:
-        print(f"Error: Unable to fetch data (status code: {response.status_code})")
-        return None
+        sys.exit(f"Error: Unable to fetch data (status code: {response.status_code})")
 
 # Generate markdown table with hyperlinks   
 def generate_markdown_table(data: Leaderboard):
@@ -185,9 +182,9 @@ def generate_markdown_table(data: Leaderboard):
             if day in completion:
                 stars_for_day = completion[day]
                 if 2 in stars_for_day:
-                    star_progress.append(f"[★](https://github.com/TrueNorthIT/AdventOfCode/tree/{branch}/{YEAR}/day{day:02})")
+                    star_progress.append(f"[★](https://github.com/TrueNorthIT/AdventOfCode/tree/{branch}/{data.event}/day{day:02})")
                 elif 1 in stars_for_day:
-                    star_progress.append(f"[✩](https://github.com/TrueNorthIT/AdventOfCode/tree/{branch}/{YEAR}/day{day:02})")
+                    star_progress.append(f"[✩](https://github.com/TrueNorthIT/AdventOfCode/tree/{branch}/{data.event}/day{day:02})")
             else:
                 star_progress.append("·")
 
@@ -242,7 +239,7 @@ def fastest_p1_per_member(board: Leaderboard) -> Dict[str, Tuple[int, int]]:
                 continue
 
             # AoC unlock: midnight US Eastern => 05:00 UTC
-            star_release_time = datetime(YEAR, 12, day, 5, 0, 0, tzinfo=timezone.utc).timestamp()
+            star_release_time = datetime(int(board.event), 12, day, 5, 0, 0, tzinfo=timezone.utc).timestamp()
             time_diff = int(star1.get_star_ts - star_release_time)
 
             # ignore weird negatives just in case
@@ -286,116 +283,96 @@ def number_of_stars(board):
     starsentries.sort(key=lambda x: -x[1])  # highest score first
     return starsentries
 
-def generate_achievements_table(board: Leaderboard) -> str:
-    num_members = len(board.members)
-
-    # --- Early Bird: fastest P1 after unlock ---
-    p1_per_member = fastest_p1_per_member(board)  # {name: (day, delta)}
-    early_bird_sorted = sorted(
-        p1_per_member.items(),
-        key=lambda x: x[1][1]  # sort by delta ascending
-    )
-    # convert to (name, score) where score is delta (seconds)
-    early_bird_entries = [(name, delta) for name, (_day, delta) in early_bird_sorted]
-
-    # --- You Are Gonna Need It: fastest P2-P1 delta ---
-    p2_p1_per_member = fastest_delta_per_member(board)  # {name: (day, delta)}
-    need_it_sorted = sorted(
-        p2_p1_per_member.items(),
-        key=lambda x: x[1][1]
-    )
-    need_it_entries = [(name, delta) for name, (_day, delta) in need_it_sorted]
-
-    # --- Hackerman: local_score (descending) ---
-    hackerman_entries = []
-    hackerman_entries = calculate_hackerman(board)
-    
+def compute_achievements(board: Leaderboard) -> list[dict]:
+    """
+    Ranked achievements, shared by the README table and the site:
+    [{"title", "description", "entries": [{"name", "value", "langs"?}]}]
+    """
     # --- Polyglot: most distinct languages per member via git ---
-    polyglot_scores = compute_polyglot_scores_git(board)
-    # polyglot_scores: { name: (count, langs_set) }
+    polyglot = sorted(compute_polyglot_scores_git(board).items(), key=lambda x: -x[1][0])
+    # --- Early Bird: fastest P1 after unlock ---
+    early_bird = sorted(fastest_p1_per_member(board).items(), key=lambda x: x[1][1])
+    # --- You Are Gonna Need It: fastest P2-P1 delta ---
+    need_it = sorted(fastest_delta_per_member(board).items(), key=lambda x: x[1][1])
 
-    polyglot_entries = [
-        (name, count, langs)
-        for name, (count, langs) in polyglot_scores.items()
+    return [
+        {"title": "Polyglot 🤓", "description": "Most distinct programming languages used.",
+         "entries": [{"name": name, "value": str(count), "langs": sorted(langs)} for name, (count, langs) in polyglot]},
+        {"title": "Early Bird ⏰", "description": "Fastest time to complete Star 1 after unlock.",
+         "entries": [{"name": name, "value": format_duration_full(delta)} for name, (_day, delta) in early_bird]},
+        {"title": "You Are Gonna Need It 🛠️", "description": "Fastest time between Star 1 and Star 2.",
+         "entries": [{"name": name, "value": format_duration_full(delta)} for name, (_day, delta) in need_it]},
+        # --- Hackerman: local_score (descending) ---
+        {"title": "Hackerman 💻", "description": "Highest local score on the private leaderboard.",
+         "entries": [{"name": name, "value": str(score)} for name, score in calculate_hackerman(board)]},
     ]
-    polyglot_entries.sort(key=lambda x: -x[1])  # sort by language count desc
-    
-    max_len = max(len(early_bird_entries), len(need_it_entries), len(hackerman_entries), len(polyglot_entries))
-    
-    
+
+
+def generate_achievements_table(achievements: list[dict]) -> str:
+    max_len = max(len(a["entries"]) for a in achievements)
+
     # headers: "", "1st", "2nd", ..., "Nth"
     headers = [""] + [ordinal(i) for i in range(1, max_len + 1)]
     rows = []
-
-    def cells_from_entries(entries, fmt_score, num_slots: int) -> list[str]:
-        """
-        Take list[(name, score)] and return up to num_slots 'Name (score)' cells.
-        Pad with "" if fewer than num_slots.
-        """
-        cells: list[str] = []
-        for name, score in entries[:num_slots]:
-            cells.append(f"{name} ({fmt_score(score)})")
-        # pad with blanks if we have fewer entries
-        while len(cells) < num_slots:
-            cells.append("")
-        return cells
-    
-    def cells_for_polyglot(entries, num_slots):
+    for a in achievements:
         cells = []
-        for name, count, langs in entries[:num_slots]:
-            lang_list = "<br>".join(sorted(langs))  # multiline inside <details>
-            cell = (
-                f"<details>"
-                f"<summary>{name} ({count})</summary>"
-                f"{lang_list}"
-                f"</details>"
-            )
-            cells.append(cell)
-        while len(cells) < num_slots:
-            cells.append("")
-        return cells
-
-    rows.append(
-        [(
-            f"<details>"
-            f"<summary>Polyglot 🤓</summary>"
-            f"Most distinct programming languages used.<br>"
-            f"</details>"
-        )]
-        + cells_for_polyglot(polyglot_entries, max_len)
-    )
-
-    rows.append(
-        [(
-            f"<details>"
-            f"<summary>Early Bird ⏰</summary>"
-            f"Fastest time to complete Star 1 after unlock.<br>"
-            f"</details>"
-        )]
-        + cells_from_entries(early_bird_entries, lambda s: format_duration_full(s), max_len)
-    )
-
-    rows.append(
-        [(
-            f"<details>"
-            f"<summary>You Are Gonna Need It 🛠️</summary>"
-            f"Fastest time between Star 1 and Star 2.<br>"
-            f"</details>"
-        )]
-        + cells_from_entries(need_it_entries, lambda s: format_duration_full(s), max_len)
-    )
-
-    rows.append(
-        [(
-            f"<details>"
-            f"<summary>Hackerman 💻</summary>"
-            f"Highest local score on the private leaderboard.<br>"
-            f"</details>"
-        ) ]
-        + cells_from_entries(hackerman_entries, lambda s: str(s), max_len)
-    )
+        for e in a["entries"]:
+            if "langs" in e:  # multiline inside <details>
+                cells.append(f"<details><summary>{e['name']} ({e['value']})</summary>{'<br>'.join(e['langs'])}</details>")
+            else:
+                cells.append(f"{e['name']} ({e['value']})")
+        cells += [""] * (max_len - len(cells))
+        rows.append([f"<details><summary>{a['title']}</summary>{a['description']}<br></details>"] + cells)
 
     return tabulate(rows, headers=headers, tablefmt="github")
+
+
+def score_series(board: Leaderboard) -> dict[int, list[list[int]]]:
+    """
+    Rebuild each member's cumulative local score over time: {member_id: [[timestamp, score], ...]}.
+    For each (day, part) the first member to get the star scores N points, the next N-1, and so on,
+    where N is the number of members. Starts every line at 0 when day 1 unlocks.
+    """
+    n = len(board.members)
+    events = []  # (ts, member_id, points)
+    for day in range(1, board.num_days + 1):
+        for part in (1, 2):
+            got = sorted(
+                (s.get_star_ts, s.star_index, m.id)
+                for m in board.members.values()
+                if (s := m.completion_day_level.get(day, {}).get(part))
+            )
+            events += [(ts, mid, n - pos) for pos, (ts, _idx, mid) in enumerate(got)]
+
+    start = int(datetime(int(board.event), 12, 1, 5, tzinfo=timezone.utc).timestamp())
+    series = {mid: [[start, 0]] for mid in board.members}
+    for ts, mid, points in sorted(events):
+        series[mid].append([ts, series[mid][-1][1] + points])
+
+    for m in board.members.values():
+        if series[m.id][-1][1] != m.local_score:
+            # AoC sometimes zeroes a day's points, so this is a warning, not an error
+            print(f"Warning: rebuilt score {series[m.id][-1][1]} != local_score {m.local_score} for member {m.id}")
+    return series
+
+
+def write_site_data(raw: dict, board: Leaderboard, achievements: list[dict]) -> None:
+    """Write docs/data/<year>.json (raw AoC JSON plus a "tn" key) and refresh docs/data/years.json."""
+    order = [m.id for m in sorted(board.members.values(), key=lambda m: -m.local_score)]  # same order as README
+    raw = dict(raw, tn={
+        "branches": BRANCH_MAPPING,
+        "order": order,
+        "achievements": achievements,
+        "languages": {e["name"]: e["langs"] for e in achievements[0]["entries"]},
+        "series": score_series(board),
+    })
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with open(DATA_DIR / f"{board.event}.json", "w", encoding="utf-8", newline="\n") as f:
+        json.dump(raw, f, ensure_ascii=False, indent=1)
+        f.write("\n")
+    years = sorted(int(p.stem) for p in DATA_DIR.glob("*.json") if p.stem.isdigit())
+    with open(DATA_DIR / "years.json", "w", encoding="utf-8", newline="\n") as f:
+        f.write(json.dumps(years) + "\n")
 
 
 def post_to_haWebhook(leaderboard):
@@ -410,18 +387,39 @@ def post_to_haWebhook(leaderboard):
 
 # Main script
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Build README.md and docs/data from the AoC private leaderboard.")
+    parser.add_argument("--year", type=int, default=int(os.getenv("AOC_YEAR") or 0) or None,
+                        help=f"year to fetch (default: AOC_YEAR env var, else {YEAR})")
+    parser.add_argument("--input", type=Path,
+                        help="read the leaderboard JSON from this file instead of fetching it; skips the webhook")
+    args = parser.parse_args()
 
-    # Fetch data
-    leaderboard_data, raw_data = fetch_leaderboard_data(LEADERBOARD_URL, SESSION_COOKIE)
+    if args.input:
+        raw_data = json.loads(args.input.read_text(encoding="utf-8"))
+        leaderboard_data = Leaderboard.from_dict(raw_data)
+    else:
+        if not SESSION_COOKIE:
+            raise ValueError("SESSION_COOKIE is not set. Please provide it as an environment variable.")
+        args.year = args.year or YEAR
+        if args.year == YEAR and not WEBHOOK_ENDPOINT:
+            raise ValueError("WEBHOOK_ENDPOINT is not set. Please provide it as an environment variable.")
+        leaderboard_data, raw_data = fetch_leaderboard_data(LEADERBOARD_URL.format(year=args.year), SESSION_COOKIE)
+        # Post Leaderboard data to home assitant (current year only, not a backfill)
+        if args.year == YEAR:
+            post_to_haWebhook(leaderboard_data)
 
-    if leaderboard_data:
-        # Post Leaderboard data to home assitant
-        post_to_haWebhook(leaderboard_data)
+    year = int(leaderboard_data.event)
+    if args.year and year != args.year:
+        print(f"Warning: --year {args.year} but the data is for {year}; using {year}")
 
-        # Generate and print markdown table
+    achievements = compute_achievements(leaderboard_data)
+    write_site_data(raw_data, leaderboard_data, achievements)
+
+    # README only tracks the current competition year
+    if year == YEAR:
         markdown_table = generate_markdown_table(leaderboard_data)
-        achievements_table = generate_achievements_table(leaderboard_data)
-        
+        achievements_table = generate_achievements_table(achievements)
+
         with open('README.template', encoding='utf-8') as f:
             readme_stub = f.read()
 

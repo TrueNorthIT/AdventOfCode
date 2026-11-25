@@ -1,0 +1,78 @@
+:root {
+  --bg: #0a0e24;
+  --text: #c9cfe0;
+  --dim: #5c6585;
+  --none: #333a5c;
+  --green: #22dd66;
+  --gold: #ffd54a;
+  --silver: #a9b4cc;
+  --red: #ff5f6d;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0 auto;
+  max-width: 62rem;
+  padding: 1rem 16px 2rem;
+  background: var(--bg);
+  color: var(--text);
+  font: 300 15px/1.45 "Source Code Pro", ui-monospace, Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+
+a { color: var(--green); text-decoration: none; }
+a:hover, a:focus-visible { color: #8dffb4; text-shadow: 0 0 6px var(--green); }
+
+h1, h2 { font-size: 1em; font-weight: 400; margin: 0; }
+h1 a, h2 { color: var(--green); text-shadow: 0 0 2px var(--green), 0 0 10px var(--green); }
+h2 { margin: 2rem 0 .75rem; }
+
+header nav { margin-top: .25rem; }
+header nav a { margin-right: .5ch; display: inline-block; }
+header nav a.current { color: #fff; text-shadow: 0 0 6px #fff; }
+
+.dim { color: var(--dim); }
+.gold { color: var(--gold); text-shadow: 0 0 6px var(--gold); }
+.silver { color: var(--silver); }
+.none { color: var(--none); }
+.glow { color: #fff; text-shadow: 0 0 8px #fff; }
+
+.art { margin: 1.5rem 0 1rem; line-height: 1.2; font-size: 14px; overflow: hidden; }
+.art .snow { color: #dfe6ff; opacity: .55; }
+.art .tree { color: var(--green); text-shadow: 0 0 4px #0a8f3c; }
+.art .bauble { color: var(--red); text-shadow: 0 0 6px var(--red); }
+.art .trunk { color: #a0703c; }
+
+/* Leaderboard: a monospace text table that scrolls inside its own box */
+.scroll { overflow-x: auto; padding-bottom: .25rem; }
+.table { white-space: nowrap; width: max-content; }
+.table .row > span { display: inline-block; }
+.table .rank { width: 4ch; text-align: right; color: var(--dim); }
+.table .name { padding: 0 2ch 0 1ch; }
+.table .num { width: 6ch; text-align: right; }
+.table .days { padding-left: 2ch; }
+.table .day { display: inline-block; width: 1.4ch; text-align: center; }
+.table .head { color: var(--dim); line-height: 1.1; }
+.table .row:not(.head):hover { background: #121838; }
+.table a.day:hover { text-shadow: 0 0 6px var(--gold); }
+
+/* Achievements */
+#ach { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.25rem 2rem; }
+#ach h3 { font-size: 1em; font-weight: 400; margin: 0; color: var(--gold); }
+#ach p { margin: 0 0 .25rem; }
+#ach ol { margin: 0; padding: 0; list-style: none; }
+#ach li .place { color: var(--dim); display: inline-block; width: 4ch; }
+#ach li .langs { display: block; padding-left: 4ch; color: var(--dim); }
+#ach summary { cursor: pointer; color: var(--green); }
+
+.chart { position: relative; height: min(60vh, 26rem); }
+
+footer { margin-top: 3rem; font-size: .85em; }
+
+@media (max-width: 30rem) {
+  body { font-size: 13px; }
+  .art { font-size: 11px; }
+}

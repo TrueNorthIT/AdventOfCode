@@ -1,51 +1,64 @@
-name: Build README
+name: Build README and leaderboard site
 
 on:
-  # Trigger on push to any branch
+  # Any branch: refresh the current year's data and README on main
   push:
     branches:
       - "**"
+  # Manual run, e.g. a one-off backfill of an earlier year
+  workflow_dispatch:
+    inputs:
+      year:
+        description: "Year to fetch (blank = current year)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+# One run at a time so parallel pushes don't race each other to main
+concurrency:
+  group: build-readme
+  cancel-in-progress: false
 
 jobs:
   build-readme:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout repository
+      - name: Checkout main
         uses: actions/checkout@v5
         with:
-          # Ensure full history is fetched
+          ref: main
           fetch-depth: 0
-          persist-credentials: true
 
+      # Polyglot reads every member's branch with git ls-tree origin/<branch>
       - name: Fetch all remote branches
-        run: |
-          git fetch origin "+refs/heads/*:refs/remotes/origin/*"
-          git branch -a
+        run: git fetch origin "+refs/heads/*:refs/remotes/origin/*"
 
-      # Step 2: Set up Python environment
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Step 3: Install dependencies (if you have any requirements)
       - name: Install dependencies
         run: pip install requests tabulate
 
-      # Step 4: Run the script to build README
       - name: Run build_readme.py
         env:
           SESSION_COOKIE: ${{ secrets.SESSION_COOKIE }}
           WEBHOOK_ENDPOINT: ${{ secrets.WEBHOOK_ENDPOINT }}
+          AOC_YEAR: ${{ inputs.year }}
         run: python build_readme.py
 
-      # Step 5: Commit and push updated README.md to main branch
-      - name: Commit and push changes
+      - name: Commit and push to main
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "Update README.md [GitHub Action]" || echo "No changes to commit"
-          git push
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/data
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update README.md and leaderboard data [GitHub Action]"
+          git push origin HEAD:main
