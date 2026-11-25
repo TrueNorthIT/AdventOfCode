@@ -77,16 +77,15 @@ footer { margin-top: 3rem; font-size: .85em; }
   .art { font-size: 11px; }
 }
 
-/* Big faint compass behind everything, pushed up and off to the right */
+/* The header compass, blown up and muted in the top-right corner */
 .bg-compass {
   position: fixed;
-  top: -4rem;
-  right: -15vw;
+  top: .5rem;
+  right: 1rem;
   margin: 0;
-  font-size: clamp(14px, 2.3vw, 26px);
-  line-height: 1.15;
-  color: var(--dim);
-  opacity: .22;
+  font-size: clamp(26px, 5vw, 80px);
+  line-height: 1.1;
+  opacity: .14;
   pointer-events: none;
   user-select: none;
   z-index: 0;
