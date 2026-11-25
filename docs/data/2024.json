@@ -1,0 +1,1341 @@
+{
+ "members": {
+  "4472230": {
+   "name": "JCottrell-TrueNorthIT",
+   "global_score": 0,
+   "local_score": 23,
+   "stars": 4,
+   "last_star_ts": 1733217201,
+   "completion_day_level": {
+    "2": {
+     "1": {
+      "get_star_ts": 1733133525,
+      "star_index": 12
+     }
+    },
+    "1": {
+     "2": {
+      "star_index": 9,
+      "get_star_ts": 1733132556
+     },
+     "1": {
+      "get_star_ts": 1733132109,
+      "star_index": 8
+     }
+    },
+    "3": {
+     "1": {
+      "get_star_ts": 1733217201,
+      "star_index": 16
+     }
+    }
+   },
+   "id": 4472230
+  },
+  "353270": {
+   "name": "Joe Pitts",
+   "global_score": 0,
+   "local_score": 377,
+   "stars": 50,
+   "last_star_ts": 1735406548,
+   "completion_day_level": {
+    "18": {
+     "1": {
+      "get_star_ts": 1734511503,
+      "star_index": 83
+     },
+     "2": {
+      "star_index": 84,
+      "get_star_ts": 1734511887
+     }
+    },
+    "1": {
+     "1": {
+      "star_index": 0,
+      "get_star_ts": 1733043910
+     },
+     "2": {
+      "get_star_ts": 1733044149,
+      "star_index": 1
+     }
+    },
+    "5": {
+     "2": {
+      "get_star_ts": 1733389521,
+      "star_index": 27
+     },
+     "1": {
+      "get_star_ts": 1733389242,
+      "star_index": 26
+     }
+    },
+    "4": {
+     "2": {
+      "get_star_ts": 1733308175,
+      "star_index": 25
+     },
+     "1": {
+      "get_star_ts": 1733304494,
+      "star_index": 24
+     }
+    },
+    "3": {
+     "1": {
+      "get_star_ts": 1733216199,
+      "star_index": 15
+     },
+     "2": {
+      "get_star_ts": 1733220376,
+      "star_index": 17
+     }
+    },
+    "7": {
+     "1": {
+      "get_star_ts": 1733604012,
+      "star_index": 36
+     },
+     "2": {
+      "get_star_ts": 1733604369,
+      "star_index": 37
+     }
+    },
+    "15": {
+     "1": {
+      "get_star_ts": 1734284092,
+      "star_index": 74
+     },
+     "2": {
+      "get_star_ts": 1734517964,
+      "star_index": 87
+     }
+    },
+    "13": {
+     "2": {
+      "star_index": 66,
+      "get_star_ts": 1734084458
+     },
+     "1": {
+      "get_star_ts": 1734083660,
+      "star_index": 65
+     }
+    },
+    "22": {
+     "2": {
+      "star_index": 100,
+      "get_star_ts": 1734878009
+     },
+     "1": {
+      "get_star_ts": 1734875283,
+      "star_index": 98
+     }
+    },
+    "23": {
+     "1": {
+      "star_index": 102,
+      "get_star_ts": 1734943441
+     },
+     "2": {
+      "get_star_ts": 1734944043,
+      "star_index": 103
+     }
+    },
+    "2": {
+     "2": {
+      "get_star_ts": 1733128895,
+      "star_index": 7
+     },
+     "1": {
+      "get_star_ts": 1733128261,
+      "star_index": 6
+     }
+    },
+    "25": {
+     "1": {
+      "get_star_ts": 1735403238,
+      "star_index": 113
+     },
+     "2": {
+      "get_star_ts": 1735406548,
+      "star_index": 115
+     }
+    },
+    "9": {
+     "1": {
+      "get_star_ts": 1733734355,
+      "star_index": 48
+     },
+     "2": {
+      "get_star_ts": 1733824932,
+      "star_index": 53
+     }
+    },
+    "6": {
+     "1": {
+      "get_star_ts": 1733476949,
+      "star_index": 32
+     },
+     "2": {
+      "star_index": 33,
+      "get_star_ts": 1733478158
+     }
+    },
+    "21": {
+     "2": {
+      "star_index": 97,
+      "get_star_ts": 1734780406
+     },
+     "1": {
+      "get_star_ts": 1734780384,
+      "star_index": 96
+     }
+    },
+    "20": {
+     "1": {
+      "get_star_ts": 1734687668,
+      "star_index": 93
+     },
+     "2": {
+      "star_index": 94,
+      "get_star_ts": 1734690668
+     }
+    },
+    "24": {
+     "1": {
+      "star_index": 109,
+      "get_star_ts": 1735047744
+     },
+     "2": {
+      "star_index": 114,
+      "get_star_ts": 1735406396
+     }
+    },
+    "17": {
+     "2": {
+      "star_index": 81,
+      "get_star_ts": 1734444057
+     },
+     "1": {
+      "star_index": 80,
+      "get_star_ts": 1734429473
+     }
+    },
+    "16": {
+     "2": {
+      "get_star_ts": 1734358350,
+      "star_index": 78
+     },
+     "1": {
+      "get_star_ts": 1734357492,
+      "star_index": 77
+     }
+    },
+    "14": {
+     "2": {
+      "get_star_ts": 1734280085,
+      "star_index": 73
+     },
+     "1": {
+      "star_index": 72,
+      "get_star_ts": 1734279829
+     }
+    },
+    "8": {
+     "1": {
+      "get_star_ts": 1733654288,
+      "star_index": 39
+     },
+     "2": {
+      "get_star_ts": 1733654990,
+      "star_index": 40
+     }
+    },
+    "11": {
+     "2": {
+      "get_star_ts": 1733908011,
+      "star_index": 57
+     },
+     "1": {
+      "star_index": 56,
+      "get_star_ts": 1733907765
+     }
+    },
+    "10": {
+     "2": {
+      "star_index": 52,
+      "get_star_ts": 1733819990
+     },
+     "1": {
+      "star_index": 51,
+      "get_star_ts": 1733819822
+     }
+    },
+    "19": {
+     "2": {
+      "get_star_ts": 1734596932,
+      "star_index": 89
+     },
+     "1": {
+      "star_index": 88,
+      "get_star_ts": 1734596861
+     }
+    },
+    "12": {
+     "2": {
+      "star_index": 67,
+      "get_star_ts": 1734089068
+     },
+     "1": {
+      "star_index": 61,
+      "get_star_ts": 1734003379
+     }
+    }
+   },
+   "id": 353270
+  },
+  "1427047": {
+   "global_score": 0,
+   "local_score": 370,
+   "stars": 50,
+   "name": "chriswaters78",
+   "id": 1427047,
+   "last_star_ts": 1735114944,
+   "completion_day_level": {
+    "15": {
+     "2": {
+      "get_star_ts": 1734262217,
+      "star_index": 71
+     },
+     "1": {
+      "get_star_ts": 1734256077,
+      "star_index": 70
+     }
+    },
+    "23": {
+     "2": {
+      "star_index": 107,
+      "get_star_ts": 1734959768
+     },
+     "1": {
+      "star_index": 106,
+      "get_star_ts": 1734959289
+     }
+    },
+    "22": {
+     "2": {
+      "get_star_ts": 1734952405,
+      "star_index": 105
+     },
+     "1": {
+      "star_index": 104,
+      "get_star_ts": 1734946078
+     }
+    },
+    "13": {
+     "2": {
+      "get_star_ts": 1734080248,
+      "star_index": 64
+     },
+     "1": {
+      "get_star_ts": 1734080147,
+      "star_index": 63
+     }
+    },
+    "5": {
+     "1": {
+      "get_star_ts": 1733394218,
+      "star_index": 28
+     },
+     "2": {
+      "star_index": 29,
+      "get_star_ts": 1733394478
+     }
+    },
+    "1": {
+     "1": {
+      "star_index": 4,
+      "get_star_ts": 1733058293
+     },
+     "2": {
+      "star_index": 5,
+      "get_star_ts": 1733058490
+     }
+    },
+    "18": {
+     "1": {
+      "star_index": 85,
+      "get_star_ts": 1734514060
+     },
+     "2": {
+      "star_index": 86,
+      "get_star_ts": 1734515791
+     }
+    },
+    "7": {
+     "2": {
+      "star_index": 35,
+      "get_star_ts": 1733572476
+     },
+     "1": {
+      "star_index": 34,
+      "get_star_ts": 1733572305
+     }
+    },
+    "3": {
+     "2": {
+      "star_index": 19,
+      "get_star_ts": 1733222894
+     },
+     "1": {
+      "get_star_ts": 1733221151,
+      "star_index": 18
+     }
+    },
+    "4": {
+     "1": {
+      "star_index": 22,
+      "get_star_ts": 1733302466
+     },
+     "2": {
+      "star_index": 23,
+      "get_star_ts": 1733303376
+     }
+    },
+    "16": {
+     "1": {
+      "star_index": 75,
+      "get_star_ts": 1734343652
+     },
+     "2": {
+      "get_star_ts": 1734353852,
+      "star_index": 76
+     }
+    },
+    "17": {
+     "2": {
+      "star_index": 82,
+      "get_star_ts": 1734471583
+     },
+     "1": {
+      "get_star_ts": 1734426658,
+      "star_index": 79
+     }
+    },
+    "24": {
+     "1": {
+      "star_index": 108,
+      "get_star_ts": 1735040444
+     },
+     "2": {
+      "star_index": 110,
+      "get_star_ts": 1735058253
+     }
+    },
+    "20": {
+     "1": {
+      "get_star_ts": 1734684771,
+      "star_index": 92
+     },
+     "2": {
+      "star_index": 95,
+      "get_star_ts": 1734711989
+     }
+    },
+    "12": {
+     "2": {
+      "get_star_ts": 1734004419,
+      "star_index": 62
+     },
+     "1": {
+      "star_index": 60,
+      "get_star_ts": 1733999104
+     }
+    },
+    "19": {
+     "2": {
+      "get_star_ts": 1734603634,
+      "star_index": 91
+     },
+     "1": {
+      "get_star_ts": 1734603196,
+      "star_index": 90
+     }
+    },
+    "8": {
+     "2": {
+      "get_star_ts": 1733659699,
+      "star_index": 42
+     },
+     "1": {
+      "get_star_ts": 1733658782,
+      "star_index": 41
+     }
+    },
+    "11": {
+     "1": {
+      "star_index": 58,
+      "get_star_ts": 1733915757
+     },
+     "2": {
+      "star_index": 59,
+      "get_star_ts": 1733917860
+     }
+    },
+    "10": {
+     "1": {
+      "get_star_ts": 1733830234,
+      "star_index": 54
+     },
+     "2": {
+      "get_star_ts": 1733830815,
+      "star_index": 55
+     }
+    },
+    "14": {
+     "1": {
+      "get_star_ts": 1734173392,
+      "star_index": 68
+     },
+     "2": {
+      "get_star_ts": 1734177860,
+      "star_index": 69
+     }
+    },
+    "9": {
+     "2": {
+      "get_star_ts": 1733739338,
+      "star_index": 50
+     },
+     "1": {
+      "get_star_ts": 1733736639,
+      "star_index": 49
+     }
+    },
+    "2": {
+     "1": {
+      "get_star_ts": 1733132833,
+      "star_index": 10
+     },
+     "2": {
+      "get_star_ts": 1733133207,
+      "star_index": 11
+     }
+    },
+    "25": {
+     "1": {
+      "star_index": 111,
+      "get_star_ts": 1735114935
+     },
+     "2": {
+      "star_index": 112,
+      "get_star_ts": 1735114944
+     }
+    },
+    "21": {
+     "1": {
+      "star_index": 99,
+      "get_star_ts": 1734877281
+     },
+     "2": {
+      "star_index": 101,
+      "get_star_ts": 1734915923
+     }
+    },
+    "6": {
+     "2": {
+      "star_index": 31,
+      "get_star_ts": 1733476357
+     },
+     "1": {
+      "star_index": 30,
+      "get_star_ts": 1733475436
+     }
+    }
+   }
+  },
+  "4947218": {
+   "id": 4947218,
+   "last_star_ts": 0,
+   "completion_day_level": {},
+   "local_score": 0,
+   "global_score": 0,
+   "stars": 0,
+   "name": "Alex Radice"
+  },
+  "4264967": {
+   "name": "RichKelsey",
+   "stars": 12,
+   "global_score": 0,
+   "local_score": 72,
+   "completion_day_level": {
+    "4": {
+     "2": {
+      "star_index": 43,
+      "get_star_ts": 1733668955
+     },
+     "1": {
+      "star_index": 38,
+      "get_star_ts": 1733604866
+     }
+    },
+    "3": {
+     "1": {
+      "star_index": 20,
+      "get_star_ts": 1733225815
+     },
+     "2": {
+      "star_index": 21,
+      "get_star_ts": 1733226664
+     }
+    },
+    "6": {
+     "1": {
+      "star_index": 46,
+      "get_star_ts": 1733691631
+     },
+     "2": {
+      "star_index": 47,
+      "get_star_ts": 1733699184
+     }
+    },
+    "2": {
+     "2": {
+      "star_index": 14,
+      "get_star_ts": 1733146961
+     },
+     "1": {
+      "star_index": 13,
+      "get_star_ts": 1733137100
+     }
+    },
+    "1": {
+     "2": {
+      "star_index": 3,
+      "get_star_ts": 1733057665
+     },
+     "1": {
+      "star_index": 2,
+      "get_star_ts": 1733055727
+     }
+    },
+    "5": {
+     "1": {
+      "get_star_ts": 1733679646,
+      "star_index": 44
+     },
+     "2": {
+      "get_star_ts": 1733680024,
+      "star_index": 45
+     }
+    }
+   },
+   "last_star_ts": 1733699184,
+   "id": 4264967
+  },
+  "5105599": {
+   "global_score": 0,
+   "local_score": 0,
+   "stars": 0,
+   "name": "samhatts",
+   "id": 5105599,
+   "last_star_ts": 0,
+   "completion_day_level": {}
+  },
+  "5156198": {
+   "name": "BPMichon",
+   "stars": 0,
+   "global_score": 0,
+   "local_score": 0,
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "id": 5156198
+  },
+  "5175448": {
+   "name": "MHRGA",
+   "global_score": 0,
+   "local_score": 0,
+   "stars": 0,
+   "last_star_ts": 0,
+   "completion_day_level": {},
+   "id": 5175448
+  }
+ },
+ "owner_id": 353270,
+ "event": "2024",
+ "day1_ts": 1733029200,
+ "num_days": 25,
+ "tn": {
+  "branches": {
+   "1427047": "christian-waters",
+   "353270": "joe-pitts",
+   "4472230": "josh-cottrell",
+   "4947218": "alex-radice",
+   "4264967": "rich-kelsey",
+   "4265041": "kade-hennessy",
+   "5105599": "sam-hatts",
+   "5156198": "bogdan-michon",
+   "5175448": "muhamad-hewa-rahim"
+  },
+  "order": [
+   353270,
+   1427047,
+   4264967,
+   4472230,
+   4947218,
+   5105599,
+   5156198,
+   5175448
+  ],
+  "achievements": [
+   {
+    "title": "Polyglot 🤓",
+    "description": "Most distinct programming languages used.",
+    "entries": [
+     {
+      "name": "chriswaters78",
+      "value": "4",
+      "langs": [
+       "C#",
+       "Excel",
+       "F#",
+       "Haskell"
+      ]
+     },
+     {
+      "name": "Alex Radice",
+      "value": "3",
+      "langs": [
+       "C#",
+       "PowerShell",
+       "Python"
+      ]
+     },
+     {
+      "name": "Joe Pitts",
+      "value": "2",
+      "langs": [
+       "Python",
+       "Rust"
+      ]
+     },
+     {
+      "name": "JCottrell-TrueNorthIT",
+      "value": "1",
+      "langs": [
+       "TypeScript"
+      ]
+     },
+     {
+      "name": "RichKelsey",
+      "value": "1",
+      "langs": [
+       "Rust"
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Early Bird ⏰",
+    "description": "Fastest time to complete Star 1 after unlock.",
+    "entries": [
+     {
+      "name": "chriswaters78",
+      "value": "3h 22m 15s"
+     },
+     {
+      "name": "Joe Pitts",
+      "value": "3h 27m 41s"
+     },
+     {
+      "name": "JCottrell-TrueNorthIT",
+      "value": "4h 13m 21s"
+     },
+     {
+      "name": "RichKelsey",
+      "value": "5h 58m 20s"
+     }
+    ]
+   },
+   {
+    "title": "You Are Gonna Need It 🛠️",
+    "description": "Fastest time between Star 1 and Star 2.",
+    "entries": [
+     {
+      "name": "Joe Pitts",
+      "value": "22s"
+     },
+     {
+      "name": "chriswaters78",
+      "value": "1m 41s"
+     },
+     {
+      "name": "RichKelsey",
+      "value": "6m 18s"
+     },
+     {
+      "name": "JCottrell-TrueNorthIT",
+      "value": "7m 27s"
+     }
+    ]
+   },
+   {
+    "title": "Hackerman 💻",
+    "description": "Highest local score on the private leaderboard.",
+    "entries": [
+     {
+      "name": "Joe Pitts",
+      "value": "377"
+     },
+     {
+      "name": "chriswaters78",
+      "value": "370"
+     },
+     {
+      "name": "RichKelsey",
+      "value": "72"
+     },
+     {
+      "name": "JCottrell-TrueNorthIT",
+      "value": "23"
+     }
+    ]
+   }
+  ],
+  "languages": {
+   "chriswaters78": [
+    "C#",
+    "Excel",
+    "F#",
+    "Haskell"
+   ],
+   "Alex Radice": [
+    "C#",
+    "PowerShell",
+    "Python"
+   ],
+   "Joe Pitts": [
+    "Python",
+    "Rust"
+   ],
+   "JCottrell-TrueNorthIT": [
+    "TypeScript"
+   ],
+   "RichKelsey": [
+    "Rust"
+   ]
+  },
+  "series": {
+   "4472230": [
+    [
+     1733029200,
+     0
+    ],
+    [
+     1733132109,
+     5
+    ],
+    [
+     1733132556,
+     10
+    ],
+    [
+     1733133525,
+     16
+    ],
+    [
+     1733217201,
+     23
+    ]
+   ],
+   "353270": [
+    [
+     1733029200,
+     0
+    ],
+    [
+     1733043910,
+     8
+    ],
+    [
+     1733044149,
+     16
+    ],
+    [
+     1733128261,
+     24
+    ],
+    [
+     1733128895,
+     32
+    ],
+    [
+     1733216199,
+     40
+    ],
+    [
+     1733220376,
+     48
+    ],
+    [
+     1733304494,
+     55
+    ],
+    [
+     1733308175,
+     62
+    ],
+    [
+     1733389242,
+     70
+    ],
+    [
+     1733389521,
+     78
+    ],
+    [
+     1733476949,
+     85
+    ],
+    [
+     1733478158,
+     92
+    ],
+    [
+     1733604012,
+     99
+    ],
+    [
+     1733604369,
+     106
+    ],
+    [
+     1733654288,
+     114
+    ],
+    [
+     1733654990,
+     122
+    ],
+    [
+     1733734355,
+     130
+    ],
+    [
+     1733819822,
+     138
+    ],
+    [
+     1733819990,
+     146
+    ],
+    [
+     1733824932,
+     153
+    ],
+    [
+     1733907765,
+     161
+    ],
+    [
+     1733908011,
+     169
+    ],
+    [
+     1734003379,
+     176
+    ],
+    [
+     1734083660,
+     183
+    ],
+    [
+     1734084458,
+     190
+    ],
+    [
+     1734089068,
+     197
+    ],
+    [
+     1734279829,
+     204
+    ],
+    [
+     1734280085,
+     211
+    ],
+    [
+     1734284092,
+     218
+    ],
+    [
+     1734357492,
+     225
+    ],
+    [
+     1734358350,
+     232
+    ],
+    [
+     1734429473,
+     239
+    ],
+    [
+     1734444057,
+     247
+    ],
+    [
+     1734511503,
+     255
+    ],
+    [
+     1734511887,
+     263
+    ],
+    [
+     1734517964,
+     270
+    ],
+    [
+     1734596861,
+     278
+    ],
+    [
+     1734596932,
+     286
+    ],
+    [
+     1734687668,
+     293
+    ],
+    [
+     1734690668,
+     301
+    ],
+    [
+     1734780384,
+     309
+    ],
+    [
+     1734780406,
+     317
+    ],
+    [
+     1734875283,
+     325
+    ],
+    [
+     1734878009,
+     333
+    ],
+    [
+     1734943441,
+     341
+    ],
+    [
+     1734944043,
+     349
+    ],
+    [
+     1735047744,
+     356
+    ],
+    [
+     1735403238,
+     363
+    ],
+    [
+     1735406396,
+     370
+    ],
+    [
+     1735406548,
+     377
+    ]
+   ],
+   "1427047": [
+    [
+     1733029200,
+     0
+    ],
+    [
+     1733058293,
+     6
+    ],
+    [
+     1733058490,
+     12
+    ],
+    [
+     1733132833,
+     19
+    ],
+    [
+     1733133207,
+     26
+    ],
+    [
+     1733221151,
+     32
+    ],
+    [
+     1733222894,
+     39
+    ],
+    [
+     1733302466,
+     47
+    ],
+    [
+     1733303376,
+     55
+    ],
+    [
+     1733394218,
+     62
+    ],
+    [
+     1733394478,
+     69
+    ],
+    [
+     1733475436,
+     77
+    ],
+    [
+     1733476357,
+     85
+    ],
+    [
+     1733572305,
+     93
+    ],
+    [
+     1733572476,
+     101
+    ],
+    [
+     1733658782,
+     108
+    ],
+    [
+     1733659699,
+     115
+    ],
+    [
+     1733736639,
+     122
+    ],
+    [
+     1733739338,
+     130
+    ],
+    [
+     1733830234,
+     137
+    ],
+    [
+     1733830815,
+     144
+    ],
+    [
+     1733915757,
+     151
+    ],
+    [
+     1733917860,
+     158
+    ],
+    [
+     1733999104,
+     166
+    ],
+    [
+     1734004419,
+     174
+    ],
+    [
+     1734080147,
+     182
+    ],
+    [
+     1734080248,
+     190
+    ],
+    [
+     1734173392,
+     198
+    ],
+    [
+     1734177860,
+     206
+    ],
+    [
+     1734256077,
+     214
+    ],
+    [
+     1734262217,
+     222
+    ],
+    [
+     1734343652,
+     230
+    ],
+    [
+     1734353852,
+     238
+    ],
+    [
+     1734426658,
+     246
+    ],
+    [
+     1734471583,
+     253
+    ],
+    [
+     1734514060,
+     260
+    ],
+    [
+     1734515791,
+     267
+    ],
+    [
+     1734603196,
+     274
+    ],
+    [
+     1734603634,
+     281
+    ],
+    [
+     1734684771,
+     289
+    ],
+    [
+     1734711989,
+     296
+    ],
+    [
+     1734877281,
+     303
+    ],
+    [
+     1734915923,
+     310
+    ],
+    [
+     1734946078,
+     317
+    ],
+    [
+     1734952405,
+     324
+    ],
+    [
+     1734959289,
+     331
+    ],
+    [
+     1734959768,
+     338
+    ],
+    [
+     1735040444,
+     346
+    ],
+    [
+     1735058253,
+     354
+    ],
+    [
+     1735114935,
+     362
+    ],
+    [
+     1735114944,
+     370
+    ]
+   ],
+   "4947218": [
+    [
+     1733029200,
+     0
+    ]
+   ],
+   "4264967": [
+    [
+     1733029200,
+     0
+    ],
+    [
+     1733055727,
+     7
+    ],
+    [
+     1733057665,
+     14
+    ],
+    [
+     1733137100,
+     19
+    ],
+    [
+     1733146961,
+     25
+    ],
+    [
+     1733225815,
+     30
+    ],
+    [
+     1733226664,
+     36
+    ],
+    [
+     1733604866,
+     42
+    ],
+    [
+     1733668955,
+     48
+    ],
+    [
+     1733679646,
+     54
+    ],
+    [
+     1733680024,
+     60
+    ],
+    [
+     1733691631,
+     66
+    ],
+    [
+     1733699184,
+     72
+    ]
+   ],
+   "5105599": [
+    [
+     1733029200,
+     0
+    ]
+   ],
+   "5156198": [
+    [
+     1733029200,
+     0
+    ]
+   ],
+   "5175448": [
+    [
+     1733029200,
+     0
+    ]
+   ]
+  }
+ }
+}
