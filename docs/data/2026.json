@@ -1,0 +1,168 @@
+{
+ "day1_ts": 1796101200,
+ "event": "2026",
+ "members": {
+  "1427047": {
+   "id": 1427047,
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "local_score": 0,
+   "stars": 0,
+   "name": "chriswaters78"
+  },
+  "5105599": {
+   "id": 5105599,
+   "completion_day_level": {},
+   "local_score": 0,
+   "last_star_ts": 0,
+   "stars": 0,
+   "name": "samhatts"
+  },
+  "5156198": {
+   "id": 5156198,
+   "completion_day_level": {},
+   "name": "BPMichon",
+   "last_star_ts": 0,
+   "stars": 0,
+   "local_score": 0
+  },
+  "5175448": {
+   "id": 5175448,
+   "name": "MHRGA",
+   "completion_day_level": {},
+   "last_star_ts": 0,
+   "stars": 0,
+   "local_score": 0
+  },
+  "4264967": {
+   "last_star_ts": 0,
+   "completion_day_level": {},
+   "name": "RichKelsey",
+   "stars": 0,
+   "local_score": 0,
+   "id": 4264967
+  },
+  "4947218": {
+   "completion_day_level": {},
+   "local_score": 0,
+   "last_star_ts": 0,
+   "stars": 0,
+   "name": "Alex Radice",
+   "id": 4947218
+  },
+  "353270": {
+   "id": 353270,
+   "completion_day_level": {},
+   "local_score": 0,
+   "last_star_ts": 0,
+   "stars": 0,
+   "name": "Joe Pitts"
+  },
+  "4472230": {
+   "id": 4472230,
+   "completion_day_level": {},
+   "local_score": 0,
+   "last_star_ts": 0,
+   "stars": 0,
+   "name": "JCottrell-TrueNorthIT"
+  }
+ },
+ "owner_id": 353270,
+ "num_days": 12,
+ "tn": {
+  "branches": {
+   "1427047": "christian-waters",
+   "353270": "joe-pitts",
+   "4472230": "josh-cottrell",
+   "4947218": "alex-radice",
+   "4264967": "rich-kelsey",
+   "4265041": "kade-hennessy",
+   "5105599": "sam-hatts",
+   "5156198": "bogdan-michon",
+   "5175448": "muhamad-hewa-rahim"
+  },
+  "order": [
+   1427047,
+   5105599,
+   5156198,
+   5175448,
+   4264967,
+   4947218,
+   353270,
+   4472230
+  ],
+  "achievements": [
+   {
+    "title": "Polyglot 🤓",
+    "description": "Most distinct programming languages used.",
+    "entries": []
+   },
+   {
+    "title": "Early Bird ⏰",
+    "description": "Fastest time to complete Star 1 after unlock.",
+    "entries": []
+   },
+   {
+    "title": "You Are Gonna Need It 🛠️",
+    "description": "Fastest time between Star 1 and Star 2.",
+    "entries": []
+   },
+   {
+    "title": "Hackerman 💻",
+    "description": "Highest local score on the private leaderboard.",
+    "entries": []
+   }
+  ],
+  "languages": {},
+  "series": {
+   "1427047": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "5105599": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "5156198": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "5175448": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "4264967": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "4947218": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "353270": [
+    [
+     1796101200,
+     0
+    ]
+   ],
+   "4472230": [
+    [
+     1796101200,
+     0
+    ]
+   ]
+  }
+ }
+}
