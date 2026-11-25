@@ -76,18 +76,3 @@ footer { margin-top: 3rem; font-size: .85em; }
   body { font-size: 13px; }
   .art { font-size: 11px; }
 }
-
-/* The header compass, blown up and muted in the top-right corner */
-.bg-compass {
-  position: fixed;
-  top: .5rem;
-  right: 1rem;
-  margin: 0;
-  font-size: clamp(26px, 5vw, 80px);
-  line-height: 1.1;
-  opacity: .14;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
-header, main, footer { position: relative; z-index: 1; }
