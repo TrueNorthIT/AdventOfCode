@@ -76,3 +76,19 @@ footer { margin-top: 3rem; font-size: .85em; }
   body { font-size: 13px; }
   .art { font-size: 11px; }
 }
+
+/* Big faint compass behind everything, pushed up and off to the right */
+.bg-compass {
+  position: fixed;
+  top: -4rem;
+  right: -15vw;
+  margin: 0;
+  font-size: clamp(14px, 2.3vw, 26px);
+  line-height: 1.15;
+  color: var(--dim);
+  opacity: .22;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+header, main, footer { position: relative; z-index: 1; }
