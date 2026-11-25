@@ -47,7 +47,7 @@ EXT_TO_LANG = {
 
 
 # Constants
-YEAR = 2025  # current competition year: the only year that updates README and the webhook
+YEAR = 2026  # current competition year: the only year that updates README and the webhook
 LEADERBOARD_URL = "https://adventofcode.com/{year}/leaderboard/private/view/353270.json"
 DATA_DIR = Path("docs/data")
 

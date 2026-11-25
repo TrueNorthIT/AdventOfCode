@@ -1,6 +1,6 @@
-# 🎄 Advent of Code - 2025 🎄
+# 🎄 Advent of Code - 2026 🎄
 
-Welcome to the **Advent of Code 2025** private leaderboard for our team! This repository is where we’ll track progress, share solutions, and have a friendly competition while improving our coding skills.
+Welcome to the **Advent of Code 2026** private leaderboard for our team! This repository is where we’ll track progress, share solutions, and have a friendly competition while improving our coding skills.
 
 
 ## Leaderboard
@@ -25,16 +25,16 @@ Welcome to the **Advent of Code 2025** private leaderboard for our team! This re
    Visit the [Advent of Code website](https://adventofcode.com/) and sign up.
 
 2. **Join the Private Leaderboard**  
-   Go tho the [Leaderboard page](https://adventofcode.com/2023/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
+   Go to the [Leaderboard page](https://adventofcode.com/2026/leaderboard/private) and Enter our private leaderboard code: **353270-4499e43b**
 
 3. **Set Up the Repository**  
    - Clone this repository:
      ```bash
      git clone <repo_url>
      ```
-   - Check out your personal branch (replace `your-branch-name` with your name i.e `joseph-pitts`):
+   - Returning? Check out your existing branch (`git checkout joseph-pitts`). New? Create your branch from `2026-base` (replace `your-branch-name` with your name i.e `joseph-pitts`):
      ```bash
-     git checkout -b your-branch-name
+     git checkout -b your-branch-name origin/2026-base
      ```
    - Each participant will have their own branch. Please keep your solutions and notes in your branch to avoid conflicts with others.
 
