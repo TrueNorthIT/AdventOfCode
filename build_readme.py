@@ -132,7 +132,7 @@ Welcome, {name}. This is your own branch, `{branch}`, made for you when you join
 
 ## Getting started
 
-1. Ask the organiser for write access to this repository. You need it to push your solutions.
+1. Ask Joe Pitts for write access to this repository. You need it to push your solutions.
 2. Clone your branch:
 
    ```bash

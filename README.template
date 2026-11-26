@@ -15,6 +15,9 @@ Welcome to the **Advent of Code 2026** private leaderboard for our team! This re
 
 #### Golf Pro ⛳ (Manually Judged)
 
+#### Visualisations 🎨 (Manually Judged)
+Best visualisation of a puzzle or your solution: animated, plotted, rendered in the terminal, anything goes.
+
 ## What is Advent of Code?
 
 [Advent of Code](https://adventofcode.com/) is an Advent Calendar of coding puzzles, with a new challenge released every day from December 1st to December 12th. These puzzles are designed to hone your problem-solving abilities and provide an excellent opportunity to learn new coding techniques.
@@ -29,7 +32,7 @@ Welcome to the **Advent of Code 2026** private leaderboard for our team! This re
 
 3. **Get Your Branch**
    - You don't need to create one: shortly after you join the leaderboard, a branch named after your AoC name (e.g. `jane-example`) is made for you, with the day folders ready. Your name on the [leaderboard site](https://truenorthit.github.io/AdventOfCode/) links to it (hover to see the branch name).
-   - Ask the organiser for write access to this repository, then clone your branch:
+   - Ask Joe Pitts for write access to this repository, then clone your branch:
      ```bash
      git clone -b your-branch-name https://github.com/TrueNorthIT/AdventOfCode.git
      ```
