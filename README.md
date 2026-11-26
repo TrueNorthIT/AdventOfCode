@@ -7,14 +7,14 @@ Welcome to the **Advent of Code 2026** private leaderboard for our team! This re
 
 |   Rank | Name                  |   Local Score |   Stars | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10   | 11   | 12   |
 |--------|-----------------------|---------------|---------|-----|-----|-----|-----|-----|-----|-----|-----|-----|------|------|------|
-|      1 | BPMichon              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      1 | chriswaters78         |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      2 | samhatts              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      3 | Joe Pitts             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      4 | RichKelsey            |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      5 | MHRGA                 |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      3 | BPMichon              |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      4 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      5 | RichKelsey            |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 |      6 | JCottrell-TrueNorthIT |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      7 | chriswaters78         |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
-|      8 | Alex Radice           |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      7 | MHRGA                 |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
+|      8 | Joe Pitts             |             0 |       0 | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·   | ·    | ·    | ·    |
 
 
 ## Achievements
@@ -28,6 +28,9 @@ Welcome to the **Advent of Code 2026** private leaderboard for our team! This re
 
 
 #### Golf Pro ⛳ (Manually Judged)
+
+#### Visualisations 🎨 (Manually Judged)
+Best visualisation of a puzzle or your solution: animated, plotted, rendered in the terminal, anything goes.
 
 ## What is Advent of Code?
 
@@ -43,7 +46,7 @@ Welcome to the **Advent of Code 2026** private leaderboard for our team! This re
 
 3. **Get Your Branch**
    - You don't need to create one: shortly after you join the leaderboard, a branch named after your AoC name (e.g. `jane-example`) is made for you, with the day folders ready. Your name on the [leaderboard site](https://truenorthit.github.io/AdventOfCode/) links to it (hover to see the branch name).
-   - Ask the organiser for write access to this repository, then clone your branch:
+   - Ask Joe Pitts for write access to this repository, then clone your branch:
      ```bash
      git clone -b your-branch-name https://github.com/TrueNorthIT/AdventOfCode.git
      ```
